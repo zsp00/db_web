@@ -10,10 +10,12 @@
         </template>
         <router-link v-if="item.child.length !== 0" v-for="cItem in item.child" :key="cItem.id" :to="cItem.router" >
           <el-menu-item index="cItem.router">
-            <template v-if="cItem.icon !== '' && cItem.icon !== null" >
-              <icon :name="cItem.icon"></icon>
+            <template>
+              <template v-if="cItem.icon !== '' && cItem.icon !== null" >
+                <icon :name="cItem.icon"></icon>
+              </template>
+              <span slot="title">{{cItem.name}}</span>
             </template>
-            <span>{{cItem.name}}</span>
           </el-menu-item>
         </router-link>
       </el-submenu>
@@ -64,6 +66,10 @@ export default {
   .menu
     position: fixed
     height: 100%
+    transition: width 0.28s ease-out
+    overflow-y: auto
+    z-index: 1001
+    &::-webkit-scrollbar {display:none}
     span
       padding-left: 10px
   .menu:not(.el-menu--collapse) 

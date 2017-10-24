@@ -11,10 +11,7 @@ import Icon from 'vue-awesome/components/Icon'
 Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
-let a = {aa: 'aa'}
-let b = {bb: 'bb'}
-let c = {...a, ...b}
-console.log(c)
+
 Vue.use(ElementUI)
 /* eslint-disable no-new */
 new Vue({

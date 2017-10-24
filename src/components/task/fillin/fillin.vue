@@ -5,7 +5,7 @@
         <transition name="el-fade-in">
           <div v-if="this.info.loaded">
             <span>{{this.info.date.currYear}}年{{this.info.date.currMouth}}月</span>
-            <span>我的部门：北京地铁集团总部/客运营销部</span>
+            <span>我的部门：{{info.deptName}}</span>
             <el-tag v-if="taskList.identitys.indexOf('1') > -1">部门负责人</el-tag>
             <el-tag v-if="taskList.identitys.indexOf('2') > -1">办公室负责人</el-tag>
           </div>
@@ -43,7 +43,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24" class="data-table">
+      <el-col :span="24">
         <el-table
           :data="taskList.list"
           border
@@ -60,6 +60,12 @@
             <template slot-scope="scope">
               <div class="task-content">{{scope.row.content}}</div>
             </template>
+          </el-table-column>
+          <el-table-column
+            prop="deptName"
+            label="部门"
+            align="center"
+            width="150">
           </el-table-column>
           <el-table-column
             prop="serialNumber"
@@ -119,7 +125,7 @@
             width="150">
             <template slot-scope="scope">
               <!--都有修改权限-->
-              <el-button type="text" @click="onClickDetail(scope.row)" size="small">详情</el-button>
+              <el-button type="text" @click="onClickDetail(scope.row)" size="small">修改</el-button>
             </template>
           </el-table-column>
         </el-table>

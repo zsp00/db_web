@@ -34,6 +34,9 @@ export default {
       levelList: null
     }
   },
+  created () {
+    this.getBreadcrumb()
+  },
   mounted () {
     this._getUserInfo()
     var e = this
@@ -45,7 +48,6 @@ export default {
         e.$refs.userCard.style.display = 'none'
       }
     })
-    this.getBreadcrumb()
   },
   methods: {
     _getUserInfo () {
@@ -64,7 +66,9 @@ export default {
       logout().then((res) => {
         if (ERR_OK === res.data.code) {
           this.$message.success(res.data.msg)
-          this.$emit('logoutSuccess')
+          setTimeout(() => {
+            window.location.href = '/'
+          }, 1500)
         } else {
           this.$message.error(res.data.msg)
         }
