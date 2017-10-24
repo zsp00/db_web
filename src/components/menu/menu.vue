@@ -1,31 +1,71 @@
 <template>
   <div>
-    <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-      <el-submenu index="1">
-        <template slot="title"><i class="el-icon-message"></i>导航一</template>
-        <el-menu-item-group>
-          <template slot="title">分组一</template>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="1-4-1">选项1</el-menu-item>
-        </el-submenu>
+    <el-menu ref="menu" class="menu" unique-opened :default-active="$route.path" :collapse="isCollapse">
+      <el-submenu v-for="item in menus" :key="item.id" :index="item.router">
+        <template slot="title">
+          <template v-if="item.icon !== '' && item.icon !== null" >
+            <icon :name="item.icon" :scale="1.4"></icon>
+          </template>
+          <span>{{item.name}}</span>
+        </template>
+        <router-link v-if="item.child.length !== 0" v-for="cItem in item.child" :key="cItem.id" :to="cItem.router" >
+          <el-menu-item index="cItem.router">
+            <template v-if="cItem.icon !== '' && cItem.icon !== null" >
+              <icon :name="cItem.icon"></icon>
+            </template>
+            <span>{{cItem.name}}</span>
+          </el-menu-item>
+        </router-link>
       </el-submenu>
-      <el-menu-item index="2"><i class="el-icon-menu"></i>导航二</el-menu-item>
-      <el-menu-item index="3"><i class="el-icon-setting"></i>导航三</el-menu-item>
     </el-menu>
   </div>
 </template>
 
 <script>
+import {getMenus} from 'api/menu.js'
+import {ERR_OK} from 'api/config.js'
 export default {
+  data () {
+    return {
+      menus: null,
+      isCollapse: false
+    }
+  },
+  mounted () {
+    this._getMenus()
+    this._initCollapse(this.isCollapse)
+  },
+  methods: {
+    _getMenus () {
+      getMenus().then((res) => {
+        if (ERR_OK === res.data.code) {
+          console.log(res)
+          this.menus = res.data.msg
+        }
+      })
+    },
+    _initCollapse (val) {
+      if (val) {
+        this.$refs.menu.$el.style.width = 36
+      } else {
+        this.$refs.menu.$el.style.width = 200
+      }
+    }
+  },
+  watch: {
+    isCollapse (newVal, oldVal) {
+      this._initCollapse(newVal)
+    }
+  }
 }
 </script>
 
-<style>
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  .menu
+    position: fixed
+    height: 100%
+    span
+      padding-left: 10px
+  .menu:not(.el-menu--collapse) 
+    width: 200px
 </style>

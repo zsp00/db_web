@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div>
     <el-row  class="header" >
       <el-col :span="24" >
         <transition name="el-fade-in">
@@ -251,20 +251,19 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .content
-    .header
-      padding-bottom 20px
-      height 40px
-    .loading
-      width 150px
-      height 150px
-      position relative
-      left 50%
-      margin-left -75px
-      margin-top 50px
-    .task-content
-      text-align left
-    .pagination
-      text-align right
-      padding-top 10px
+  .header
+    padding-bottom 20px
+    height 40px
+  .loading
+    width 150px
+    height 150px
+    position relative
+    left 50%
+    margin-left -75px
+    margin-top 50px
+  .task-content
+    text-align left
+  .pagination
+    text-align right
+    padding-top 10px
 </style>

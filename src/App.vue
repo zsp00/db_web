@@ -3,10 +3,15 @@
       <loading class="l"></loading>
     </div>
     <el-container v-else-if="isLogin" class="container">
-      <el-header class="el-header">
-        <m-header v-on:selectMenu="selectMenu" v-on:logoutSuccess="logoutSuccess"></m-header>
-      </el-header>
-      <router-view></router-view>
+      <el-aside style="min-width:64px;width:200px">
+        <m-menu></m-menu>
+      </el-aside>
+      <el-main class="el-main">
+        <m-header></m-header>
+        <div class="content">
+          <router-view></router-view>
+        </div>
+      </el-main>
     </el-container>
     <login v-else v-on:loginSuccess="loginSuccess"></login>
 </template>
@@ -55,10 +60,10 @@ export default {
     }
   },
   components: {
-    MHeader,
     MMenu,
     Login,
-    Loading
+    Loading,
+    MHeader
   }
 }
 </script>
@@ -67,9 +72,13 @@ export default {
   @import "~assets/stylus/variable"
   @import "~assets/stylus/mixin"
   .container
+    position: relative
     height: 100%
-    .el-header
+    width: 100%
+    .el-main
       padding: 0
+      .content
+        padding: 20px
   .loading
     position: absolute
     display: block

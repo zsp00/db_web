@@ -1,16 +1,8 @@
 <template>
-  <el-container>
-    <el-aside width="200px">
-      <mleft :router="router" @selectMenu="selectMenu"></mleft>
-    </el-aside>
-    <el-main>
-      <router-view></router-view>
-    </el-main>
-  </el-container>
+  <router-view></router-view>
 </template>
 
 <script>
-import Mleft from 'components/task/left'
 export default {
   data () {
     return {
@@ -26,9 +18,6 @@ export default {
         path: item.router
       })
     }
-  },
-  components: {
-    Mleft
   }
 }
 </script>

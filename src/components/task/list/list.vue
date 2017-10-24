@@ -1,6 +1,6 @@
 <template>
   <div>
-    record
+    list
   </div>
 </template>
 

@@ -1,9 +1,13 @@
 <template>
   <div class="header">
-    <h1><div class="logo"></div></h1>
-    <el-menu background-color="#eef1f6" v-if="menu.length > 0" :default-active="activeIndex" class="nav" mode="horizontal">
-      <el-menu-item class="element-item" v-for="item in menu" @click="onSelectMenu(item)" :key="item.id" :index="item.router">{{item.name}}</el-menu-item>
-    </el-menu>
+    <div class="breadcrumb">
+      <el-breadcrumb class="app-levelbar" separator="/">
+        <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.path">
+          <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">{{item.name}}</span>
+          <router-link v-else :to="item.redirect||item.path">{{item.name}}</router-link>
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <div class="member">
       <img ref="avatar" :src="userinfo.avatar">
       <div ref="userCard" class="user-card">
@@ -16,7 +20,6 @@
 
 <script>
 import {getUserInfo} from 'api/user.js'
-import {getMenu} from 'api/menu.js'
 import {logout} from 'api/public.js'
 import {ERR_OK} from 'api/config.js'
 import noavatar from 'assets/images/noavatar.png'
@@ -28,13 +31,11 @@ export default {
         avatar: null
       },
       timer: null,
-      activeIndex: null,
-      menu: {}
+      levelList: null
     }
   },
   mounted () {
     this._getUserInfo()
-    this._getMenu()
     var e = this
     this.$refs.avatar.addEventListener('mouseover', () => {
       e.$refs.userCard.style.display = 'block'
@@ -44,6 +45,7 @@ export default {
         e.$refs.userCard.style.display = 'none'
       }
     })
+    this.getBreadcrumb()
   },
   methods: {
     _getUserInfo () {
@@ -53,21 +55,6 @@ export default {
           if (this.userinfo.avatar === false) {
             this.userinfo.avatar = noavatar
           }
-        } else {
-          this.$message.error(res.data.msg)
-        }
-      })
-    },
-    _getMenu () {
-      getMenu().then((res) => {
-        if (ERR_OK === res.data.code) {
-          for (var i = 0; i < res.data.msg.length; i++) {
-            if (this.$route.path.indexOf(res.data.msg[i].router) === 0) {
-              this.activeIndex = res.data.msg[i].router
-              break
-            }
-          }
-          this.menu = res.data.msg
         } else {
           this.$message.error(res.data.msg)
         }
@@ -85,6 +72,19 @@ export default {
     },
     onSelectMenu (item) {
       this.$emit('selectMenu', item)
+    },
+    getBreadcrumb () {
+      var matched = this.$route.matched.filter(item => item.name)
+      const first = matched[0]
+      if (first && (first.name !== '首页' || first.path !== '')) {
+        matched = [{ name: '首页', path: '/' }].concat(matched)
+      }
+      this.levelList = matched
+    }
+  },
+  watch: {
+    $route () {
+      this.getBreadcrumb()
     }
   }
 }
@@ -95,6 +95,10 @@ export default {
     height:60px
     background:#eef1f6
     border-bottom 1px solid #e6e6e6
+    .breadcrumb
+      float: left
+      margin-top: 22px
+      padding-left: 20px
     h1
       float: left
       height: 60px
@@ -149,6 +153,4 @@ export default {
     .nav
       float: left
       margin-left: 20px
-      .element-item
-        font-size 18px
 </style>
