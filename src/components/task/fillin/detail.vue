@@ -31,15 +31,27 @@
           <el-radio-button v-for="(item, key) in form.taskDataList" :key="key" :label="item.mouth"></el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="完成情况">
-        <el-input type="textarea" :disabled="!isEdit" v-model="update.completeSituation" class="my-textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="实施过程中存在的问题及建议">
-        <el-input type="textarea" :disabled="!isEdit" v-model="update.problemSuggestions" class="my-textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="未按时限完成或进度滞后的项目原因分析及推进措施">
-        <el-input type="textarea" :disabled="!isEdit" v-model="update.analysis" class="my-textarea"></el-input>
-      </el-form-item>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="完成情况">
+            <el-input type="textarea" :disabled="!isEdit" v-model="update.completeSituation" class="my-textarea"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="实施过程中存在的问题及建议">
+            <el-input type="textarea" :disabled="!isEdit" v-model="update.problemSuggestions" class="my-textarea"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>          
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="未按时限完成或进度滞后的项目原因分析及推进措施">
+            <el-input type="textarea" :disabled="!isEdit" v-model="update.analysis" class="my-textarea"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>            
       <el-col :span="24">
         <el-form-item label="状态">
           <template>
@@ -58,30 +70,31 @@
       </el-form-item>
       <el-form-item>
         <el-button v-show="isEdit" type="primary" @click="onEdit">修改</el-button>
-        <el-button v-show="isSubmit" type="primary">提交</el-button>
+        <el-button v-show="isSubmit" type="primary" @click="onSubmits">提交</el-button>
         <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
         <el-button v-show="isComplete" type="primary" @click="onComplete">完成</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
     <el-tabs type="border-card" v-model="mouth" @tab-click="handleClick">
-      <el-tab-pane :label="item.mouth + '月'" :name="item.mouth + ''" v-for="(item,index) in form.taskDataList" :key="item.mouth">
-          <div v-for="list in loglist">
-            <div v-if="list.type == 'edit'">{{ list.createTime }} {{ list.empNo }}  进行了" 
+      <el-tab-pane :label="item.mouth + '月份'" :name="item.mouth + ''" v-for="(item,index) in form.taskDataList" :key="item.mouth">
+          <div v-for="list in loglist" :key="list.id">
+            <div style="float:left;cursor:pointer;width:320px;" v-if="list.type == 'edit'">{{ list.createTime }} {{ list.empNo }}  进行了
               <el-popover
                 placement="right"
-                title="修改"
-                width="200"
+                title="修改内容如下："
+                width="300"
                 trigger="hover"
                 :content="popLog(list.logData)">
-                <el-button slot="reference">编辑</el-button>
-              </el-popover>"         
-            </div>
-            <p v-if="list.type == 'confirm'">时间：{{ list.createTime }}，操作人：{{ list.empNo }}  进行了: 确定</p>
-            <p v-if="list.type == 'complete'">时间：{{ list.createTime }}，操作人：{{ list.empNo }}  进行了: 完成</p>
+                <div style="float:right" slot="reference"> "编辑" </div>
+              </el-popover>         
+            </div><br />
+            <div v-if="list.type == 'submit'" style="float:left;cursor:pointer;width:320px">{{ list.createTime }} {{ list.empNo }}  进行了 <div style="float:right" slot="reference"> "提交"</div><br /></div>
+            <div v-if="list.type == 'confirm'" style="float:left;cursor:pointer;width:320px">{{ list.createTime }} {{ list.empNo }}  进行了 <div style="float:right" slot="reference"> "确认"</div><br /></div>
+            <div v-if="list.type == 'complete'" style="float:left;cursor:pointer;width:320px">{{ list.createTime }} {{ list.empNo }}  进行了<div style="float:right" slot="reference"> "完成" </div><br /></div>
           </div> 
       </el-tab-pane>
-    </el-tabs>
+    </el-tabs><br/><br/>
     <el-table :data="form.taskDataList" border>
       <el-table-column prop="mouth" label="月份" width="80"></el-table-column>
       <el-table-column prop="completeSituation" label="完成情况"></el-table-column>
@@ -92,7 +105,7 @@
 </template>
 
 <script>
-import {getDetail, edit, complete, confirm, getLogs} from 'api/task.js'
+import {getDetail, edit, complete, confirm, getLogs, submits} from 'api/task.js'
 import {ERR_OK} from 'api/config.js'
 export default {
   data () {
@@ -159,7 +172,6 @@ export default {
         } else {
           this.$message.error(res.data.msg)
         }
-        console.log(this.form.taskDataList)
       })
     },
     handleClick (tab, event) {
@@ -169,7 +181,6 @@ export default {
       getLogs(this.form.id, mouth).then((res) => {
         if (ERR_OK === res.data.code) {
           this.loglist = res.data.msg
-          console.log(this.loglist)
         }
       })
     },
@@ -178,6 +189,17 @@ export default {
       edit(this.update).then((res) => {
         if (ERR_OK === res.data.code) {
           this.$message.success(res.data.msg)
+          this._getDetail()
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    onSubmits () {
+      submits(this.update).then((res) => {
+        if (ERR_OK === res.data.code) {
+          this.$message.success(res.data.msg)
+          this._getDetail()
         } else {
           this.$message.error(res.data.msg)
         }
@@ -187,6 +209,7 @@ export default {
       confirm(this.update).then((res) => {
         if (ERR_OK === res.data.code) {
           this.$message.success(res.data.msg)
+          this._getDetail()
         } else {
           this.$message.error(res.data.msg)
         }
@@ -196,10 +219,14 @@ export default {
       complete(this.update).then((res) => {
         if (ERR_OK === res.data.code) {
           this.$message.success(res.data.msg)
+          this._getDetail()
         } else {
           this.$message.error(res.data.msg)
         }
       })
+    },
+    onCancel () {
+      this.$router.go(-1)
     },
     chengeMouth (mouth) {
       var item
@@ -284,27 +311,28 @@ export default {
     },
     popLog (data) {
       var str = ''
-      for (var i = 0; i < data.length; i++) {
-        console.log(data[i].field)
-        switch (data[i].field) {
-          case 'problemSuggestions':
-            str = '问题和建议'
-            break
-          case 'analysis':
-            str = '原因分析'
-            break
-          case 'completeSituation':
-            str = '完成情况'
-            break
+      if (data !== 'false') {
+        for (var item of data) {
+          switch (item.field) {
+            case 'problemSuggestions':
+              str += '问题和建议:  old：' + item.old + ', new：' + item.new
+              break
+            case 'analysis':
+              str += '原因分析: old：' + item.old + ', new：' + item.new
+              break
+            case 'completeSituation':
+              str += '完成情况: old：' + item.old + ', new：' + item.new
+          }
         }
+        return str
       }
-      return str
     }
   }
 }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .my-textarea
-    width 300px
+.my-textarea{
+  height:100px;
+}
 </style>

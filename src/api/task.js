@@ -21,6 +21,11 @@ export function edit (data) {
   return post(url, data, {headers: DB_API.headers})
 }
 
+export function submits (data) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/submits'
+  return post(url, data, {headers: DB_API.headers})
+}
+
 export function confirm (data) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/confirm'
   return post(url, data, {headers: DB_API.headers})
