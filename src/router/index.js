@@ -26,12 +26,14 @@ export default new Router({
         {
           path: 'fillin',
           name: '在线填报',
-          component: Fillin
-        },
-        {
-          path: 'fillin/detail/:id',
-          name: '修改',
-          component: FillinDetail
+          component: Fillin,
+          children: [
+            {
+              path: 'detail/:id',
+              name: '修改',
+              component: FillinDetail
+            }
+          ]
         },
         {
           path: 'list',

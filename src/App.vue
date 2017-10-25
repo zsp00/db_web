@@ -76,8 +76,10 @@ export default {
     height: 100%
     width: 100%
     .el-main
+      width: calc(100% - 200px)
       padding: 0
       .content
+        position: relative
         margin-top 60px
         padding: 20px
   .loading

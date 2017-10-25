@@ -1,24 +1,25 @@
 <template>
-  <div>
-    <el-form :model="form" label-width="120px">
+<transition name="detail">
+  <div class="detail">
+    <el-form :model="form"  label-position="top" label-width="120px">
       <el-col :span="24">
         <el-form-item label="任务">
           {{form.content}}
         </el-form-item>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="3">
         <el-form-item label="序号">
           {{form.serialNumber}}
         </el-form-item>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="9">
         <el-form-item label="部门">
           {{form.deptName}}
         </el-form-item>
       </el-col>
       <el-col :span="4">
         <el-form-item label="所属年份">
-          {{form.year}}
+          {{form.year}}年
         </el-form-item>
       </el-col>
       <el-col :span="4">
@@ -26,38 +27,38 @@
           {{form.timeLimit}}月
         </el-form-item>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-form-item label="等级配分">
           {{form.level}}
         </el-form-item>
       </el-col>
-      <el-form-item label="月">
+      <el-form-item label="月份">
         <el-radio-group v-model="mouth" @change="chengeMouth">
-          <el-radio-button v-for="(item, key) in form.taskDataList" :key="key" :label="item.mouth"></el-radio-button>
+          <el-radio-button v-for="(item, key) in form.taskDataList" :key="key" :label="item.mouth">{{item.mouth}}月</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-row>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="完成情况">
             <el-input type="textarea" :disabled="!isEdit" v-model="update.completeSituation" :autosize="{ minRows: 4, maxRows: 10}"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="实施过程中存在的问题及建议">
             <el-input type="textarea" :disabled="!isEdit" v-model="update.problemSuggestions" :autosize="{ minRows: 4, maxRows: 10}"></el-input>
           </el-form-item>
         </el-col>
       </el-row>          
       <el-row>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="未按时限完成或进度滞后的项目原因分析及推进措施">
             <el-input type="textarea" :disabled="!isEdit" v-model="update.analysis" :autosize="{ minRows: 4, maxRows: 10}"></el-input>
           </el-form-item>
         </el-col>
       </el-row>            
-      <el-col :span="24">
+      <el-col :span="4">
         <el-form-item label="状态">
           <template>
             <span v-if="form.status === '1'"> 
@@ -69,17 +70,22 @@
           </template>
         </el-form-item>
       </el-col>
-      <el-form-item label="我的身份">
-        <el-tag v-if="form.identitys.indexOf('1') > -1">部门负责人</el-tag>
-        <el-tag v-if="form.identitys.indexOf('2') > -1">办公室负责人</el-tag>
-      </el-form-item>
-      <el-form-item>
-        <el-button v-show="isEdit" type="primary" @click="onEdit">修改</el-button>
-        <el-button v-show="isSubmit" type="primary" @click="onSubmits">提交</el-button>
-        <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
-        <el-button v-show="isComplete" type="primary" @click="onComplete">完成</el-button>
-        <el-button @click="onCancel">取消</el-button>
-      </el-form-item>
+      <el-col :span="4">
+        <el-form-item label="我的身份">
+          <el-tag v-if="form.identitys.length === 0">员工</el-tag>
+          <el-tag v-if="form.identitys.indexOf('1') > -1">部门负责人</el-tag>
+          <el-tag v-if="form.identitys.indexOf('2') > -1">办公室负责人</el-tag>
+        </el-form-item>
+      </el-col>
+      <el-col :span="24">
+        <el-form-item>
+          <el-button v-show="isEdit" type="primary" @click="onEdit">修改</el-button>
+          <el-button v-show="isSubmit" type="primary" @click="onSubmits">提交</el-button>
+          <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
+          <el-button v-show="isComplete" type="primary" @click="onComplete">完成</el-button>
+          <el-button @click="onCancel">取消</el-button>
+        </el-form-item>
+      </el-col>
     </el-form>
     
     <el-table :data="form.taskDataList" border>
@@ -90,6 +96,9 @@
     </el-table>
     <el-tabs type="border-card" class="logList" v-model="mouth" @tab-click="handleClick">
       <el-tab-pane :label="item.mouth + '月份'" :name="item.mouth + ''" v-for="(item,index) in form.taskDataList" :key="item.mouth">
+          <template v-if="loglist === null || loglist.length === 0">
+            没有修改记录
+          </template>
           <div v-for="(list,x) in loglist" :key="list.id">
             <div>
               {{x+1}}. {{ list.createTime }} 由<b> {{ list.empNo }} </b>进行了
@@ -125,6 +134,7 @@
       </el-tab-pane>
     </el-tabs>
   </div>
+</transition>
 </template>
 
 <script>
@@ -188,7 +198,6 @@ export default {
               this.mouth = this.form.taskDataList[i].mouth
               this.currTaskData = this.form.taskDataList[i]
               this.chengeMouth(this.mouth)
-              this.logs(this.mouth)
               selected = true
             }
           }
@@ -198,7 +207,7 @@ export default {
       })
     },
     handleClick (tab, event) {
-      this.logs(tab.name)
+      this.mouth = tab.name
     },
     logs (mouth) {
       getLogs(this.form.id, mouth).then((res) => {
@@ -314,6 +323,7 @@ export default {
         this.isComplete = false
       }
       this.update = item
+      this.logs(this.mouth)
     },
     // 检查身份
     checkIdentitys (type) {
@@ -350,11 +360,27 @@ export default {
         return str
       }
     }
+  },
+  watch: {
+    mouth (newVal, oldVal) {
+      this.chengeMouth(newVal)
+    }
   }
 }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  .detail{
+    z-index: 31;
+    background: #ffffff;
+  }
+  .detail-enter-active,.document-leave-active{
+    transition: all 0.3s
+  }
+
+  .document-enter, .document-leave-to{
+    transform: translate3d(100%, 0, 0)
+  }
 .my-textarea{
   height:100px;
 }

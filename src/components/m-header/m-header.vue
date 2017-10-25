@@ -127,6 +127,7 @@ export default {
         margin-top:13px
         margin-bottom:13px
         height: 30px
+        width: 30px
         border-radius: 30px
         border: 2px solid #eef1f6
         cursor pointer

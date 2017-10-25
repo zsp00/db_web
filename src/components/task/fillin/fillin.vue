@@ -1,11 +1,13 @@
 <template>
   <div>
+    <template v-if="$route.path === '/task/fillin'">
     <el-row  class="header" >
       <el-col :span="24" >
         <transition name="el-fade-in">
           <div v-if="this.info.loaded">
             <span>{{this.info.date.currYear}}年{{this.info.date.currMouth}}月</span>
             <span>我的部门：{{info.deptName}}</span>
+            <el-tag v-if="taskList.identitys.length === 0">员工</el-tag>
             <el-tag v-if="taskList.identitys.indexOf('1') > -1">部门负责人</el-tag>
             <el-tag v-if="taskList.identitys.indexOf('2') > -1">办公室负责人</el-tag>
           </div>
@@ -141,7 +143,10 @@
         </div>
       </el-col>
     </el-row>
-    
+    </template>
+    <template v-else>
+      <router-view></router-view>
+    </template>
   </div>
 </template>
 

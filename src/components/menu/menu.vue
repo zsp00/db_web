@@ -9,7 +9,7 @@
           <span>{{item.name}}</span>
         </template>
         <router-link v-if="item.child.length !== 0" v-for="cItem in item.child" :key="cItem.id" :to="cItem.router" >
-          <el-menu-item index="cItem.router">
+          <el-menu-item :index="cItem.router">
             <template>
               <template v-if="cItem.icon !== '' && cItem.icon !== null" >
                 <icon :name="cItem.icon"></icon>
