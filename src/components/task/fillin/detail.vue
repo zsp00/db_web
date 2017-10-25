@@ -125,7 +125,7 @@
                     <template v-if="logItem.field === 'analysis'">
                       <b><i>未按时限完成或进度滞后的项目原因分析及推进措施</i></b>
                     </template>
-                    ，旧值为“{{logItem.old}}”，新值为“{{logItem.new}}”
+                    ，旧值为“{{logItem.old}}”，新值为“{{logItem.new}}”。
                   </div>
                 </div>
               </template>
