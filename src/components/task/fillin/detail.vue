@@ -341,24 +341,6 @@ export default {
           }
           break
       }
-    },
-    popLog (data) {
-      var str = ''
-      if (data !== 'false') {
-        for (var item of data) {
-          switch (item.field) {
-            case 'problemSuggestions':
-              str += '问题和建议:  旧值：' + item.old + ', 新值：' + item.new + '&lt;br&gt;'
-              break
-            case 'analysis':
-              str += '原因分析: 旧值：' + item.old + ', 新值：' + item.new
-              break
-            case 'completeSituation':
-              str += '完成情况: 旧值：' + item.old + ', 新值：' + item.new
-          }
-        }
-        return str
-      }
     }
   },
   watch: {
