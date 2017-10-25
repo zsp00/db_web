@@ -1,6 +1,11 @@
 <template>
   <div>
     <el-form :model="form" label-width="120px">
+      <el-col :span="24">
+        <el-form-item label="任务">
+          {{form.content}}
+        </el-form-item>
+      </el-col>
       <el-col :span="4">
         <el-form-item label="序号">
           {{form.serialNumber}}
@@ -16,14 +21,14 @@
           {{form.year}}
         </el-form-item>
       </el-col>
-      <el-col :span="10">
-        <el-form-item label="等级配分">
-          {{form.level}}
+      <el-col :span="4">
+        <el-form-item label="完成时限">
+          {{form.timeLimit}}月
         </el-form-item>
       </el-col>
-      <el-col :span="24">
-        <el-form-item label="任务">
-          {{form.content}}
+      <el-col :span="6">
+        <el-form-item label="等级配分">
+          {{form.level}}
         </el-form-item>
       </el-col>
       <el-form-item label="月">
@@ -34,21 +39,21 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="完成情况">
-            <el-input type="textarea" :disabled="!isEdit" v-model="update.completeSituation" class="my-textarea"></el-input>
+            <el-input type="textarea" :disabled="!isEdit" v-model="update.completeSituation" :autosize="{ minRows: 4, maxRows: 10}"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
           <el-form-item label="实施过程中存在的问题及建议">
-            <el-input type="textarea" :disabled="!isEdit" v-model="update.problemSuggestions" class="my-textarea"></el-input>
+            <el-input type="textarea" :disabled="!isEdit" v-model="update.problemSuggestions" :autosize="{ minRows: 4, maxRows: 10}"></el-input>
           </el-form-item>
         </el-col>
       </el-row>          
       <el-row>
         <el-col :span="12">
           <el-form-item label="未按时限完成或进度滞后的项目原因分析及推进措施">
-            <el-input type="textarea" :disabled="!isEdit" v-model="update.analysis" class="my-textarea"></el-input>
+            <el-input type="textarea" :disabled="!isEdit" v-model="update.analysis" :autosize="{ minRows: 4, maxRows: 10}"></el-input>
           </el-form-item>
         </el-col>
       </el-row>            
@@ -76,31 +81,49 @@
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
-    <el-tabs type="border-card" v-model="mouth" @tab-click="handleClick">
-      <el-tab-pane :label="item.mouth + '月份'" :name="item.mouth + ''" v-for="(item,index) in form.taskDataList" :key="item.mouth">
-          <div v-for="list in loglist" :key="list.id">
-            <div style="float:left;cursor:pointer;width:320px;" v-if="list.type == 'edit'">{{ list.createTime }} {{ list.empNo }}  进行了
-              <el-popover
-                placement="right"
-                title="修改内容如下："
-                width="300"
-                trigger="hover"
-                :content="popLog(list.logData)">
-                <div style="float:right" slot="reference"> "编辑" </div>
-              </el-popover>         
-            </div><br />
-            <div v-if="list.type == 'submit'" style="float:left;cursor:pointer;width:320px">{{ list.createTime }} {{ list.empNo }}  进行了 <div style="float:right" slot="reference"> "提交"</div><br /></div>
-            <div v-if="list.type == 'confirm'" style="float:left;cursor:pointer;width:320px">{{ list.createTime }} {{ list.empNo }}  进行了 <div style="float:right" slot="reference"> "确认"</div><br /></div>
-            <div v-if="list.type == 'complete'" style="float:left;cursor:pointer;width:320px">{{ list.createTime }} {{ list.empNo }}  进行了<div style="float:right" slot="reference"> "完成" </div><br /></div>
-          </div> 
-      </el-tab-pane>
-    </el-tabs><br/><br/>
+    
     <el-table :data="form.taskDataList" border>
       <el-table-column prop="mouth" label="月份" width="80"></el-table-column>
       <el-table-column prop="completeSituation" label="完成情况"></el-table-column>
       <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议"></el-table-column>
       <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施"></el-table-column>
     </el-table>
+    <el-tabs type="border-card" class="logList" v-model="mouth" @tab-click="handleClick">
+      <el-tab-pane :label="item.mouth + '月份'" :name="item.mouth + ''" v-for="(item,index) in form.taskDataList" :key="item.mouth">
+          <div v-for="(list,x) in loglist" :key="list.id">
+            <div>
+              {{x+1}}. {{ list.createTime }} 由<b> {{ list.empNo }} </b>进行了
+              <template v-if="list.type == 'submit'">
+                <span style="" slot="reference"><b>提交</b></span>。
+              </template>
+              <template v-if="list.type == 'confirm'">
+                <span style="" slot="reference"><b>确认</b></span>。
+              </template>
+              <template v-if="list.type == 'complete'">
+                <span style="" slot="reference"><b>完成</b></span>。
+              </template>
+              <template v-if="list.type == 'edit'">
+                <span slot="reference"><b>编辑</b></span>。
+                <div class="editLog">
+                  <div v-for="logItem in list.logData">
+                    修改了
+                    <template v-if="logItem.field === 'completeSituation'">
+                      <b><i>完成情况</i></b>
+                    </template>
+                    <template v-if="logItem.field === 'problemSuggestions'">
+                      <b><i>实施过程中存在的问题及建议</i></b>
+                    </template>
+                    <template v-if="logItem.field === 'analysis'">
+                      <b><i>未按时限完成或进度滞后的项目原因分析及推进措施</i></b>
+                    </template>
+                    ，旧值为“{{logItem.old}}”，新值为“{{logItem.new}}”
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div> 
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -315,13 +338,13 @@ export default {
         for (var item of data) {
           switch (item.field) {
             case 'problemSuggestions':
-              str += '问题和建议:  old：' + item.old + ', new：' + item.new
+              str += '问题和建议:  旧值：' + item.old + ', 新值：' + item.new + '&lt;br&gt;'
               break
             case 'analysis':
-              str += '原因分析: old：' + item.old + ', new：' + item.new
+              str += '原因分析: 旧值：' + item.old + ', 新值：' + item.new
               break
             case 'completeSituation':
-              str += '完成情况: old：' + item.old + ', new：' + item.new
+              str += '完成情况: 旧值：' + item.old + ', 新值：' + item.new
           }
         }
         return str
@@ -334,5 +357,20 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
 .my-textarea{
   height:100px;
+}
+.logList{
+  margin-top: 20px;
+}
+.logList div{
+  line-height:25px;
+  font-size: 13px;
+}
+.logList div span{
+  cursor: pointer
+}
+.editLog{
+  margin-left:20px;
+  background: #f1f1f1;
+  padding:10px;
 }
 </style>
