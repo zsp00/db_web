@@ -78,6 +78,7 @@ export default {
     .el-main
       padding: 0
       .content
+        margin-top 60px
         padding: 20px
   .loading
     position: absolute

@@ -97,8 +97,11 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .header
     height:60px
-    background:#eef1f6
     border-bottom 1px solid #e6e6e6
+    position fixed
+    width calc(100% - 200px)
+    background:#eef1f6
+    z-index 1000
     .breadcrumb
       float: left
       margin-top: 22px
