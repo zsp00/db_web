@@ -5,6 +5,9 @@ import Fillin from 'components/task/fillin/fillin.vue'
 import FillinDetail from 'components/task/fillin/detail.vue'
 import taskList from 'components/task/list/list.vue'
 import Login from 'components/login/login.vue'
+import Setting from 'components/setting/setting.vue'
+import Label from 'components/setting/label/label.vue'
+import MenuManagement from 'components/setting/menu-management/menu-management.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -39,6 +42,23 @@ export default new Router({
           path: 'list',
           name: '任务列表',
           component: taskList
+        }
+      ]
+    },
+    {
+      path: '/setting',
+      name: '设置',
+      component: Setting,
+      children: [
+        {
+          path: 'label',
+          name: '标签管理',
+          component: Label
+        },
+        {
+          path: 'menu-management',
+          name: '菜单管理',
+          component: MenuManagement
         }
       ]
     },
