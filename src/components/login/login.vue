@@ -53,6 +53,7 @@ export default {
       this.loging = true
       let loginData = this.loginData
       login(loginData.username, loginData.password, loginData.remember).then((res) => {
+        // console.log(loginData)
         if (res.data.code === ERR_OK) {
           this.$message.success('登录成功')
           this.$refs.content.removeChild(this.$refs.background)
