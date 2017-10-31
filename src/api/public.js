@@ -14,3 +14,8 @@ export function checkLogin () {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/login/checkLogin'
   return get(url, {}, {headers: DB_API.headers})
 }
+
+// 删除左右两端的空格
+export function trim (str) {
+  return str.replace(/(^\s*)|(\s*$)/g, '')
+}
