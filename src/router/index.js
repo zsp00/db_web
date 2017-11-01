@@ -3,11 +3,14 @@ import Router from 'vue-router'
 import Task from 'components/task/task.vue'
 import Fillin from 'components/task/fillin/fillin.vue'
 import FillinDetail from 'components/task/fillin/detail.vue'
-import taskList from 'components/task/list/list.vue'
+import TaskList from 'components/task/list/list.vue'
 import Login from 'components/login/login.vue'
 import Setting from 'components/setting/setting.vue'
 import Label from 'components/setting/label/label.vue'
 import MenuManagement from 'components/setting/menu-management/menu-management.vue'
+import TypeList from 'components/task/task-type/type-list'
+import Process from 'components/process/process'
+import ProcessManagement from 'components/process/process-management/process-management'
 
 Vue.use(Router)
 export default new Router({
@@ -28,7 +31,7 @@ export default new Router({
         },
         {
           path: 'fillin',
-          name: '在线填报',
+          name: '任务列表',
           component: Fillin,
           children: [
             {
@@ -40,8 +43,13 @@ export default new Router({
         },
         {
           path: 'list',
-          name: '任务列表',
-          component: taskList
+          name: '任务管理',
+          component: TaskList
+        },
+        {
+          path: 'type-list',
+          name: '任务分类管理',
+          component: TypeList
         }
       ]
     },
@@ -59,6 +67,18 @@ export default new Router({
           path: 'menu-management',
           name: '菜单管理',
           component: MenuManagement
+        }
+      ]
+    },
+    {
+      path: '/process',
+      name: '流程',
+      component: Process,
+      children: [
+        {
+          path: 'process-management',
+          name: '标签管理',
+          component: ProcessManagement
         }
       ]
     },

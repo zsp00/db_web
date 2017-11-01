@@ -34,7 +34,7 @@
           </div>
           <div class="label-list-container">
             <ul id="asdasdasd">
-              <li class="everyLabel" v-for="(item, index) in labelList" :key="item.id" :id="'label-' + item.id" @click="labelId = item.id">
+              <li v-for="(item, index) in labelList" :key="item.id" v-if="labelId == item.id" @click="labelId = item.id">
                 <span>{{ item.name }}</span>
                 <i class="el-icon-delete" @click="_del(item.id, index)"></i>
                 <i class="el-icon-edit" @click="_edit(item.id, index)"></i>
@@ -124,8 +124,6 @@ export default {
           this.labelList = res.data.data
           if (this.labelList.length > 0) {
             this.labelId = this.labelList[0].id
-            console.log(document.getElementById('asdasdasd'))
-            console.log(document.getElementById('label-1'))
           }
         } else {
           this.$message.warning('暂无标签！')
@@ -190,14 +188,6 @@ export default {
       }).catch(() => {
         this.$message.warning('已取消删除！')
       })
-    },
-    _selectLabel () {
-      var labels = document.getElementsByClassName('everyLabel')
-      for (var item of labels) {
-        item.className = 'everyLabel'
-      }
-      var obj = document.getElementById('label-' + this.labelId)
-      obj.className = 'everyLabel label-selected'
     }
   }
 }
