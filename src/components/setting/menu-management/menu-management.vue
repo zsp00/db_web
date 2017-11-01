@@ -2,7 +2,7 @@
   <div id="type-list" v-loading="loading">
     <div style="margin-top: 20px" id="btn">
       <el-button type="button" @click="showAddDialog">新增菜单</el-button>
-      <el-button @click="toggleDelection()">删除</el-button>
+      <el-button @click="toggleDelection()">禁用</el-button>
       <!--这是添加菜单的模态框-->
       <el-dialog title="新增菜单" :visible.sync="dialogFormVisible">
         <el-form :model="form">
@@ -19,7 +19,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="菜单排序" :label-width="formLabelWidth">
-            <el-input v-model="form.sort" auto-complete="off" style="width:243px;"></el-input>
+            <el-input v-model="form.sort" auto-complete="off" style="width:30%;"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -43,7 +43,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="菜单排序" :label-width="formLabelWidth">
-            <el-input v-model="editForm.sort" auto-complete="off" style="width:243px;"></el-input>
+            <el-input v-model="editForm.sort" auto-complete="off" style="width:30%;"></el-input>
           </el-form-item>          
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -52,6 +52,7 @@
         </div>
       </el-dialog>
     </div>
+    <!--这是菜单表格的展示框-->
     <el-table ref="multipleTable" :data="data" border tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55">
       </el-table-column>
@@ -61,11 +62,12 @@
       </el-table-column>
       <el-table-column prop="status" label="状态" width="80">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status === '1' ? 'success' : 'danger'" close-transition>{{ scope.row.status == 1 ? '启用' : '停用' }}</el-tag>
+          <el-tag :type="scope.row.status === '1' ? 'success' : 'danger'" close-transition>{{ scope.row.status == 1 ? '启用' : '禁用' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="options" label="操作" width="240">
         <template slot-scope="scope">
+          <el-button type="text" size="small" @click="" >权限</el-button>
           <el-button type="text" size="small"  @click="showEditDialog(scope.row.id)">编辑</el-button>
           <el-button type="text" size="small" @click="delMenu(scope.row.id)" >删除</el-button>
         </template>
