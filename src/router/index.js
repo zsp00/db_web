@@ -10,7 +10,9 @@ import Label from 'components/setting/label/label.vue'
 import MenuManagement from 'components/setting/menu-management/menu-management.vue'
 import TypeList from 'components/task/task-type/type-list'
 import Process from 'components/process/process'
-import ProcessManagement from 'components/process/process-management/process-management'
+import ProcessList from 'components/process/process-management/process-list'
+import AddProcess from 'components/process/process-management/process-add'
+import EditProcess from 'components/process/process-management/process-edit'
 
 Vue.use(Router)
 export default new Router({
@@ -76,9 +78,19 @@ export default new Router({
       component: Process,
       children: [
         {
-          path: 'process-management',
-          name: '标签管理',
-          component: ProcessManagement
+          path: 'process-list',
+          name: '流程管理',
+          component: ProcessList
+        },
+        {
+          path: 'process-add',
+          name: '新增流程',
+          component: AddProcess
+        },
+        {
+          path: 'process-edit/:pId',
+          name: '编辑流程',
+          component: EditProcess
         }
       ]
     },

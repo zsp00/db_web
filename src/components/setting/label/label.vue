@@ -34,7 +34,7 @@
           </div>
           <div class="label-list-container">
             <ul id="asdasdasd">
-              <li v-for="(item, index) in labelList" :key="item.id" v-if="labelId == item.id" @click="labelId = item.id">
+              <li v-for="(item, index) in labelList" :key="item.id" :class="(labelId == item.id) ? 'label-selected' : ''" @click="labelId = item.id">
                 <span>{{ item.name }}</span>
                 <i class="el-icon-delete" @click="_del(item.id, index)"></i>
                 <i class="el-icon-edit" @click="_edit(item.id, index)"></i>
