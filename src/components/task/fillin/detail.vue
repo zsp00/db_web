@@ -19,7 +19,7 @@
       </el-col>
       <el-col :span="4">
         <el-form-item label="所属年份">
-          {{form.year}}年
+          {{form.releaseTime}}年
         </el-form-item>
       </el-col>
       <el-col :span="4">
@@ -33,8 +33,8 @@
         </el-form-item>
       </el-col>
       <el-form-item label="月份">
-        <el-radio-group v-model="mouth" @change="chengeMouth">
-          <el-radio-button v-for="(item, key) in form.taskDataList" :key="key" :label="item.mouth">{{item.mouth}}月</el-radio-button>
+        <el-radio-group v-model="tDate" @change="chengeMouth">
+          <el-radio-button v-for="(item, key) in form.taskDataList" :key="key" :label="item.tDate">{{item.tDate}}月</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-row>
@@ -89,13 +89,13 @@
     </el-form>
     
     <el-table :data="form.taskDataList" border>
-      <el-table-column prop="mouth" label="月份" width="80"></el-table-column>
+      <el-table-column prop="tDate" label="月份" width="80"></el-table-column>
       <el-table-column prop="completeSituation" label="完成情况"></el-table-column>
       <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议"></el-table-column>
       <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施"></el-table-column>
     </el-table>
-    <el-tabs type="border-card" class="logList" v-model="mouth" @tab-click="handleClick">
-      <el-tab-pane :label="item.mouth + '月份'" :name="item.mouth + ''" v-for="(item,index) in form.taskDataList" :key="item.mouth">
+    <el-tabs type="border-card" class="logList" v-model="tDate" @tab-click="handleClick">
+      <el-tab-pane :label="item.tDate + '月份'" :name="item.tDate + ''" v-for="(item,index) in form.taskDataList" :key="item.tDate">
           <template v-if="loglist === null || loglist.length === 0">
             没有修改记录
           </template>
@@ -156,7 +156,7 @@ export default {
         status: '',
         taskDataList: [
           {
-            mouth: 0
+            tDate: 0
           }
         ],
         identitys: []
@@ -166,7 +166,7 @@ export default {
         problemSuggestions: null,
         analysis: null
       },
-      mouth: 0,
+      tDate: 0,
       currTaskData: [],
       isEdit: false,
       isSubmit: false,
@@ -184,6 +184,7 @@ export default {
       getDetail(this.form.id).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
+          console.log(this.form)
           var status = [1]
           for (var i = 0; i < this.form.identitys; i++) {
             // 如果是办公室
@@ -195,9 +196,10 @@ export default {
           for (i = 0; i < this.form.taskDataList.length; i++) {
             // 根据
             if (selected === null) {
-              this.mouth = this.form.taskDataList[i].mouth
+              this.tDate = this.form.taskDataList[i].tDate
               this.currTaskData = this.form.taskDataList[i]
-              this.chengeMouth(this.mouth)
+              console.log(this.currTaskData)
+              this.chengeMouth(this.tDate)
               selected = true
             }
           }
@@ -207,10 +209,10 @@ export default {
       })
     },
     handleClick (tab, event) {
-      this.mouth = tab.name
+      this.tDate = tab.name
     },
-    logs (mouth) {
-      getLogs(this.form.id, mouth).then((res) => {
+    logs (tDate) {
+      getLogs(this.form.id, tDate).then((res) => {
         if (ERR_OK === res.data.code) {
           this.loglist = res.data.msg
         }
@@ -260,15 +262,16 @@ export default {
     onCancel () {
       this.$router.go(-1)
     },
-    chengeMouth (mouth) {
+    chengeMouth (tDate) {
       var item
       // 赋值数据
       for (var i = 0; i < this.form.taskDataList.length; i++) {
-        if (mouth === this.form.taskDataList[i].mouth) {
+        if (tDate === this.form.taskDataList[i].tDate) {
           item = this.form.taskDataList[i]
           break
         }
       }
+      console.log(this.form.status)
       if (this.form.status === '1') {
         // 检查是否有可以编辑
         switch (item.status) {
@@ -277,6 +280,8 @@ export default {
             // 如果是部门负责人
             if (this.checkIdentitys('1')) {
               this.isEdit = true
+              console.log(123)
+              console.log(this.isEdit)
               this.isSubmit = true
             } else if (this.checkIdentitys('2')) {  // 如果是办公室 那么可以修改
               this.isEdit = false
@@ -323,7 +328,7 @@ export default {
         this.isComplete = false
       }
       this.update = item
-      this.logs(this.mouth)
+      this.logs(this.tDate)
     },
     // 检查身份
     checkIdentitys (type) {
@@ -344,7 +349,7 @@ export default {
     }
   },
   watch: {
-    mouth (newVal, oldVal) {
+    tDate (newVal, oldVal) {
       this.chengeMouth(newVal)
     }
   }

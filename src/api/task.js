@@ -36,7 +36,50 @@ export function complete (data) {
   return post(url, data, {headers: DB_API.headers})
 }
 
+// 修改日志
 export function getLogs (tId, mouth) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/getLogs'
   return post(url, { tId: tId, mouth: mouth }, {headers: DB_API.headers})
+}
+
+// 获取分类列表
+export function getTypeList () {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/getTypeList'
+  return post(url, {}, {headers: DB_API.headers})
+}
+
+// 添加分类
+export function addType (typeInfo) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/addType'
+  return post(url, {typeInfo: typeInfo}, {headers: DB_API.headers})
+}
+
+// 获取编辑的分类信息
+export function editTypeSelt (typeId) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/editTypeSelt'
+  return post(url, {typeId: typeId}, {headers: DB_API.headers})
+}
+
+// 编辑分类
+export function editType (typeInfo) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/editType'
+  return post(url, {typeInfo: typeInfo}, {headers: DB_API.headers})
+}
+
+// 删除分类
+export function delType (typeId) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/delType'
+  return post(url, {typeId: typeId}, {headers: DB_API.headers})
+}
+
+// 检查分类名字是否重复
+export function checkRepeat (typeName) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/checkRepeat'
+  return get(url, { typeName: typeName }, {headers: DB_API.headers})
+}
+
+// 禁用启用
+export function oprationSta (typeId, status) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/oprationSta'
+  return get(url, { typeId: typeId, status: status }, {headers: DB_API.headers})
 }
