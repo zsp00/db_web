@@ -78,6 +78,10 @@ export default new Router({
       component: Process,
       children: [
         {
+          path: '',
+          redirect: 'process-list'
+        },
+        {
           path: 'process-list',
           name: '流程管理',
           component: ProcessList
