@@ -2,7 +2,8 @@
   <div id="type-list" v-loading="loading">
     <div style="margin-top: 20px" id="btn">
       <el-button type="button" @click="showAddDialog">新增菜单</el-button>
-      <el-button @click="toggleDelection()">禁用</el-button>
+      <el-button @click="Enable(multipleSelection)">启用</el-button>
+      <el-button @click="Disable(multipleSelection)">禁用</el-button>
       <!--这是添加菜单的模态框-->
       <el-dialog title="新增菜单" :visible.sync="dialogFormVisible">
         <el-form :model="form">
@@ -24,7 +25,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="onSubmit">确 定</el-button>
+          <el-button type="primary" @click="_AddSubmit">确 定</el-button>
         </div>
       </el-dialog>
       <!--这是修改菜单的模态框-->
@@ -48,7 +49,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormEdit = false">取 消</el-button>
-          <el-button type="primary" @click="editSubmit">确 定</el-button>
+          <el-button type="primary" @click="_editSubmit">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -67,9 +68,8 @@
       </el-table-column>
       <el-table-column prop="options" label="操作" width="240">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="" >权限</el-button>
           <el-button type="text" size="small"  @click="showEditDialog(scope.row.id)">编辑</el-button>
-          <el-button type="text" size="small" @click="delMenu(scope.row.id)" >删除</el-button>
+          <el-button type="text" size="small" @click="_del(scope.row.id)" >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,13 +77,13 @@
 </template>
 
 <script>
-  import {addMenu, getMenuList, editMenuId, editMenu, delMenu} from 'api/menu-manage.js'
+  import {getMenuList, addMenu, editMenuId, editMenu, delMenu, enable, disable, checkRepeat} from 'api/menu-manage.js'
   import {ERR_OK} from 'api/config.js'
+  import { trim } from 'api/public.js'
   export default {
     data () {
       return {
         data: [],
-        multipleSelection: [],
         form: {
           name: '',
           router: '',
@@ -94,16 +94,17 @@
           name: '',
           router: ''
         },
-        formLabelWidth: '80px',
         options: [
           {
             label: '顶级分类',
             value: '0'
           }
         ],
+        formLabelWidth: '80px',
         loading: false,
         dialogFormVisible: false,
-        dialogFormEdit: false
+        dialogFormEdit: false,
+        multipleSelection: ''
       }
     },
     mounted () {
@@ -116,27 +117,49 @@
           this.data = res.data.msg
         })
       },
-      toggleDelection (rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleDelection(row)
-          })
-        } else {
-          this.$refs.multipleTable.clearDelection()
-        }
-      },
+      // 多选按钮
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      // 删除菜单
-      delMenu (id) {
-        delMenu(id).then((res) => {
+      // 启用按钮
+      Enable (id) {
+        enable(id).then((res) => {
           if (ERR_OK === res.data.code) {
             this.$message.success(res.data.msg)
             this._getMenuList()
           } else {
             this.$message.error(res.data.msg)
           }
+        })
+      },
+     // 禁用按钮
+      Disable (id) {
+        disable(id).then((res) => {
+          if (ERR_OK === res.data.code) {
+            this.$message.success(res.data.msg)
+            this._getMenuList()
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+      },
+      // 删除分类
+      _del (id) {
+        this.$confirm('此操作将删除该分类, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          delMenu(id).then((res) => {
+            if (ERR_OK === res.data.code) {
+              this.$message.success(res.data.msg)
+              this._getMenuList()
+            } else {
+              this.$message.error(res.data.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message.warning('已取消删除！')
         })
       },
       // 添加菜单的模态框
@@ -161,36 +184,61 @@
         this.dialogFormEdit = true
       },
       // 添加的数据提交
-      onSubmit  () {
+      _AddSubmit  () {
+        this.form.name = trim(this.form.name)
         if (this.form.name === '') {
           this.$message.error('菜单名称不能为空')
-        } else if (this.form.router === '') {
-          this.$message.error('路径不能为空')
-        } else {
+          return
+        }
+        checkRepeat(this.form.name).then((res) => {
+          return new Promise(function (resolve, reject) {
+            if (res.data.code === ERR_OK) {
+              resolve()
+            } else {
+              reject()
+            }
+          })
+        }).then(() => {
           addMenu(this.form).then((res) => {
             if (ERR_OK === res.data.code) {
               this.$message.success(res.data.msg)
               this.dialogFormVisible = false
               this._getMenuList()
+              this.form.name = ''
             }
           })
-        }
+        }).catch(() => {
+          this.$message.error('该名称已经存在！')
+        })
       },
       // 修改的数据提交
-      editSubmit  () {
+      _editSubmit  () {
+        this.editForm.name = trim(this.editForm.name)
         if (this.editForm.name === '') {
           this.$message.error('菜单名称不能为空')
-        } else if (this.editForm.router === '') {
-          this.$message.error('路径不能为空')
-        } else {
+          return
+        }
+        checkRepeat(this.editForm.name).then((res) => {
+          return new Promise(function (resolve, reject) {
+            if (res.data.code === ERR_OK) {
+              resolve()
+            } else {
+              reject()
+            }
+          })
+        }).then(() => {
           editMenu(this.editForm).then((res) => {
             if (ERR_OK === res.data.code) {
               this.$message.success(res.data.msg)
               this.dialogFormEdit = false
               this._getMenuList()
+            } else {
+              this.$message.error('请做出修改')
             }
           })
-        }
+        }).catch(() => {
+          this.$message.error('该名称已经存在！')
+        })
       }
     }
   }
