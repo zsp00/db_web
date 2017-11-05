@@ -101,7 +101,11 @@ export default {
       }
       addProcess(this.form).then((res) => {
         if (res.data.code === 1) {
+          this.$message.success('新增流程成功！')
           this.$router.push('/process/process-list')
+        } else {
+          this.$message.error('新增流程失败！')
+          console.log(res.data.msg)
         }
       })
     },
@@ -130,6 +134,7 @@ export default {
           return false
         }
       }
+      return true
     }
   }
 }

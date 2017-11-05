@@ -41,7 +41,6 @@ export default {
     _getMenus () {
       getMenus().then((res) => {
         if (ERR_OK === res.data.code) {
-          console.log(res)
           this.menus = res.data.msg
         }
       })
