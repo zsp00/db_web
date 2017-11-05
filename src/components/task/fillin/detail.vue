@@ -33,7 +33,7 @@
         </el-form-item>
       </el-col>
       <el-form-item label="月份">
-        <el-radio-group v-model="tDate" @change="chengeMouth">
+        <el-radio-group v-model="tDate">
           <el-radio-button v-for="(item, key) in form.taskDataList" :key="key" :label="item.tDate">{{item.tDate}}月</el-radio-button>
         </el-radio-group>
       </el-form-item>
@@ -72,9 +72,9 @@
       </el-col>
       <el-col :span="4">
         <el-form-item label="我的身份">
-          <el-tag v-if="form.identitys.length === 0">员工</el-tag>
+          <!-- <el-tag v-if="form.identitys.length === 0">员工</el-tag>
           <el-tag v-if="form.identitys.indexOf('1') > -1">部门负责人</el-tag>
-          <el-tag v-if="form.identitys.indexOf('2') > -1">办公室负责人</el-tag>
+          <el-tag v-if="form.identitys.indexOf('2') > -1">办公室负责人</el-tag> -->
         </el-form-item>
       </el-col>
       <el-col :span="24">
@@ -82,7 +82,8 @@
           <el-button v-show="isEdit" type="primary" @click="onEdit">修改</el-button>
           <el-button v-show="isSubmit" type="primary" @click="onSubmits">提交</el-button>
           <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
-          <el-button v-show="isComplete" type="primary" @click="onComplete">完成</el-button>
+          <el-button v-show="isReject" type="primary" @click="onReject">驳回</el-button>
+          <el-button v-show="isWithdraw" type="primary" @click="onWithdraw">撤回</el-button>
           <el-button @click="onCancel">取消</el-button>
         </el-form-item>
       </el-col>
@@ -94,7 +95,7 @@
       <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议"></el-table-column>
       <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施"></el-table-column>
     </el-table>
-    <el-tabs type="border-card" class="logList" v-model="tDate" @tab-click="handleClick">
+    <el-tabs type="border-card" class="logList" v-model="tDate">
       <el-tab-pane :label="item.tDate + '月份'" :name="item.tDate + ''" v-for="(item,index) in form.taskDataList" :key="item.tDate">
           <template v-if="loglist === null || loglist.length === 0">
             没有修改记录
@@ -114,7 +115,7 @@
               <template v-if="list.type == 'edit'">
                 <span slot="reference"><b>编辑</b></span>。
                 <div class="editLog">
-                  <div v-for="logItem in list.logData">
+                  <!-- <div v-for="logItem in list.logData">
                     修改了
                     <template v-if="logItem.field === 'completeSituation'">
                       <b><i>完成情况</i></b>
@@ -126,7 +127,7 @@
                       <b><i>未按时限完成或进度滞后的项目原因分析及推进措施</i></b>
                     </template>
                     ，旧值为“{{logItem.old}}”，新值为“{{logItem.new}}”。
-                  </div>
+                  </div> -->
                 </div>
               </template>
             </div>
@@ -158,20 +159,20 @@ export default {
           {
             tDate: 0
           }
-        ],
-        identitys: []
+        ]
       },
       update: {
-        completeSituation: '',
+        completeSituation: null,
         problemSuggestions: null,
         analysis: null
       },
-      tDate: 0,
+      tDate: null,
       currTaskData: [],
       isEdit: false,
       isSubmit: false,
       isConfirm: false,
-      isComplete: false,
+      isReject: false,
+      isWithdraw: false,
       loglist: null
     }
   },
@@ -184,22 +185,12 @@ export default {
       getDetail(this.form.id).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
-          console.log(this.form)
-          var status = [1]
-          for (var i = 0; i < this.form.identitys; i++) {
-            // 如果是办公室
-            if (this.form.identitys[i] === 1) {
-              status.push(2)
-            }
-          }
           var selected = null
-          for (i = 0; i < this.form.taskDataList.length; i++) {
+          for (var i = 0; i < this.form.taskDataList.length; i++) {
             // 根据
             if (selected === null) {
               this.tDate = this.form.taskDataList[i].tDate
               this.currTaskData = this.form.taskDataList[i]
-              console.log(this.currTaskData)
-              this.chengeMouth(this.tDate)
               selected = true
             }
           }
@@ -207,9 +198,6 @@ export default {
           this.$message.error(res.data.msg)
         }
       })
-    },
-    handleClick (tab, event) {
-      this.tDate = tab.name
     },
     logs (tDate) {
       getLogs(this.form.id, tDate).then((res) => {
@@ -249,7 +237,7 @@ export default {
         }
       })
     },
-    onComplete () {
+    onReject () {
       complete(this.update).then((res) => {
         if (ERR_OK === res.data.code) {
           this.$message.success(res.data.msg)
@@ -259,6 +247,9 @@ export default {
         }
       })
     },
+    onWithdraw () {
+
+    },
     onCancel () {
       this.$router.go(-1)
     },
@@ -266,91 +257,58 @@ export default {
       var item
       // 赋值数据
       for (var i = 0; i < this.form.taskDataList.length; i++) {
-        if (tDate === this.form.taskDataList[i].tDate) {
+        if (tDate.toString() === this.form.taskDataList[i].tDate) {
           item = this.form.taskDataList[i]
           break
         }
       }
-      console.log(this.form.status)
-      if (this.form.status === '1') {
-        // 检查是否有可以编辑
-        switch (item.status) {
-          // 部门领导未提交
-          case '1':
-            // 如果是部门负责人
-            if (this.checkIdentitys('1')) {
-              this.isEdit = true
-              console.log(123)
-              console.log(this.isEdit)
-              this.isSubmit = true
-            } else if (this.checkIdentitys('2')) {  // 如果是办公室 那么可以修改
-              this.isEdit = false
-              this.isSubmit = false
-            } else {  // 普通员工也没办法修改了
-              this.isEdit = true
-              this.isSubmit = false
-            }
+      if (item.status === 1) {
+        if (item.currentLevel === this.form.identitys) {
+          this.isEdit = true
+          if (this.form.identitys !== 6) {
+            this.isSubmit = true
             this.isConfirm = false
-            this.isComplete = false
-            break
-          // 部门领导提交了
-          case '2':
-            // 如果是部门领导 那么不能修改了
-            if (this.checkIdentitys('1')) {
-              this.isEdit = false
-              this.isSubmit = false
-              this.isConfirm = false
-              this.isComplete = false
-            } else if (this.checkIdentitys('2')) {  // 如果是办公室 那么可以修改
-              this.isEdit = true
-              this.isSubmit = false
-              this.isConfirm = true
-              this.isComplete = true
-            } else {  // 普通员工也没办法修改了
-              this.isEdit = false
-              this.isSubmit = false
-              this.isConfirm = false
-              this.isComplete = false
-            }
-            break
-          // 如果办公室也确认了
-          case '3':
-            this.isEdit = false
+          } else {
             this.isSubmit = false
-            this.isConfirm = false
-            this.isComplete = true
-            break
+            this.isConfirm = true
+          }
+          if (this.form.identitys !== 1) {
+            this.isReject = true
+          }
+        } else if (item.currentLevel === this.form.identitys + 1) {
+          if (this.form.identitys !== 6) {
+            this.isWithdraw = true
+          }
         }
-      } else if (this.form.status === '2') {
+        //   this.isSubmit = true
+        //   if (this.form.identitys > 1) {
+        //     this.isReject = true
+        //   }
+        //   this.isWithdraw = false
+        //   this.isConfirm = false
+        // } else if (item.currentLevel === this.form.identitys + 1) {
+        //   this.isWithdraw = true
+        //   this.isEdit = false
+        //   this.isSubmit = false
+        //   this.isConfirm = false
+        //   this.isReject = false
+        // }
+      } else if (item.status === 0) {
         this.isEdit = false
         this.isSubmit = false
         this.isConfirm = false
-        this.isComplete = false
+        this.isReject = false
+        this.isWithdraw = false
       }
       this.update = item
       this.logs(this.tDate)
-    },
-    // 检查身份
-    checkIdentitys (type) {
-      switch (type) {
-        // 检查是不是部门负责人
-        case '1':
-          if (this.form.identitys.indexOf('1') > -1) {
-            return true
-          }
-          break
-        // 检查是不是办公室负责人
-        case '2':
-          if (this.form.identitys.indexOf('2') > -1) {
-            return true
-          }
-          break
-      }
     }
   },
   watch: {
-    tDate (newVal, oldVal) {
-      this.chengeMouth(newVal)
+    tDate: function (newVal, oldVal) {
+      if (newVal !== null && newVal !== '0') {
+        this.chengeMouth(newVal)
+      }
     }
   }
 }
