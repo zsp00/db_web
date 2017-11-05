@@ -7,9 +7,9 @@
           <div v-if="this.info.loaded">
             <span>{{this.info.date.currYear}}年{{this.info.date.currMouth}}月</span>
             <span>我的部门：{{info.deptName}}</span>
-            <el-tag v-if="taskList.identitys.length === 0">员工</el-tag>
+            <!-- <el-tag v-if="taskList.identitys.length === 0">员工</el-tag>
             <el-tag v-if="taskList.identitys.indexOf('1') > -1">部门负责人</el-tag>
-            <el-tag v-if="taskList.identitys.indexOf('2') > -1">办公室负责人</el-tag>
+            <el-tag v-if="taskList.identitys.indexOf('2') > -1">办公室负责人</el-tag> -->
           </div>
         </transition>
       </el-col>
@@ -29,6 +29,22 @@
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="任务分类">
+            <el-select
+              v-model="search.typeId"
+              filterable
+              allow-create
+              width="100%"
+              :value="search.typeId"
+              placeholder="请选择任务分类">
+              <el-option
+                v-for="item in typeList"
+                :key="item.id"
+                :label="item.typeName"
+                :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -64,6 +80,11 @@
             </template>
           </el-table-column>
           <el-table-column
+            prop="typeName"
+            label="任务分类"
+            width="150">
+          </el-table-column>
+          <el-table-column
             prop="deptName"
             label="部门"
             align="center"
@@ -79,10 +100,7 @@
             prop="timeLimit"
             label="完成时限"
             align="center"
-            width="95">
-            <template  slot-scope="scope">
-              <div class="task-time-limit">{{scope.row.timeLimit}}月</div>
-            </template>
+            width="115">
           </el-table-column>
           <el-table-column
             prop="level"
@@ -103,14 +121,14 @@
           <el-table-column
             prop="analysis"
             label="未按时限完成或进度滞后的项目原因分析及推进措施"
-            width="380">
+            width="360">
           </el-table-column>
           <el-table-column
             fixed="right"
-            prop="taskDataStatusMsg"
+            prop="pDescribe"
             label="状态"
             align="center"
-            width="85">
+            width="150">
             <template slot-scope="scope">
               <span v-if="scope.row.status === '1'"> 
                 {{scope.row.taskDataStatusMsg}}
@@ -124,7 +142,7 @@
             fixed="right"
             align="center"
             label="操作"
-            width="150">
+            width="80">
             <template slot-scope="scope">
               <!--都有修改权限-->
               <el-button type="text" @click="onClickDetail(scope.row)" size="small">修改</el-button>
@@ -151,7 +169,7 @@
 </template>
 
 <script>
-import {getInfo, getList} from 'api/task.js'
+import { getInfo, getList, getTypeList } from 'api/task.js'
 import {ERR_OK} from 'api/config.js'
 import loading from 'base/loading/loading'
 export default {
@@ -159,7 +177,8 @@ export default {
     return {
       search: {
         keyword: null,
-        level: ''
+        level: '',
+        typeId: ''
       },
       levelOptions: [
         {
@@ -183,6 +202,7 @@ export default {
           label: 'D'
         }
       ],
+      typeList: [],
       tableData: [{
       }],
       options: [],
@@ -205,6 +225,7 @@ export default {
   mounted () {
     this._getInfo()
     this._getList()
+    this._getTypeList()
   },
   methods: {
     onClickDetail (row) {
@@ -243,7 +264,7 @@ export default {
     },
     _getList () {
       this.taskList.loading = true
-      getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level).then((res) => {
+      getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId).then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList.loading = false
           this.taskList.identitys = res.data.msg.identitys
@@ -251,6 +272,18 @@ export default {
           this.taskList.list = res.data.msg.data
         } else {
           this.$message.error(res.data.msg)
+        }
+      })
+    },
+    _getTypeList () {
+      getTypeList().then((res) => {
+        if (res.data.code === 1) {
+          this.typeList = res.data.msg
+          var allType = {
+            id: '',
+            typeName: '全部分类'
+          }
+          this.typeList.splice(0, 0, allType)
         }
       })
     }

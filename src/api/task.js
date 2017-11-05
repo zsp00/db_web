@@ -6,9 +6,9 @@ export function getInfo () {
   return get(url, {}, {headers: DB_API.headers})
 }
 
-export function getList (page, listRow, keyword, level) {
+export function getList (page, listRow, keyword, level, typeId) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/getList'
-  return get(url, {page: page, listRow: listRow, keyword: keyword, level: level}, {headers: DB_API.headers})
+  return get(url, {page: page, listRow: listRow, keyword: keyword, level: level, typeId: typeId}, {headers: DB_API.headers})
 }
 
 export function getDetail (id) {
