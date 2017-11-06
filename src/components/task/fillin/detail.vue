@@ -24,7 +24,7 @@
       </el-col>
       <el-col :span="4">
         <el-form-item label="完成时限">
-          {{form.timeLimit}}月
+          {{form.timeLimit}}
         </el-form-item>
       </el-col>
       <el-col :span="4">
@@ -106,10 +106,13 @@
               <template v-if="list.type == 'complete'">
                 <span style="" slot="reference"><b>完成</b></span>。
               </template>
+              <template v-if="list.type == 'reject'">
+                <span style="" slot="reference"><b>驳回</b></span>。
+              </template>
               <template v-if="list.type == 'edit'">
                 <span slot="reference"><b>编辑</b></span>。
                 <div class="editLog">
-                  <!-- <div v-for="logItem in list.logData">
+                  <div v-for="logItem in list.logData">
                     修改了
                     <template v-if="logItem.field === 'completeSituation'">
                       <b><i>完成情况</i></b>
@@ -121,7 +124,7 @@
                       <b><i>未按时限完成或进度滞后的项目原因分析及推进措施</i></b>
                     </template>
                     ，旧值为“{{logItem.old}}”，新值为“{{logItem.new}}”。
-                  </div> -->
+                  </div>
                 </div>
               </template>
             </div>
