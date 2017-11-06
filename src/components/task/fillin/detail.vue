@@ -1,7 +1,7 @@
 <template>
 <transition name="detail">
   <div class="detail">
-    <el-form :model="form"  label-position="top" label-width="120px">
+    <el-form :model="form" label-position="top" label-width="120px">
       <el-col :span="24">
         <el-form-item label="任务">
           {{form.content}}
@@ -57,7 +57,7 @@
             <el-input type="textarea" :disabled="!isEdit" v-model="update.analysis" :autosize="{ minRows: 4, maxRows: 10}"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>            
+      </el-row>
       <el-col :span="4">
         <el-form-item label="状态">
           <template>
@@ -70,13 +70,6 @@
           </template>
         </el-form-item>
       </el-col>
-      <el-col :span="4">
-        <el-form-item label="我的身份">
-          <!-- <el-tag v-if="form.identitys.length === 0">员工</el-tag>
-          <el-tag v-if="form.identitys.indexOf('1') > -1">部门负责人</el-tag>
-          <el-tag v-if="form.identitys.indexOf('2') > -1">办公室负责人</el-tag> -->
-        </el-form-item>
-      </el-col>
       <el-col :span="24">
         <el-form-item>
           <el-button v-show="isEdit" type="primary" @click="onEdit">修改</el-button>
@@ -84,6 +77,7 @@
           <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
           <el-button v-show="isReject" type="primary" @click="onReject">驳回</el-button>
           <el-button v-show="isWithdraw" type="primary" @click="onWithdraw">撤回</el-button>
+          <el-button v-show="isComplete" type="primary" @click="onComplete">确认任务完成</el-button>
           <el-button @click="onCancel">取消</el-button>
         </el-form-item>
       </el-col>
@@ -139,8 +133,8 @@
 </template>
 
 <script>
-import {getDetail, edit, complete, confirm, getLogs, submits} from 'api/task.js'
-import {ERR_OK} from 'api/config.js'
+import { getDetail, edit, reject, confirm, getLogs, submits, withdraw, complete } from 'api/task.js'
+import { ERR_OK } from 'api/config.js'
 export default {
   data () {
     return {
@@ -159,7 +153,8 @@ export default {
           {
             tDate: 0
           }
-        ]
+        ],
+        steps: 0
       },
       update: {
         completeSituation: null,
@@ -173,6 +168,7 @@ export default {
       isConfirm: false,
       isReject: false,
       isWithdraw: false,
+      isComplete: false,
       loglist: null
     }
   },
@@ -182,6 +178,7 @@ export default {
   },
   methods: {
     _getDetail () {
+      this.tDate = '0'
       getDetail(this.form.id).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
@@ -218,37 +215,89 @@ export default {
     },
     // 提交按钮
     onSubmits () {
-      submits(this.update).then((res) => {
-        if (ERR_OK === res.data.code) {
-          this.$message.success(res.data.msg)
-          this._getDetail()
-        } else {
-          this.$message.error(res.data.msg)
-        }
-      })
+      this.$confirm('是否要提交该任务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        submits(this.update).then((res) => {
+          if (ERR_OK === res.data.code) {
+            this.$message.success(res.data.msg)
+            this._getDetail()
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+      }).catch(() => {})
     },
+    // 确认任务
     onConfirm () {
-      confirm(this.update).then((res) => {
-        if (ERR_OK === res.data.code) {
-          this.$message.success(res.data.msg)
-          this._getDetail()
-        } else {
-          this.$message.error(res.data.msg)
-        }
-      })
+      this.$confirm('是否要确认任务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        confirm(this.update).then((res) => {
+          if (ERR_OK === res.data.code) {
+            this.$message.success(res.data.msg)
+            this._getDetail()
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+      }).catch(() => {})
     },
+    // 驳回任务请求
     onReject () {
-      complete(this.update).then((res) => {
-        if (ERR_OK === res.data.code) {
-          this.$message.success(res.data.msg)
-          this._getDetail()
-        } else {
-          this.$message.error(res.data.msg)
-        }
-      })
+      this.$confirm('是否要驳回该任务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        reject(this.update).then((res) => {
+          if (ERR_OK === res.data.code) {
+            this.$message.success(res.data.msg)
+            this._getDetail()
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+      }).catch(() => {})
     },
+    // 撤回提交
     onWithdraw () {
-
+      this.$confirm('是否要撤回该任务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        withdraw(this.update).then((res) => {
+          if (ERR_OK === res.data.code) {
+            this.$message.success(res.data.msg)
+            this._getDetail()
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+      }).catch(() => {})
+    },
+    onComplete () {
+      this.$confirm('是否确认完成该任务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        complete(this.update).then((res) => {
+          if (ERR_OK === res.data.code) {
+            this.$message.success(res.data.msg)
+            this.$router.push({
+              path: '/'
+            })
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+      }).catch(() => {})
     },
     onCancel () {
       this.$router.go(-1)
@@ -262,10 +311,11 @@ export default {
           break
         }
       }
+      this._initBtn()
       if (item.status === 1) {
         if (item.currentLevel === this.form.identitys) {
           this.isEdit = true
-          if (this.form.identitys !== 6) {
+          if (this.form.identitys !== this.form.steps) {
             this.isSubmit = true
             this.isConfirm = false
           } else {
@@ -276,7 +326,7 @@ export default {
             this.isReject = true
           }
         } else if (item.currentLevel === this.form.identitys + 1) {
-          if (this.form.identitys !== 6) {
+          if (this.form.identitys !== this.form.steps) {
             this.isWithdraw = true
           }
         }
@@ -286,14 +336,25 @@ export default {
         this.isConfirm = false
         this.isReject = false
         this.isWithdraw = false
+        if (this.form.status === '1') {
+          this.isComplete = true
+        }
       }
       this.update = item
       this.logs(this.tDate)
+    },
+    _initBtn () {
+      this.isEdit = false
+      this.isSubmit = false
+      this.isConfirm = false
+      this.isReject = false
+      this.isWithdraw = false
+      this.isComplete = false
     }
   },
   watch: {
     tDate: function (newVal, oldVal) {
-      if (newVal !== null && newVal !== '0') {
+      if (newVal !== null && newVal !== '0' && newVal !== 0) {
         this.chengeMouth(newVal)
       }
     }

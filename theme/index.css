@@ -5265,7 +5265,7 @@
     transition: border-color .3s, background-color .3s;
 }
 .el-switch__core .el-switch__button {
-    top: 0;
+    top: 2px;
     left: 0;
     position: absolute;
     border-radius: 100%;

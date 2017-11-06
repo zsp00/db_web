@@ -16,21 +16,37 @@ export function getDetail (id) {
   return get(url, {id: id}, {headers: DB_API.headers})
 }
 
+// 任务内容修改
 export function edit (data) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/edit'
   return post(url, data, {headers: DB_API.headers})
 }
 
+// 提交任务
 export function submits (data) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/submits'
   return post(url, data, {headers: DB_API.headers})
 }
 
+// 确认任务
 export function confirm (data) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/confirm'
   return post(url, data, {headers: DB_API.headers})
 }
 
+// 驳回任务请求
+export function reject (data) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/reject'
+  return post(url, data, {headers: DB_API.headers})
+}
+
+// 撤回任务
+export function withdraw (data) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/withdraw'
+  return post(url, data, {headers: DB_API.headers})
+}
+
+// 完成任务
 export function complete (data) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/complete'
   return post(url, data, {headers: DB_API.headers})
