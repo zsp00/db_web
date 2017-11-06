@@ -62,7 +62,7 @@
         <el-form-item label="状态">
           <template>
             <span v-if="form.status === '1'"> 
-              {{form.taskDataStatusMsg[currTaskData.status]}}
+              {{form.taskDataList[monthIndex].taskDataStatusMsg}}
             </span>
             <span v-if="form.status === '2'"> 
               {{form.statusMsg}}
@@ -169,7 +169,8 @@ export default {
       isReject: false,
       isWithdraw: false,
       isComplete: false,
-      loglist: null
+      loglist: null,
+      monthIndex: 0              // 该任务选择展示月份的索引
     }
   },
   mounted () {
@@ -182,6 +183,7 @@ export default {
       getDetail(this.form.id).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
+          console.log(this.form)
           var selected = null
           for (var i = 0; i < this.form.taskDataList.length; i++) {
             if (selected === null) {
@@ -308,25 +310,26 @@ export default {
       for (var i = 0; i < this.form.taskDataList.length; i++) {
         if (tDate.toString() === this.form.taskDataList[i].tDate) {
           item = this.form.taskDataList[i]
+          this.monthIndex = i
           break
         }
       }
       this._initBtn()
       if (item.status === 1) {
-        if (item.currentLevel === this.form.identitys) {
+        if (item.currentLevel === this.form.identitys[0]) {
           this.isEdit = true
-          if (this.form.identitys !== this.form.steps) {
+          if (this.form.identitys[0] !== this.form.steps) {
             this.isSubmit = true
             this.isConfirm = false
           } else {
             this.isSubmit = false
             this.isConfirm = true
           }
-          if (this.form.identitys !== 1) {
+          if (this.form.identitys[0] !== 1) {
             this.isReject = true
           }
-        } else if (item.currentLevel === this.form.identitys + 1) {
-          if (this.form.identitys !== this.form.steps) {
+        } else if (item.currentLevel === this.form.identitys[0] + 1) {
+          if (this.form.identitys[0] !== this.form.steps) {
             this.isWithdraw = true
           }
         }
