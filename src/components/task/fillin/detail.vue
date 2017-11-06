@@ -187,7 +187,6 @@ export default {
           this.form = res.data.msg
           var selected = null
           for (var i = 0; i < this.form.taskDataList.length; i++) {
-            // 根据
             if (selected === null) {
               this.tDate = this.form.taskDataList[i].tDate
               this.currTaskData = this.form.taskDataList[i]
@@ -206,7 +205,7 @@ export default {
         }
       })
     },
-    // 修改内容
+    // 修改内容按钮
     onEdit () {
       edit(this.update).then((res) => {
         if (ERR_OK === res.data.code) {
@@ -217,6 +216,7 @@ export default {
         }
       })
     },
+    // 提交按钮
     onSubmits () {
       submits(this.update).then((res) => {
         if (ERR_OK === res.data.code) {
@@ -280,19 +280,6 @@ export default {
             this.isWithdraw = true
           }
         }
-        //   this.isSubmit = true
-        //   if (this.form.identitys > 1) {
-        //     this.isReject = true
-        //   }
-        //   this.isWithdraw = false
-        //   this.isConfirm = false
-        // } else if (item.currentLevel === this.form.identitys + 1) {
-        //   this.isWithdraw = true
-        //   this.isEdit = false
-        //   this.isSubmit = false
-        //   this.isConfirm = false
-        //   this.isReject = false
-        // }
       } else if (item.status === 0) {
         this.isEdit = false
         this.isSubmit = false
