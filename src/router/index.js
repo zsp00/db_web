@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Task from 'components/task/task.vue'
 import Fillin from 'components/task/fillin/fillin.vue'
+import FillinIndex from 'components/task/fillin/index.vue'
 import FillinDetail from 'components/task/fillin/detail.vue'
 import TaskList from 'components/task/list/list.vue'
 import Login from 'components/login/login.vue'
@@ -33,9 +34,17 @@ export default new Router({
         },
         {
           path: 'fillin',
-          name: '任务列表',
           component: Fillin,
           children: [
+            {
+              path: '',
+              redirect: 'index'
+            },
+            {
+              path: 'index',
+              name: '任务列表',
+              component: FillinIndex
+            },
             {
               path: 'detail/:id',
               name: '修改',
