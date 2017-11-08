@@ -58,18 +58,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-col :span="4">
-        <el-form-item label="状态">
-          <template>
-            <span v-if="form.status === '1'"> 
-              {{form.taskDataList[monthIndex].taskDataStatusMsg}}
-            </span>
-            <span v-if="form.status === '2'"> 
-              {{form.statusMsg}}
-            </span>
-          </template>
-        </el-form-item>
-      </el-col>
       <el-col :span="24">
         <el-form-item>
           <el-button v-show="isEdit" type="primary" @click="onEdit">修改</el-button>
@@ -131,6 +119,13 @@
           </div> 
       </el-tab-pane>
     </el-tabs>
+    <div class="detail-steps">
+      <el-steps direction="vertical" :active="1">
+        <el-step title="步骤 1"></el-step>
+        <el-step title="步骤 2"></el-step>
+        <el-step title="步骤 3" description="这是一段很长很长很长的描述性文字"></el-step>
+      </el-steps>
+    </div>
   </div>
 </transition>
 </template>
@@ -405,5 +400,9 @@ export default {
   margin-left:20px;
   background: #f1f1f1;
   padding:10px;
+}
+.detail-steps {
+  height: 300px;
+  margin: 20px 0;
 }
 </style>
