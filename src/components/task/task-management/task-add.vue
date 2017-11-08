@@ -33,29 +33,23 @@ export default {
     return {
       form: {
         name: '',
-        compValue: '',                 // 选择公司下拉框的值，
-        deptValue: '',                 // 选择部门下拉框的值
-        process: [                     // 流程
-          {},
-          {
-            auditor: '',
-            notIn: '',
-            describe: ''
-          }
-        ]
+        compValue: '',
+        deptValue: ''
       },
-      compDept: [],                    // 选择部门下拉框值
-      processCount: 1                 // 流程级次数量
+      compDept: []
     }
   },
   mounted () {
-    getCompDept().then((res) => {
-      if (res.data.code === 1) {
-        this.compDept = res.data.data
-      }
-    })
+    this._getCompDept
   },
   methods: {
+    _getCompDept () {
+      getCompDept().then((res) => {
+        if (res.data.code === 1) {
+          this.compDept = res.data.data
+        }
+      })
+    },
     _onSubmit () {
       if (!this._checkData()) {
         return false

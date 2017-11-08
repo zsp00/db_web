@@ -72,13 +72,13 @@
       </el-col>
       <el-col :span="24">
         <el-form-item>
-          <el-button v-show="isEdit" type="primary" @click="onEdit">修改</el-button>
+          <el-button v-show="isEdit" type="primary" @click="onEdit">保存</el-button>
           <el-button v-show="isSubmit" type="primary" @click="onSubmits">提交</el-button>
           <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
           <el-button v-show="isReject" type="primary" @click="onReject">驳回</el-button>
           <el-button v-show="isWithdraw" type="primary" @click="onWithdraw">撤回</el-button>
           <el-button v-show="isComplete" type="primary" @click="onComplete">确认任务完成</el-button>
-          <el-button @click="onCancel">取消</el-button>
+          <el-button @click="onCancel">返回</el-button>
         </el-form-item>
       </el-col>
     </el-form>
@@ -109,10 +109,13 @@
               <template v-if="list.type == 'reject'">
                 <span style="" slot="reference"><b>驳回</b></span>。
               </template>
+              <template v-if="list.type == 'withdraw'">
+                <span style="" slot="reference"><b>撤回</b></span>。
+              </template>
               <template v-if="list.type == 'edit'">
                 <span slot="reference"><b>编辑</b></span>。
                 <div class="editLog">
-                  <div v-for="logItem in list.logData">
+                  <div v-for="logItem in list.logData" :key="logItem.id">
                     修改了
                     <template v-if="logItem.field === 'completeSituation'">
                       <b><i>完成情况</i></b>

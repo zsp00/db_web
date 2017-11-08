@@ -37,15 +37,16 @@ import {ERR_OK} from 'api/config.js'
 export default {
   data () {
     return {
-      multipleSelection: [],                         // 多选记录
-      taskList: [],                               // 任务列表
-      loading: false                                  // 加载中
+      multipleSelection: [],
+      taskList: [],
+      loading: false
     }
   },
   mounted () {
     this._getTaskList()
   },
   methods: {
+    // 获取任务列表
     _getTaskList () {
       getTaskList().then((res) => {
         if (ERR_OK === res.data.code) {
@@ -53,9 +54,11 @@ export default {
         }
       })
     },
+    // 修改按钮触发
     _edit (pId) {
       console.log('edit   :' + pId)
     },
+    // 删除按钮触发
     _del (id) {
       this.$confirm('此操作将删除该任务, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -74,6 +77,7 @@ export default {
         this.$message.warning('已取消删除！')
       })
     },
+    // 删除多选
     _handleSelectionChange (val) {
       this.multipleSelection = val
     }
