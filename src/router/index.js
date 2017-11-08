@@ -4,7 +4,6 @@ import Task from 'components/task/task.vue'
 import Fillin from 'components/task/fillin/fillin.vue'
 import FillinIndex from 'components/task/fillin/index.vue'
 import FillinDetail from 'components/task/fillin/detail.vue'
-import TaskList from 'components/task/list/list.vue'
 import Login from 'components/login/login.vue'
 import Setting from 'components/setting/setting.vue'
 import Label from 'components/setting/label/label.vue'
@@ -14,6 +13,10 @@ import Process from 'components/process/process'
 import ProcessList from 'components/process/process-management/process-list'
 import AddProcess from 'components/process/process-management/process-add'
 import EditProcess from 'components/process/process-management/process-edit'
+import TaskList from 'components/task/task-management/task-list.vue'
+import AddTask from 'components/task/task-management/task-add'
+import EditTask from 'components/task/task-management/task-edit'
+import List from 'components/task/task-management/list'
 
 Vue.use(Router)
 export default new Router({
@@ -55,7 +58,28 @@ export default new Router({
         {
           path: 'list',
           name: '任务管理',
-          component: TaskList
+          component: List,
+          children: [
+            {
+              path: '',
+              redirect: 'task-list'
+            },
+            {
+              path: 'task-list',
+              name: '任务列表',
+              component: TaskList
+            },
+            {
+              path: 'task-add',
+              name: '新增任务',
+              component: AddTask
+            },
+            {
+              path: 'task-edit/:pId',
+              name: '编辑任务',
+              component: EditTask
+            }
+          ]
         },
         {
           path: 'type-list',

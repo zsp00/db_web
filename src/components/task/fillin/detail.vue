@@ -186,7 +186,6 @@ export default {
       getDetail(this.form.id).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
-          console.log(this.form)
           var selected = null
           for (var i = 0; i < this.form.taskDataList.length; i++) {
             if (selected === null) {
@@ -307,6 +306,15 @@ export default {
     onCancel () {
       this.$router.go(-1)
     },
+    contains (arr, obj) {
+      var i = arr.length
+      while (i--) {
+        if (arr[i] === obj) {
+          return true
+        }
+      }
+      return false
+    },
     chengeMouth (tDate) {
       var item
       // 赋值数据
@@ -319,7 +327,7 @@ export default {
       }
       this._initBtn()
       if (item.status === 1) {
-        if (item.currentLevel === this.form.identitys[0]) {
+        if (this.contains(this.form.identitys, item.currentLevel)) {
           this.isEdit = true
           if (this.form.identitys[0] !== this.form.steps) {
             this.isSubmit = true
@@ -331,8 +339,8 @@ export default {
           if (this.form.identitys[0] !== 1) {
             this.isReject = true
           }
-        } else if (item.currentLevel === this.form.identitys[0] + 1) {
-          if (this.form.identitys[0] !== this.form.steps) {
+        } else if (item.currentLevel === this.form.identitys[this.form.identitys.length - 1] + 1) {
+          if (this.form.identitys[this.form.identitys.length - 1] !== this.form.steps) {
             this.isWithdraw = true
           }
         }
