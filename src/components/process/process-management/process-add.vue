@@ -105,7 +105,6 @@ export default {
           this.$router.push('/process/process-list')
         } else {
           this.$message.error('新增流程失败！')
-          console.log(res.data.msg)
         }
       })
     },

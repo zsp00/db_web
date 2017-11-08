@@ -219,12 +219,10 @@ export default {
         identitys: [],
         total: 0,
         list: []
-      },
-      aa: 0
+      }
     }
   },
   activated () {
-    console.log(111)
     this._getTypeList()
   },
   mounted () {
@@ -281,8 +279,6 @@ export default {
       })
     },
     _getTypeList () {
-      this.aa++
-      console.log(this.aa)
       getTypeList().then((res) => {
         if (res.data.code === 1) {
           this.typeList = res.data.msg

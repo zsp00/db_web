@@ -14,7 +14,25 @@ export function addProcess (data) {
 }
 
 // 获取流程列表
-export function getProcessList () {
+export function getProcessList (page, listRow) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Process/getProcessList'
-  return post(url, {}, {headers: DB_API.headers})
+  return post(url, { page: page, listRow: listRow }, {headers: DB_API.headers})
+}
+
+// 删除流程
+export function del (ids) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Process/del'
+  return post(url, { ids: ids }, {headers: DB_API.headers})
+}
+
+// 获取流程信息
+export function getProcessInfo (pId) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Process/getProcessInfo'
+  return post(url, { pId: pId }, {headers: DB_API.headers})
+}
+
+// 执行编辑流程
+export function edit (data) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Process/edit'
+  return post(url, { data: data }, {headers: DB_API.headers})
 }
