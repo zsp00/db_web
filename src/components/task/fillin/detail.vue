@@ -132,10 +132,29 @@
       </el-tab-pane>
     </el-tabs>
     <div class="detail-steps">
-      <el-steps direction="vertical" :active="1">
-        <el-step title="步骤 1"></el-step>
-        <el-step title="步骤 2"></el-step>
-        <el-step title="步骤 3" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-steps direction="vertical" :active="form.taskDataList[monthIndex].currentLevel" space="100px">
+        <!-- 第一步 -->
+        <el-step>
+          <el-tooltip slot="title" class="item" effect="dark" :content="form.taskDataList[monthIndex].stepFirst.fullName" placement="top-start">
+            <el-button type="text">{{ form.taskDataList[monthIndex].stepFirst.name }}</el-button>
+          </el-tooltip>
+          <span slot="title" class="step-first-text">{{ form.taskDataList[monthIndex].stepFirst.text }}</span>
+        </el-step>
+        <!-- 循环展示剩余的步骤 -->
+        <el-step :title="item.label" v-for="(item, index) in form.taskDataList[monthIndex].steps" :key="index">
+          <!-- 展示参与者 -->
+          <span slot="description">参与者：</span>
+          <el-tooltip slot="description" class="item" effect="dark" :content="pp.fullName" placement="top-start" v-for="(pp, ii) in item.participate[0]" :key="ii">
+            <el-button type="text">{{ pp.name }}</el-button>
+          </el-tooltip>
+          <!-- 如果有不包含的项，展示 -->
+          <template v-if="item.participate[1].length > 0" slot="description">
+            <span class="step-notin">不包含：</span>
+            <el-tooltip slot="description" class="item" effect="dark" :content="pp.fullName" placement="top-start" v-for="(pp, ii) in item.participate[1]" :key="ii">
+              <el-button type="text">{{ pp.name }}</el-button>
+            </el-tooltip>
+          </template>
+        </el-step>
       </el-steps>
     </div>
   </div>
@@ -161,10 +180,12 @@ export default {
         status: '',
         taskDataList: [
           {
-            tDate: 0
+            tDate: 0,
+            stepFirst: {},                 // 步骤条第一步
+            steps: []                      // 步骤条剩下的步骤
           }
         ],
-        steps: 0
+        stepNum: 0                         // 流程步骤数量
       },
       update: {
         completeSituation: null,
@@ -195,6 +216,7 @@ export default {
       getDetail(this.form.id).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
+          console.log(this.form)
           var selected = null
           for (var i = 0; i < this.form.taskDataList.length; i++) {
             if (selected === null) {
@@ -339,7 +361,7 @@ export default {
       if (item.status === 1) {
         if (this.contains(this.form.identitys, item.currentLevel)) {
           this.isEdit = true
-          if (this.form.identitys[0] !== this.form.steps) {
+          if (this.form.identitys[0] !== this.form.stepNum) {
             this.isSubmit = true
             this.isConfirm = false
           } else {
@@ -350,7 +372,7 @@ export default {
             this.isReject = true
           }
         } else if (item.currentLevel === this.form.identitys[this.form.identitys.length - 1] + 1) {
-          if (this.form.identitys[this.form.identitys.length - 1] !== this.form.steps) {
+          if (this.form.identitys[this.form.identitys.length - 1] !== this.form.stepNum) {
             this.isWithdraw = true
           }
         }
@@ -417,7 +439,12 @@ export default {
   padding:10px;
 }
 .detail-steps {
-  height: 300px;
   margin: 20px 0;
+}
+.step-first-text {
+  margin-left: 5px;
+}
+.step-notin {
+  margin-left: 10px;
 }
 </style>
