@@ -132,7 +132,7 @@
       </el-tab-pane>
     </el-tabs>
     <div class="detail-steps">
-      <el-steps direction="vertical" :active="form.taskDataList[monthIndex].currentLevel" space="100px">
+      <el-steps direction="vertical" :active="form.taskDataList[monthIndex].status == 0 ? (form.stepsNum + 1) : form.taskDataList[monthIndex].currentLevel" space="100px">
         <!-- 第一步 -->
         <el-step>
           <el-tooltip slot="title" class="item" effect="dark" :content="form.taskDataList[monthIndex].stepFirst.fullName" placement="top-start">
@@ -185,7 +185,7 @@ export default {
             steps: []                      // 步骤条剩下的步骤
           }
         ],
-        stepNum: 0                         // 流程步骤数量
+        stepsNum: 0                         // 流程步骤数量
       },
       update: {
         completeSituation: null,
@@ -361,7 +361,7 @@ export default {
       if (item.status === 1) {
         if (this.contains(this.form.identitys, item.currentLevel)) {
           this.isEdit = true
-          if (this.form.identitys[0] !== this.form.stepNum) {
+          if (this.form.identitys[0] !== this.form.stepsNum) {
             this.isSubmit = true
             this.isConfirm = false
           } else {
@@ -372,7 +372,7 @@ export default {
             this.isReject = true
           }
         } else if (item.currentLevel === this.form.identitys[this.form.identitys.length - 1] + 1) {
-          if (this.form.identitys[this.form.identitys.length - 1] !== this.form.stepNum) {
+          if (this.form.identitys[this.form.identitys.length - 1] !== this.form.stepsNum) {
             this.isWithdraw = true
           }
         }
