@@ -280,7 +280,9 @@ export default {
         confirm(this.update).then((res) => {
           if (ERR_OK === res.data.code) {
             this.$message.success(res.data.msg)
-            this._getDetail()
+            this.$router.push({
+              path: '/'
+            })
           } else {
             this.$message.error(res.data.msg)
           }
