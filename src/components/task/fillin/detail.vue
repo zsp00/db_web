@@ -24,7 +24,7 @@
       </el-col>
       <el-col :span="4">
         <el-form-item label="完成时限">
-          {{form.timeLimit}}
+          {{form.timeLimit}}月
         </el-form-item>
       </el-col>
       <el-col :span="4">
@@ -58,6 +58,15 @@
           </el-form-item>
         </el-col>
       </el-row>
+
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="是否完成任务">
+            <el-switch v-model="taskSelect2"></el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <el-col :span="24">
         <el-form-item>
           <el-button v-show="isEdit" type="primary" @click="onEdit">保存</el-button>
@@ -102,7 +111,7 @@
               </template>
               <template v-if="list.type == 'edit'">
                 <span slot="reference"><b>编辑</b></span>。
-                <div class="editLog">
+                <div class="editLog" v-if="list.logData != ''">
                   <div v-for="logItem in list.logData" :key="logItem.id">
                     修改了
                     <template v-if="logItem.field === 'completeSituation'">
@@ -171,7 +180,9 @@ export default {
       isWithdraw: false,
       isComplete: false,
       loglist: null,
-      monthIndex: 0              // 该任务选择展示月份的索引
+      monthIndex: 0,             // 该任务选择展示月份的索引
+      taskSelect1: true,
+      taskSelect2: true
     }
   },
   mounted () {
@@ -207,6 +218,7 @@ export default {
     // 修改内容按钮
     onEdit () {
       edit(this.update).then((res) => {
+        console.log(this.update)
         if (ERR_OK === res.data.code) {
           this.$message.success(res.data.msg)
           this._getDetail()

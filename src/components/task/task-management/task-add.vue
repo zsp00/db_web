@@ -16,6 +16,29 @@
             </template>
           </el-select>
         </el-form-item>
+        <el-form-item label="任务分类">
+          <el-select v-model="form.typeValue" filterable placeholder="请选择分类">
+            <el-option v-for="(item, key) in typeId" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="流程选择">
+          <el-select v-model="form.processValue" filterable placeholder="请选择流程">
+            <el-option v-for="(item, key) in processId" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="任务等级">
+          <el-select v-model="form.tasklevel" filterable placeholder="请选择等级">
+            <el-option v-for="(item, key) in level" :key="item.label" :label="item.label" :value="item.label"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <template>
+            <div class="block">
+              <span class="demonstration">date</span>
+              <el-date-picker v-model="form.timeLimit" type="date" placeholder="选择日期"></el-date-picker>
+            </div>
+          </template>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="_onSubmit">立即创建</el-button>
           <el-button @click="_cancel">取消</el-button>
@@ -26,7 +49,8 @@
 </template>
 
 <script>
-import { getCompDept, addProcess } from 'api/process.js'
+import { getCompDept } from 'api/process.js'
+import { getType, getProcess } from 'api/task-management.js'
 // import { trim } from 'api/public.js'
 export default {
   data () {
@@ -34,13 +58,33 @@ export default {
       form: {
         name: '',
         compValue: '',
-        deptValue: ''
+        deptValue: '',
+        typeValue: '',
+        processValue: '',
+        tasklevel: '',
+        timeLimit: ''
       },
-      compDept: []
+      compDept: [],
+      typeId: [],
+      processId: [],
+      level: [
+        {
+          label: 'A'
+        },
+        {
+          label: 'B'
+        },
+        {
+          label: 'C'
+        },
+        {
+          label: 'D'
+        }
+      ]
     }
   },
   mounted () {
-    this._getCompDept
+    this._getCompDept()
   },
   methods: {
     _getCompDept () {
@@ -49,24 +93,23 @@ export default {
           this.compDept = res.data.data
         }
       })
-    },
-    _onSubmit () {
-      if (!this._checkData()) {
-        return false
-      }
-      addProcess(this.form).then((res) => {
+      getType().then((res) => {
         if (res.data.code === 1) {
-          this.$message.success('新增流程成功！')
-          this.$router.push('/process/process-list')
-        } else {
-          this.$message.error('新增流程失败！')
-          console.log(res.data.msg)
+          this.typeId = res.data.msg
+        }
+      })
+      getProcess().then((res) => {
+        if (res.data.code === 1) {
+          this.processId = res.data.msg
         }
       })
     },
+    _onSubmit () {
+      console.log(this.form)
+    },
     // 取消按钮
     _cancel () {
-      this.$router.push('/task/list/task-list')
+      this.$router.go(-1)
     }
   }
 }
