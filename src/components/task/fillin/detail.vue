@@ -62,7 +62,7 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="是否完成任务">
-            <el-switch v-model="taskSelect2"></el-switch>
+            <el-switch v-model="update.taskSelect"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
@@ -74,7 +74,7 @@
           <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
           <el-button v-show="isReject" type="primary" @click="onReject">驳回</el-button>
           <el-button v-show="isWithdraw" type="primary" @click="onWithdraw">撤回</el-button>
-          <el-button v-show="isComplete" type="primary" @click="onComplete">确认任务完成</el-button>
+          <!-- <el-button v-show="isComplete" type="primary" @click="onComplete">确认任务完成</el-button> -->
           <el-button @click="onCancel">返回</el-button>
         </el-form-item>
       </el-col>
@@ -123,7 +123,13 @@
                     <template v-if="logItem.field === 'analysis'">
                       <b><i>未按时限完成或进度滞后的项目原因分析及推进措施</i></b>
                     </template>
-                    ，旧值为“{{logItem.old}}”，新值为“{{logItem.new}}”。
+                    <template v-if="logItem.field === 'status'">
+                      <b><i>任务完成状态</i></b>
+                      ，由“{{logItem.old == '1' ? '未完成' : '已完成' }}”，改为“{{logItem.new == '1' ? '未完成' : '已完成'}}”。
+                    </template>
+                    <template v-else>
+                      ，旧值为“{{logItem.old}}”，新值为“{{logItem.new}}”。
+                    </template>
                   </div>
                 </div>
               </template>
@@ -162,7 +168,7 @@
 </template>
 
 <script>
-import { getDetail, edit, reject, confirm, getLogs, submits, withdraw, complete } from 'api/task.js'
+import { getDetail, edit, reject, confirm, getLogs, submits, withdraw } from 'api/task.js'
 import { ERR_OK } from 'api/config.js'
 export default {
   data () {
@@ -190,7 +196,8 @@ export default {
       update: {
         completeSituation: null,
         problemSuggestions: null,
-        analysis: null
+        analysis: null,
+        taskSelect: false
       },
       tDate: null,
       currTaskData: [],
@@ -201,9 +208,7 @@ export default {
       isWithdraw: false,
       isComplete: false,
       loglist: null,
-      monthIndex: 0,             // 该任务选择展示月份的索引
-      taskSelect1: true,
-      taskSelect2: true
+      monthIndex: 0             // 该任务选择展示月份的索引
     }
   },
   mounted () {
@@ -216,7 +221,6 @@ export default {
       getDetail(this.form.id).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
-          console.log(this.form)
           var selected = null
           for (var i = 0; i < this.form.taskDataList.length; i++) {
             if (selected === null) {
@@ -317,24 +321,24 @@ export default {
         })
       }).catch(() => {})
     },
-    onComplete () {
-      this.$confirm('是否确认完成该任务?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        complete(this.update).then((res) => {
-          if (ERR_OK === res.data.code) {
-            this.$message.success(res.data.msg)
-            this.$router.push({
-              path: '/'
-            })
-          } else {
-            this.$message.error(res.data.msg)
-          }
-        })
-      }).catch(() => {})
-    },
+    // onComplete () {
+    //   this.$confirm('是否确认完成该任务?', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     complete(this.update).then((res) => {
+    //       if (ERR_OK === res.data.code) {
+    //         this.$message.success(res.data.msg)
+    //         this.$router.push({
+    //           path: '/'
+    //         })
+    //       } else {
+    //         this.$message.error(res.data.msg)
+    //       }
+    //     })
+    //   }).catch(() => {})
+    // },
     onCancel () {
       this.$router.go(-1)
     },
@@ -358,6 +362,7 @@ export default {
         }
       }
       this._initBtn()
+      console.log(this.form.identitys)
       if (item.status === 1) {
         if (this.contains(this.form.identitys, item.currentLevel)) {
           this.isEdit = true
@@ -382,9 +387,9 @@ export default {
         this.isConfirm = false
         this.isReject = false
         this.isWithdraw = false
-        if (this.form.status === '1') {
-          this.isComplete = true
-        }
+        // if (this.form.status === '1') {
+        //   this.isComplete = true
+        // }
       }
       this.update = item
       this.logs(this.tDate)
@@ -395,7 +400,7 @@ export default {
       this.isConfirm = false
       this.isReject = false
       this.isWithdraw = false
-      this.isComplete = false
+      // this.isComplete = false
     }
   },
   watch: {
