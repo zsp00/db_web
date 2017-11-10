@@ -7,7 +7,7 @@
           <el-input v-model="form.name" class="process-name"></el-input>
         </el-form-item>
         <el-form-item label="部门名称">
-          <el-select id="choiceComp" v-model="form.compValue" filterable placeholder="请选择公司">
+          <el-select id="choiceComp" v-model="form.compValue" filterable placeholder="请选择公司" @change="form.deptValue = ''">
             <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
           </el-select>
           <el-select id="choiceDept" v-model="form.deptValue" filterable placeholder="请选择部门">
@@ -35,7 +35,7 @@
           <template>
             <div class="block">
               <span class="demonstration">date</span>
-              <el-date-picker v-model="form.timeLimit" type="date" placeholder="选择日期"></el-date-picker>
+              <el-date-picker v-model="form.timeLimit" type="year" placeholder="选择日期"></el-date-picker>
             </div>
           </template>
         </el-form-item>
