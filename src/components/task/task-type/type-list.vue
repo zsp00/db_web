@@ -1,8 +1,8 @@
 <template>
   <div id="type-list" v-loading="loading">
     <div style="margin-top: 20px" id="btn">
-      <el-button type="button" @click="showAddDialog">新增分类</el-button>
-      <el-button type="button" @click="_del(multipleSelection)">删除</el-button>
+      <el-button type="primary" @click="showAddDialog">新增分类</el-button>
+      <el-button type="primary" @click="_del(multipleSelection)">删除</el-button>
       <!--这是添加分类的模态框-->
       <el-dialog title="新增分类" :visible.sync="dialogFormAdd" width="30%">
         <el-form :model="form">
@@ -29,7 +29,7 @@
       </el-dialog>
     </div>
     <!--这是分类表格的展示框-->
-    <el-table ref="multipleTable" :data="typeList" border tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table ref="multipleTable" :data="typeList" border tooltip-effect="dark" style="width: 100%;margin-top:20px;" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55">
       </el-table-column>
       <el-table-column prop="typeName" label="分类名称">

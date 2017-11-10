@@ -1,7 +1,7 @@
 import {post} from 'assets/js/util.js'
 import {DB_API} from 'api/config.js'
 
-// 获取任务列表
+// 获取所有任务列表
 export function getTaskList () {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getTaskList'
   return post(url, {}, {headers: DB_API.headers})
@@ -29,4 +29,16 @@ export function getProcess () {
 export function addTask (taskInfo) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/addTask'
   return post(url, { taskInfo: taskInfo }, {headers: DB_API.headers})
+}
+
+// 督办任务列表
+export function getSuperviceList () {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getSuperviceList'
+  return post(url, {}, {headers: DB_API.headers})
+}
+
+// 全部督办任务
+export function taskSupervice (id) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/taskSupervice'
+  return post(url, { id: id }, {headers: DB_API.headers})
 }

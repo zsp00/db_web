@@ -17,6 +17,7 @@ import TaskList from 'components/task/task-management/task-list.vue'
 import AddTask from 'components/task/task-management/task-add'
 import EditTask from 'components/task/task-management/task-edit'
 import List from 'components/task/task-management/list'
+import Supervice from 'components/task/task-supervice/supervice'
 
 Vue.use(Router)
 export default new Router({
@@ -85,6 +86,11 @@ export default new Router({
           path: 'type-list',
           name: '任务分类管理',
           component: TypeList
+        },
+        {
+          path: 'supervice',
+          name: '任务督办',
+          component: Supervice
         }
       ]
     },

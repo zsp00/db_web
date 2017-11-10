@@ -1,27 +1,24 @@
 <template>
   <div class="box">
     <div class="list-head">
-      <router-link to="/task/list/task-add">
-        <el-button type="primary">创建任务</el-button>
-      </router-link>
-      <el-button type="primary" @click="_del(multipleSelection)">删除</el-button>
+      <el-button type="primary" @click="_supervice(multipleSelection)">全部督办</el-button>
     </div>
     <div class="list-body">
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="700" style="width: 100%" border @selection-change="_handleSelectionChange">
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="800" style="width: 100%" border @selection-change="_handleSelectionChange">
         <el-table-column type="selection" width="50" align="center"></el-table-column>
         <el-table-column prop="content" label="任务名称"></el-table-column>
         <el-table-column prop="pId" label="所属流程" width="150"></el-table-column>
         <el-table-column prop="deptNo" label="所属部门" width="180" show-overflow-tooltip></el-table-column>
-        <!-- <el-table-column prop="typeId" label="所属分类" width="110"></el-table-column>         -->
-        <el-table-column prop="releaseTime" label="创建时间" width="175"></el-table-column>
+        <!-- <el-table-column prop="taskType" label="所属分类" width="110"></el-table-column>         -->
         <el-table-column prop="timeLimit" label="期限" width="140"></el-table-column>
-        <el-table-column prop="completeTime" label="完成时间" width="175"></el-table-column>
-        <el-table-column prop="options" label="操作" width="80">
+        <el-table-column prop="taskDataValue" label="状态" width="100">
           <template slot-scope="scope">
-            <router-link :to="'/task/list/task-edit/' + scope.row.id">
-              <i class="el-icon-edit"></i>
-            </router-link>
-            <i class="el-icon-delete" @click="_del(scope.row.id)"></i>
+            <el-tag :type="scope.row.taskDataValue === true ? 'success' : 'danger'" close-transition>{{ scope.row.taskDataValue == true ? '督办中' : '未开始' }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="options" label="操作" width="240">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.taskDataValue == false" type="text" size="small"  @click="_supervice(scope.row.id)">开始督办</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -30,7 +27,7 @@
 </template>
 
 <script>
-import {getTaskList, delTask} from 'api/task-management.js'
+import {getSuperviceList, taskSupervice} from 'api/task-management.js'
 import {ERR_OK} from 'api/config.js'
 
 export default {
@@ -42,32 +39,29 @@ export default {
     }
   },
   mounted () {
-    this._getTaskList()
+    this._getSuperviceList()
   },
   methods: {
     // 获取任务列表
-    _getTaskList () {
-      getTaskList().then((res) => {
+    _getSuperviceList () {
+      getSuperviceList().then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList = res.data.msg
+          console.log(this.taskList)
         }
       })
     },
-    // 修改按钮触发
-    _edit (pId) {
-      console.log('edit   :' + pId)
-    },
-    // 删除按钮触发
-    _del (id) {
-      this.$confirm('此操作将删除该任务, 是否继续?', '提示', {
+    // 督办任务按钮
+    _supervice (id) {
+      this.$confirm('此操作将开始督办, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delTask(id).then((res) => {
+        taskSupervice(id).then((res) => {
           if (res.data.code === ERR_OK) {
             this.$message.success(res.data.msg)
-            this._getTaskList()
+            this._getSuperviceList()
           } else {
             this.$message.error(res.data.msg)
           }
@@ -76,7 +70,7 @@ export default {
         this.$message.warning('已取消删除！')
       })
     },
-    // 删除多选
+    // 督办多选
     _handleSelectionChange (val) {
       this.multipleSelection = val
     }
