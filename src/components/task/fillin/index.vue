@@ -125,18 +125,10 @@
           </el-table-column>
           <el-table-column
             fixed="right"
-            prop="pDescribe"
+            prop="statusMsg"
             label="状态"
             align="center"
             width="150">
-            <template slot-scope="scope">
-              <span v-if="scope.row.status === '1'"> 
-                {{scope.row.taskDataStatusMsg}}
-              </span>
-              <span v-if="scope.row.status === '2'"> 
-                {{scope.row.statusMsg}}
-              </span>
-            </template>
           </el-table-column>
           <el-table-column
             fixed="right"
@@ -273,6 +265,7 @@ export default {
           this.taskList.identitys = res.data.msg.identitys
           this.taskList.total = res.data.msg.total
           this.taskList.list = res.data.msg.data
+          console.log(this.taskList.list)
         } else {
           this.$message.error(res.data.msg)
         }

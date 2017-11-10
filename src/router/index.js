@@ -7,6 +7,7 @@ import FillinDetail from 'components/task/fillin/detail.vue'
 import Login from 'components/login/login.vue'
 import Setting from 'components/setting/setting.vue'
 import Label from 'components/setting/label/label.vue'
+import TaskListAuthority from 'components/setting/tasklist-authority/tasklist-authority'
 import MenuManagement from 'components/setting/menu-management/menu-management.vue'
 import TypeList from 'components/task/task-type/type-list'
 import Process from 'components/process/process'
@@ -99,6 +100,11 @@ export default new Router({
       name: '设置',
       component: Setting,
       children: [
+        {
+          path: 'tasklist-authority',
+          name: '任务列表权限',
+          component: TaskListAuthority
+        },
         {
           path: 'label',
           name: '标签管理',
