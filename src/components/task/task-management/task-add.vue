@@ -4,7 +4,7 @@
     <div class="container">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="任务名称">
-          <el-input v-model="form.name" class="process-name"></el-input>
+          <el-input v-model="form.content" class="process-name"></el-input>
         </el-form-item>
         <el-form-item label="部门名称">
           <el-select id="choiceComp" v-model="form.compValue" filterable placeholder="请选择公司">
@@ -31,13 +31,8 @@
             <el-option v-for="(item, key) in level" :key="item.label" :label="item.label" :value="item.label"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <template>
-            <div class="block">
-              <span class="demonstration">date</span>
-              <el-date-picker v-model="form.timeLimit" type="date" placeholder="选择日期"></el-date-picker>
-            </div>
-          </template>
+        <el-form-item label="期限日期">
+          <el-date-picker v-model="form.timeLimit" type="month" placeholder="选择日期"></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="_onSubmit">立即创建</el-button>
@@ -50,13 +45,14 @@
 
 <script>
 import { getCompDept } from 'api/process.js'
-import { getType, getProcess } from 'api/task-management.js'
+import { getType, getProcess, addTask } from 'api/task-management.js'
+import {ERR_OK} from 'api/config.js'
 // import { trim } from 'api/public.js'
 export default {
   data () {
     return {
       form: {
-        name: '',
+        content: '',
         compValue: '',
         deptValue: '',
         typeValue: '',
@@ -106,6 +102,12 @@ export default {
     },
     _onSubmit () {
       console.log(this.form)
+      addTask(this.form).then((res) => {
+        if (ERR_OK === res.data.code) {
+          this.$message.success(res.data.msg)
+          this._getCompDept()
+        }
+      })
     },
     // 取消按钮
     _cancel () {

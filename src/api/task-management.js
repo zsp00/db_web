@@ -25,3 +25,8 @@ export function getProcess () {
   return post(url, {}, {headers: DB_API.headers})
 }
 
+// 添加任务
+export function addTask (taskInfo) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/addTask'
+  return post(url, { taskInfo: taskInfo }, {headers: DB_API.headers})
+}
