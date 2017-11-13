@@ -7,6 +7,12 @@ export function getTaskList () {
   return post(url, {}, {headers: DB_API.headers})
 }
 
+// 添加任务
+export function addTask (taskInfo) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/addTask'
+  return post(url, { taskInfo: taskInfo }, {headers: DB_API.headers})
+}
+
 // 删除任务
 export function delTask (id) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/delTask'
@@ -25,12 +31,6 @@ export function getProcess () {
   return post(url, {}, {headers: DB_API.headers})
 }
 
-// 添加任务
-export function addTask (taskInfo) {
-  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/addTask'
-  return post(url, { taskInfo: taskInfo }, {headers: DB_API.headers})
-}
-
 // 督办任务列表
 export function getSuperviceList () {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getSuperviceList'
@@ -41,4 +41,10 @@ export function getSuperviceList () {
 export function taskSupervice (id) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/taskSupervice'
   return post(url, { id: id }, {headers: DB_API.headers})
+}
+
+// 获取督办列表的部门
+export function getTaskDeptNo () {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getTaskDeptNo'
+  return post(url, {}, {headers: DB_API.headers})
 }
