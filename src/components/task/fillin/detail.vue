@@ -364,7 +364,6 @@ export default {
         }
       }
       this._initBtn()
-      console.log(this.form.identitys)
       if (item.status === 1) {
         if (this.contains(this.form.identitys, item.currentLevel)) {
           this.isEdit = true

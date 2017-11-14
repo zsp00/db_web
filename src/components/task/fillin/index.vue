@@ -7,6 +7,7 @@
           <div v-if="this.info.loaded">
             <span>{{this.info.date.currYear}}年{{this.info.date.currMouth}}月</span>
             <span>我的部门：{{info.deptName}}</span>
+            <span class="task-record" v-if="taskList.flag == true">本月督办任务{{ taskList.dbCount }}个，已提交{{ taskList.commitNum }}个</span>
             <!-- <el-tag v-if="taskList.identitys.length === 0">员工</el-tag>
             <el-tag v-if="taskList.identitys.indexOf('1') > -1">部门负责人</el-tag>
             <el-tag v-if="taskList.identitys.indexOf('2') > -1">办公室负责人</el-tag> -->
@@ -48,6 +49,22 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="是否提交" v-if="taskList.flag == true">
+            <el-select v-model="search.ifCommit" filterable width="100%" placeholder="">
+              <el-option v-for="item in ifCommit" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="部门名称" v-if="taskList.flag == true">
+            <el-select id="choiceComp" v-model="taskList.compValue" filterable placeholder="请选择公司" @change="taskList.deptValue = ''">
+              <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
+            </el-select>
+            <el-select id="choiceDept" v-model="taskList.deptValue" filterable placeholder="请选择部门" @change="search.dept = taskList.deptValue">
+              <template v-if="taskList.compValue != ''">
+                <el-option v-for="(item, key) in compDept[taskList.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
+              </template>
+            </el-select>
+          </el-form-item>
           <el-form-item label="搜索内容">
             <el-input
               v-model="search.keyword"
@@ -56,6 +73,12 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSearch">查询</el-button>
+          </el-form-item>
+          <el-form-item class="need-to-do">
+            <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
+          </el-form-item>
+          <el-form-item class="commit-all" v-if="taskList.list.length > 0 && search.needToDo == true && taskList.list[0].commitAll == 1">
+            <el-button type="primary" @click="_commitAll">全部提交</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -68,7 +91,7 @@
           v-loading.body="taskList.loading"
           style="width: 100%"
           :row-style="tableRowStyle"
-          max-height="500">
+          max-height="650">
           <el-table-column
             fixed
             prop="content"
@@ -161,7 +184,9 @@
 </template>
 
 <script>
-import { getInfo, getList, getTypeList } from 'api/task.js'
+import { getInfo, getList, getTypeList, commitAll } from 'api/task.js'
+import { getTaskDeptNo } from 'api/task-management.js'
+import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
 import loading from 'base/loading/loading'
 export default {
@@ -170,7 +195,10 @@ export default {
       search: {
         keyword: null,
         level: '',
-        typeId: ''
+        typeId: '',
+        ifCommit: '',
+        dept: '',
+        needToDo: true                          // 是否待办的开关按钮，默认选择待办
       },
       levelOptions: [
         {
@@ -194,6 +222,20 @@ export default {
           label: 'D'
         }
       ],
+      ifCommit: [
+        {
+          value: '',
+          label: '全部'
+        },
+        {
+          value: true,
+          label: '已提交'
+        },
+        {
+          value: false,
+          label: '未提交'
+        }
+      ],
       typeList: [],
       tableData: [{
       }],
@@ -210,8 +252,15 @@ export default {
         listRow: 10,
         identitys: [],
         total: 0,
-        list: []
-      }
+        list: [],
+        flag: '',                           // 是否能查看所有任务列表
+        commitNum: 0,                        // 针对于当前登录用户，统计提交了多少个任务
+        compValue: '',
+        deptValue: '',
+        dbCount: 0                           // 本月督办任务数量
+      },
+      deptList: [],                          // 按部门筛选用的部门列表
+      compDept: []
     }
   },
   activated () {
@@ -221,6 +270,8 @@ export default {
     this._getInfo()
     this._getList()
     this._getTypeList()
+    this._getDeptList()
+    this._getCompDept()
   },
   methods: {
     onClickDetail (row) {
@@ -259,13 +310,15 @@ export default {
     },
     _getList () {
       this.taskList.loading = true
-      getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId).then((res) => {
+      getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId, this.search.ifCommit, this.search.dept, this.search.needToDo).then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList.loading = false
           this.taskList.identitys = res.data.msg.identitys
           this.taskList.total = res.data.msg.total
           this.taskList.list = res.data.msg.data
-          console.log(this.taskList.list)
+          this.taskList.flag = res.data.msg.flag
+          this.taskList.commitNum = res.data.msg.commitNum
+          this.taskList.dbCount = res.data.msg.dbCount
         } else {
           this.$message.error(res.data.msg)
         }
@@ -282,6 +335,41 @@ export default {
           this.typeList.splice(0, 0, allType)
         }
       })
+    },
+    _getDeptList () {
+      getTaskDeptNo().then((res) => {
+        if (res.data.code === 1) {
+          this.deptList = res.data.msg
+          var all = {
+            deptNo: '',
+            deptName: '全部'
+          }
+          this.deptList.splice(0, 0, all)
+        }
+      })
+    },
+    _getCompDept () {
+      getCompDept().then((res) => {
+        if (res.data.code === 1) {
+          this.compDept = res.data.data
+        }
+      })
+    },
+    _commitAll () {
+      this.$confirm('该操作将提交所有待办任务，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        commitAll().then((res) => {
+          if (res.data.code === 1) {
+            this.$message.success(res.data.msg)
+            this._getList()
+          } else {
+            this.$message.error('全部提交失败！')
+          }
+        })
+      }).catch(() => {})
     }
   },
   components: {
@@ -306,4 +394,10 @@ export default {
   .pagination
     text-align right
     padding-top 10px
+  .task-record
+    margin-left 20px;
+  .need-to-do
+    margin-left 20px;
+  .commit-all
+    float right;
 </style>

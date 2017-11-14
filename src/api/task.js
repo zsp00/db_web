@@ -6,9 +6,9 @@ export function getInfo () {
   return get(url, {}, {headers: DB_API.headers})
 }
 
-export function getList (page, listRow, keyword, level, typeId) {
+export function getList (page, listRow, keyword, level, typeId, ifCommit, dept, needToDo) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/getList'
-  return get(url, {page: page, listRow: listRow, keyword: keyword, level: level, typeId: typeId}, {headers: DB_API.headers})
+  return get(url, {page: page, listRow: listRow, keyword: keyword, level: level, typeId: typeId, ifCommit: ifCommit, dept: dept, needToDo: needToDo}, {headers: DB_API.headers})
 }
 
 export function getDetail (id) {
@@ -98,4 +98,10 @@ export function checkRepeat (typeName) {
 export function oprationSta (typeId, status) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/oprationSta'
   return get(url, { typeId: typeId, status: status }, {headers: DB_API.headers})
+}
+
+// 全部提交
+export function commitAll () {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/commitAll'
+  return get(url, {}, {headers: DB_API.headers})
 }
