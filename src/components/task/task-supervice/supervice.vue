@@ -34,11 +34,10 @@
           </el-form>
         </el-col>
       </el-row>
-      <el-button type="primary" @click="_supervice(multipleSelection)">全部督办</el-button>
+      <el-button type="primary" @click="_supervice(taskList)">全部督办</el-button>
     </div>
     <div class="list-body">
       <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="800" style="width: 100%" border @selection-change="_handleSelectionChange">
-        <el-table-column type="selection" width="50" align="center"></el-table-column>
         <el-table-column prop="content" label="任务名称"></el-table-column>
         <el-table-column prop="pId" label="所属流程" width="110"></el-table-column>
         <el-table-column prop="deptNo" label="所属部门" width="140" show-overflow-tooltip></el-table-column>
