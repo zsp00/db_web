@@ -45,7 +45,7 @@
 
 <script>
 import { getCompDept } from 'api/process.js'
-import { getType, getProcess, addTask } from 'api/task-management.js'
+import { getTaskType, getProcess, addTask } from 'api/task-management.js'
 import {ERR_OK} from 'api/config.js'
 // import { trim } from 'api/public.js'
 export default {
@@ -89,7 +89,7 @@ export default {
           this.compDept = res.data.data
         }
       })
-      getType().then((res) => {
+      getTaskType().then((res) => {
         if (res.data.code === 1) {
           this.typeId = res.data.msg
         }

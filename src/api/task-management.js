@@ -20,8 +20,8 @@ export function delTask (id) {
 }
 
 // 获取所有分类
-export function getType () {
-  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getType'
+export function getTaskType () {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getTaskType'
   return post(url, {}, {headers: DB_API.headers})
 }
 
@@ -32,9 +32,9 @@ export function getProcess () {
 }
 
 // 督办任务列表
-export function getSuperviceList () {
+export function getSuperviceList (keyword, level, typeId, deptNo, taskdataStatus) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getSuperviceList'
-  return post(url, {}, {headers: DB_API.headers})
+  return post(url, { keyword: keyword, level: level, typeId: typeId, deptNo: deptNo, taskdataStatus: taskdataStatus }, {headers: DB_API.headers})
 }
 
 // 全部督办任务
