@@ -368,7 +368,9 @@ export default {
         if (this.contains(this.form.identitys, item.currentLevel)) {
           this.isEdit = true
           if (this.form.identitys[0] !== this.form.stepsNum) {
-            this.isSubmit = true
+            if (this.form.identitys[0] !== 3) {
+              this.isSubmit = true
+            }
             this.isConfirm = false
           } else {
             this.isSubmit = false

@@ -198,7 +198,7 @@ export default {
         typeId: '',
         ifCommit: '',
         dept: '',
-        needToDo: true                          // 是否待办的开关按钮，默认选择待办
+        needToDo: false                          // 是否待办的开关按钮，默认选择待办
       },
       levelOptions: [
         {
