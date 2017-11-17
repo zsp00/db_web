@@ -6,9 +6,9 @@ export function getInfo () {
   return get(url, {}, {headers: DB_API.headers})
 }
 
-export function getList (page, listRow, keyword, level, typeId, ifCommit, dept, needToDo) {
+export function getList (page, listRow, keyword, level, typeId, ifStatus, dept, needToDo) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/getList'
-  return get(url, {page: page, listRow: listRow, keyword: keyword, level: level, typeId: typeId, ifCommit: ifCommit, dept: dept, needToDo: needToDo}, {headers: DB_API.headers})
+  return get(url, {page: page, listRow: listRow, keyword: keyword, level: level, typeId: typeId, ifStatus: ifStatus, dept: dept, needToDo: needToDo}, {headers: DB_API.headers})
 }
 
 export function getDetail (id) {
@@ -35,9 +35,9 @@ export function confirm (data) {
 }
 
 // 驳回任务请求
-export function reject (data) {
+export function reject (data, reason) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/reject'
-  return post(url, data, {headers: DB_API.headers})
+  return post(url, { data: data, reason: reason }, {headers: DB_API.headers})
 }
 
 // 撤回任务

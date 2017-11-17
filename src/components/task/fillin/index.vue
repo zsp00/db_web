@@ -8,9 +8,6 @@
             <span>{{this.info.date.currYear}}年{{this.info.date.currMouth}}月</span>
             <span>我的部门：{{info.deptName}}</span>
             <span class="task-record" v-if="taskList.flag == true">本月督办任务{{ taskList.dbCount }}个，已提交{{ taskList.commitNum }}个</span>
-            <!-- <el-tag v-if="taskList.identitys.length === 0">员工</el-tag>
-            <el-tag v-if="taskList.identitys.indexOf('1') > -1">部门负责人</el-tag>
-            <el-tag v-if="taskList.identitys.indexOf('2') > -1">办公室负责人</el-tag> -->
           </div>
         </transition>
       </el-col>
@@ -49,9 +46,9 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="是否提交" v-if="taskList.flag == true">
-            <el-select v-model="search.ifCommit" filterable width="100%" placeholder="">
-              <el-option v-for="item in ifCommit" :key="item.value" :label="item.label" :value="item.value">
+          <el-form-item label="状态查询" v-if="taskList.flag == true">
+            <el-select v-model="search.ifStatus" filterable width="100%" placeholder="">
+              <el-option v-for="item in ifStatus" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -93,6 +90,12 @@
           :row-style="tableRowStyle"
           max-height="650">
           <el-table-column
+            prop="serialNumber"
+            label="序号"
+            align="center"
+            width="65">
+          </el-table-column>
+          <el-table-column
             fixed
             prop="content"
             label="任务"
@@ -112,12 +115,6 @@
             label="部门"
             align="center"
             width="150">
-          </el-table-column>
-          <el-table-column
-            prop="serialNumber"
-            label="序号"
-            align="center"
-            width="65">
           </el-table-column>
           <el-table-column
             prop="timeLimit"
@@ -144,14 +141,28 @@
           <el-table-column
             prop="analysis"
             label="未按时限完成或进度滞后的项目原因分析及推进措施"
-            width="360">
+            width="380">
           </el-table-column>
+
+           <!-- <el-table-column
+            fixed="right"
+            prop="getTaskStatusMsg"
+            label="状态"
+            align="center"
+            width="90">
+          </el-table-column> -->
+          <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="90">
+            <template slot-scope="scope">
+              <el-tag :type="scope.row.getTaskStatusMsg !== '驳回' ? 'success' : 'danger'" close-transition>{{ scope.row.getTaskStatusMsg }}</el-tag>
+            </template>
+          </el-table-column>
+
           <el-table-column
             fixed="right"
             prop="statusMsg"
-            label="状态"
+            label="步骤"
             align="center"
-            width="150">
+            width="120">
           </el-table-column>
           <el-table-column
             fixed="right"
@@ -160,7 +171,7 @@
             width="80">
             <template slot-scope="scope">
               <!--都有修改权限-->
-              <el-button type="text" @click="onClickDetail(scope.row)" size="small">修改</el-button>
+              <el-button type="text" @click="onClickDetail(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds ? '修改' : '查看'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -196,7 +207,7 @@ export default {
         keyword: null,
         level: '',
         typeId: '',
-        ifCommit: '',
+        ifStatus: '',
         dept: '',
         needToDo: true                          // 是否待办的开关按钮，默认选择待办
       },
@@ -222,18 +233,22 @@ export default {
           label: 'D'
         }
       ],
-      ifCommit: [
+      ifStatus: [
         {
           value: '',
           label: '全部'
         },
         {
-          value: true,
-          label: '已提交'
+          value: '填报中',
+          label: '填报中'
         },
         {
-          value: false,
-          label: '未提交'
+          value: '审核中',
+          label: '审核中'
+        },
+        {
+          value: '驳回',
+          label: '驳回'
         }
       ],
       typeList: [],
@@ -250,10 +265,9 @@ export default {
         loading: true,
         page: 1,
         listRow: 10,
-        identitys: [],
         total: 0,
         list: [],
-        flag: '',                           // 是否能查看所有任务列表
+        flag: true,                           // 是否能查看所有任务列表
         commitNum: 0,                        // 针对于当前登录用户，统计提交了多少个任务
         compValue: '',
         deptValue: '',
@@ -310,7 +324,8 @@ export default {
     },
     _getList () {
       this.taskList.loading = true
-      getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId, this.search.ifCommit, this.search.dept, this.search.needToDo).then((res) => {
+      console.log(this.search.ifStatus)
+      getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId, this.search.ifStatus, this.search.dept, this.search.needToDo).then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList.loading = false
           this.taskList.identitys = res.data.msg.identitys

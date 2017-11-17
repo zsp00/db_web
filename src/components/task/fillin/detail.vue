@@ -72,20 +72,33 @@
           <el-button v-show="isEdit" type="primary" @click="onEdit">保存</el-button>
           <el-button v-show="isSubmit" type="primary" @click="onSubmits">提交</el-button>
           <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
-          <el-button v-show="isReject" type="primary" @click="onReject">驳回</el-button>
-          <el-button v-show="isWithdraw" type="primary" @click="onWithdraw">撤回</el-button>
-          <!-- <el-button v-show="isComplete" type="primary" @click="onComplete">确认任务完成</el-button> -->
+          <el-button v-show="isReject" type="primary" @click="rejectShow">驳回</el-button>
+          <el-button v-show="isWithdraw" type="primary" @click="onWithdraw">撤回</el-button>         
           <el-button @click="onCancel">返回</el-button>
         </el-form-item>
       </el-col>
     </el-form>
-    
+
+    <!--这是添加驳回理由的模态框-->
+    <el-dialog title="驳回理由" :visible.sync="dialogFormAdd" width="30%">
+      <el-form>
+        <el-form-item>
+          <el-input type="textarea" v-model="rejectReason" :autosize="{ minRows: 4, maxRows: 10}"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormAdd = false">取 消</el-button>
+        <el-button type="primary" @click="onReject">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!--这是表格内容-->
     <el-table :data="form.taskDataList" border>
       <el-table-column prop="tDate" label="月份" width="80"></el-table-column>
       <el-table-column prop="completeSituation" label="完成情况"></el-table-column>
       <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议"></el-table-column>
       <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施"></el-table-column>
     </el-table>
+    <!--这是日志记录-->
     <el-tabs type="border-card" class="logList" v-model="tDate">
       <el-tab-pane :label="item.tDate + '月份'" :name="item.tDate + ''" v-for="(item,index) in form.taskDataList" :key="item.tDate">
           <template v-if="loglist === null || loglist.length === 0">
@@ -105,6 +118,13 @@
               </template>
               <template v-if="list.type == 'reject'">
                 <span style="" slot="reference"><b>驳回</b></span>。
+                  <div v-for="logItem in list.logData" :key="logItem.id">
+                    <div class="editLog" v-if="logItem.new != ''">
+                    <template>
+                      <b><i>驳回理由：</i></b>“{{logItem.new}}”。
+                    </template>
+                    </div>
+                  </div>           
               </template>
               <template v-if="list.type == 'withdraw'">
                 <span style="" slot="reference"><b>撤回</b></span>。
@@ -128,7 +148,7 @@
                       ，由“{{logItem.old == '1' ? '未完成' : '已完成' }}”，改为“{{logItem.new == '1' ? '未完成' : '已完成'}}”。
                     </template>
                     <template v-else>
-                      ，旧值为“{{logItem.old}}”，新值为“{{logItem.new}}”。
+                      ，由“{{logItem.old}}”，改为“{{logItem.new}}”。
                     </template>
                   </div>
                 </div>
@@ -137,6 +157,7 @@
           </div> 
       </el-tab-pane>
     </el-tabs>
+    <!--这是步骤-->
     <div class="detail-steps">
       <el-steps direction="vertical" :active="form.taskDataList[monthIndex].status == 0 ? (form.stepsNum + 1) : form.taskDataList[monthIndex].currentLevel" space="100px">
         <!-- 第一步 -->
@@ -168,7 +189,7 @@
 </template>
 
 <script>
-import { getDetail, edit, reject, confirm, getLogs, submits, withdraw } from 'api/task.js'
+import { getDetail, edit, confirm, getLogs, submits, withdraw, reject } from 'api/task.js'
 import { ERR_OK } from 'api/config.js'
 export default {
   data () {
@@ -199,6 +220,7 @@ export default {
         analysis: null,
         taskSelect: false
       },
+      rejectReason: null,
       tDate: null,
       currTaskData: [],
       isEdit: false,
@@ -208,7 +230,8 @@ export default {
       isWithdraw: false,
       isComplete: false,
       loglist: null,
-      monthIndex: 0             // 该任务选择展示月份的索引
+      monthIndex: 0,             // 该任务选择展示月份的索引
+      dialogFormAdd: false       // 驳回理由的模态框
     }
   },
   mounted () {
@@ -244,7 +267,6 @@ export default {
     // 修改内容按钮
     onEdit () {
       edit(this.update).then((res) => {
-        console.log(this.update)
         if (ERR_OK === res.data.code) {
           this.$message.success(res.data.msg)
           this._getDetail()
@@ -289,24 +311,23 @@ export default {
         })
       }).catch(() => {})
     },
+    // 驳回按钮
+    rejectShow () {
+      this.dialogFormAdd = true
+    },
     // 驳回任务请求
     onReject () {
-      this.$confirm('是否要驳回该任务?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        reject(this.update).then((res) => {
-          if (ERR_OK === res.data.code) {
-            this.$message.success(res.data.msg)
-            this._getDetail()
-          } else {
-            this.$message.error(res.data.msg)
-          }
-        })
-      }).catch(() => {})
+      reject(this.update, this.rejectReason).then((res) => {
+        if (ERR_OK === res.data.code) {
+          this.$message.success(res.data.msg)
+          this._getDetail()
+          this.dialogFormAdd = false
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
     },
-    // 撤回提交
+    // 撤回按钮
     onWithdraw () {
       this.$confirm('是否要撤回该任务?', '提示', {
         confirmButtonText: '确定',
@@ -323,24 +344,6 @@ export default {
         })
       }).catch(() => {})
     },
-    // onComplete () {
-    //   this.$confirm('是否确认完成该任务?', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     complete(this.update).then((res) => {
-    //       if (ERR_OK === res.data.code) {
-    //         this.$message.success(res.data.msg)
-    //         this.$router.push({
-    //           path: '/'
-    //         })
-    //       } else {
-    //         this.$message.error(res.data.msg)
-    //       }
-    //     })
-    //   }).catch(() => {})
-    // },
     onCancel () {
       this.$router.go(-1)
     },
@@ -390,9 +393,6 @@ export default {
         this.isConfirm = false
         this.isReject = false
         this.isWithdraw = false
-        // if (this.form.status === '1') {
-        //   this.isComplete = true
-        // }
       }
       this.update = item
       this.logs(this.tDate)
@@ -403,7 +403,6 @@ export default {
       this.isConfirm = false
       this.isReject = false
       this.isWithdraw = false
-      // this.isComplete = false
     }
   },
   watch: {
