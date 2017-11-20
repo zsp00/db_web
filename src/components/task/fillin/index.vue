@@ -195,7 +195,7 @@
 </template>
 
 <script>
-import { getInfo, getList, getTypeList, commitAll } from 'api/task.js'
+import { getInfo, getList, getTypeList, commitAll, checkCount } from 'api/task.js'
 import { getTaskDeptNo } from 'api/task-management.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
@@ -324,7 +324,6 @@ export default {
     },
     _getList () {
       this.taskList.loading = true
-      console.log(this.search.ifStatus)
       getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId, this.search.ifStatus, this.search.dept, this.search.needToDo).then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList.loading = false
@@ -376,12 +375,18 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        commitAll().then((res) => {
+        checkCount().then((res) => {
           if (res.data.code === 1) {
-            this.$message.success(res.data.msg)
-            this._getList()
+            commitAll().then((res) => {
+              if (res.data.code === 1) {
+                this.$message.success(res.data.msg)
+                this._getList()
+              } else {
+                this.$message.error('全部提交失败！')
+              }
+            })
           } else {
-            this.$message.error('全部提交失败！')
+            this.$message.error(res.data.msg)
           }
         })
       }).catch(() => {})
