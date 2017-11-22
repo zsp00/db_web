@@ -19,6 +19,7 @@ import AddTask from 'components/task/task-management/task-add'
 import EditTask from 'components/task/task-management/task-edit'
 import List from 'components/task/task-management/list'
 import Supervice from 'components/task/task-supervice/supervice'
+import TaskSearch from 'components/task/task-search/task-search'
 
 Vue.use(Router)
 export default new Router({
@@ -92,6 +93,11 @@ export default new Router({
           path: 'supervice',
           name: '任务督办',
           component: Supervice
+        },
+        {
+          path: 'task-search',
+          name: '任务查询',
+          component: TaskSearch
         }
       ]
     },
