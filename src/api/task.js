@@ -111,3 +111,9 @@ export function checkCount () {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/checkCount'
   return get(url, {}, {headers: DB_API.headers})
 }
+
+// 任务查询
+export function getTaskList (condition) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskSearch/getTaskList'
+  return get(url, { condition: condition }, {headers: DB_API.headers})
+}
