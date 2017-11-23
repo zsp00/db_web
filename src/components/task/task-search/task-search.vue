@@ -150,7 +150,13 @@ export default {
         }
       ],
       multipleSelection: [],
-      taskList: [],
+      taskList: [],                 // 后台返回的任务列表
+      serialNum: [],                // 序号列合并的单元格
+      title1: [],                   // 一级目标任务合并的单元格
+      title2: [],                   // 二级目标任务第一列
+      detail2: [],                  // 二级目标任务第二列
+      detail3: [],                  // 三级目标任务
+      duty3: [],                    // 三级目标任务第二列
       loading: true
     }
   },
@@ -169,11 +175,19 @@ export default {
     },
     // 获取任务列表
     _getTaskList () {
+      this.loading = true
       getTaskList(this.search).then((res) => {
         this.taskList = []
-        this.loading = true
         if (ERR_OK === res.data.code) {
-          this.taskList = res.data.data
+          this.taskList = res.data.data[0]
+          this.serialNum = res.data.data[1]
+          this.title1 = res.data.data[2]
+          this.title2 = res.data.data[3]
+          this.detail2 = res.data.data[4]
+          this.detail3 = res.data.data[5]
+          this.duty3 = res.data.data[6]
+          // console.log(this.detail3)
+          // console.log(this.duty3)
           this.loading = false
         }
       })
@@ -201,7 +215,43 @@ export default {
       }
     },
     _cellMerge ({ row, column, rowIndex, columnIndex }) {
-      console.log(rowIndex + ', ' + columnIndex)
+      if (columnIndex === 0) {
+        if (this.serialNum[rowIndex] !== 0) {
+          return [this.serialNum[rowIndex], 1]
+        } else {
+          return [0, 0]
+        }
+      } else if (columnIndex === 1 || columnIndex === 2 || columnIndex === 3) {
+        if (this.title1[rowIndex] !== 0) {
+          return [this.title1[rowIndex], 1]
+        } else {
+          return [0, 0]
+        }
+      } else if (columnIndex === 4) {
+        if (this.title2[rowIndex] !== 0) {
+          return [this.title2[rowIndex], 1]
+        } else {
+          return [0, 0]
+        }
+      } else if (columnIndex === 5 || columnIndex === 6 || columnIndex === 7) {
+        if (this.detail2[rowIndex] !== 0) {
+          return [this.detail2[rowIndex], 1]
+        } else {
+          return [0, 0]
+        }
+      } else if (columnIndex === 8) {
+        if (this.detail3[rowIndex] !== 0) {
+          return [this.detail3[rowIndex], 1]
+        } else {
+          return [0, 0]
+        }
+      } else if (columnIndex === 9) {
+        if (this.duty3[rowIndex] !== 0) {
+          return [this.duty3[rowIndex], 1]
+        } else {
+          return [0, 0]    // 不合并，需要保留该单元格占位则用[1, 1], 不需要保留单元格用[0, 0]
+        }
+      }
     }
   }
 }
