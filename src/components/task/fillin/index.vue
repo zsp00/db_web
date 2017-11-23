@@ -89,88 +89,40 @@
           style="width: 100%"
           :row-style="tableRowStyle"
           max-height="650">
-          <el-table-column
-            prop="serialNumber"
-            label="序号"
-            align="center"
-            width="65">
-          </el-table-column>
-          <el-table-column
-            fixed
-            prop="content"
-            label="任务"
-            align="center"
-            width="150">
-            <template slot-scope="scope">
-              <div class="task-content">{{scope.row.content}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="typeName"
-            label="任务分类"
-            width="150">
-          </el-table-column>
-          <el-table-column
-            prop="deptName"
-            label="部门"
-            align="center"
-            width="150">
-          </el-table-column>
-          <el-table-column
-            prop="timeLimit"
-            label="完成时限"
-            align="center"
-            width="115">
-          </el-table-column>
-          <el-table-column
-            prop="level"
-            label="等级配分"
-            align="center"
-            width="95">
-          </el-table-column>
-          <el-table-column
-            prop="completeSituation"
-            label="完成情况"
-            width="200">
-          </el-table-column>
-          <el-table-column
-            prop="problemSuggestions"
-            label="实施过程中存在的问题及建议"
-            width="220">
-          </el-table-column>
-          <el-table-column
-            prop="analysis"
-            label="未按时限完成或进度滞后的项目原因分析及推进措施"
-            width="380">
-          </el-table-column>
+            <el-table-column fixed prop="serialNum" label="序号" align="center" width="65"></el-table-column>
+            <el-table-column prop="title1" label="一级目标任务(目标)" width="110"></el-table-column>
+            <el-table-column prop="detail1" label="一级目标任务(目标)" width="150"></el-table-column>
+            <el-table-column prop="leader1" label="牵头领导"></el-table-column>
 
-           <!-- <el-table-column
-            fixed="right"
-            prop="getTaskStatusMsg"
-            label="状态"
-            align="center"
-            width="90">
-          </el-table-column> -->
+            <el-table-column prop="title2" label="二级目标任务(任务)" width="110"></el-table-column>
+            <el-table-column prop="detail2" label="二级目标任务(任务)" width="200"></el-table-column>
+            <el-table-column prop="leader2" label="责任领导"></el-table-column>
+            <el-table-column prop="deptNo2" label="责任部室"></el-table-column>
+
+            <el-table-column prop="detail3" label="三级目标任务(目标)" width="180"></el-table-column>
+            <el-table-column prop="duty3" label="三级目标任务(举措)" width="110"></el-table-column>
+            <el-table-column prop="leader3" label="责任领导"></el-table-column>
+
+            <el-table-column prop="deptNo" label="责任部室、二级单位" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="duty" label="目标任务"></el-table-column>
+            <el-table-column prop="content" label="2017年度实施计划" width="300"></el-table-column>
+
+          <el-table-column prop="level" label="等级配分" align="center" width="95"></el-table-column>
+          <el-table-column prop="typeName" label="任务分类"  align="center" width="100"></el-table-column>
+          <el-table-column prop="timeLimit" label="完成时限" align="center" width="115"></el-table-column>
+
+          <el-table-column prop="completeSituation" label="完成情况" width="200"></el-table-column>
+          <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议" width="220"></el-table-column>
+          <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施" width="380"></el-table-column>
+
           <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="90">
             <template slot-scope="scope">
               <el-tag :type="scope.row.getTaskStatusMsg !== '驳回' ? 'success' : 'danger'" close-transition>{{ scope.row.getTaskStatusMsg }}</el-tag>
             </template>
           </el-table-column>
-
-          <el-table-column
-            fixed="right"
-            prop="statusMsg"
-            label="步骤"
-            align="center"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            align="center"
-            label="操作"
-            width="80">
+          <el-table-column fixed="right" prop="statusMsg" label="步骤" align="center" width="120"></el-table-column>
+          <el-table-column fixed="right" align="center" label="操作" width="80">
             <template slot-scope="scope">
-              <!--都有修改权限-->
               <el-button type="text" @click="onClickDetail(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds ? '修改' : '查看'}}</el-button>
             </template>
           </el-table-column>
