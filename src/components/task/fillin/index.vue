@@ -287,6 +287,7 @@ export default {
           this.taskList.flag = res.data.msg.flag
           this.taskList.commitNum = res.data.msg.commitNum
           this.taskList.dbCount = res.data.msg.dbCount
+          console.log(this.taskList.list)
         } else {
           this.$message.error(res.data.msg)
         }
