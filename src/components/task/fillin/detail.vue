@@ -371,7 +371,7 @@ export default {
         if (this.contains(this.form.identitys, item.currentLevel)) {
           this.isEdit = true
           if (this.form.identitys[0] !== this.form.stepsNum) {
-            if (this.form.identitys[0] !== 3) {
+            if (this.form.taskDataList[this.monthIndex].commitAll !== 1) {
               this.isSubmit = true
             }
             this.isConfirm = false

@@ -54,7 +54,8 @@
       </el-row>
     </div>
     <div class="list-body">
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList" :span-method="_cellMerge" tooltip-effect="dark" max-height="680" style="width: 100%" border>
+      <!-- <el-table ref="multipleTable" v-loading="loading" :data="taskList" :span-method="_cellMerge" tooltip-effect="dark" max-height="680" style="width: 100%" border> -->
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList" :cell-style="_hasBackground" tooltip-effect="dark" max-height="680" style="width: 100%" border>
         <el-table-column prop="serialNum" label="序号" fixed width="60"></el-table-column>
         <el-table-column prop="title1" label="一级目标任务(目标)" width="110"></el-table-column>
         <el-table-column prop="detail1" label="一级目标任务(目标)" width="150"></el-table-column>
@@ -73,18 +74,15 @@
         <el-table-column prop="duty" label="目标任务"></el-table-column>
         <el-table-column prop="content" label="2017年度实施计划" width="300"></el-table-column>
 
-        <el-table-column prop="pName" label="所属流程" width="110"></el-table-column>
-        <el-table-column prop="taskType" label="所属分类" width="240"></el-table-column>  
-        <el-table-column prop="level" label="任务等级" width="80"></el-table-column>      
-        <el-table-column prop="timeLimit" label="期限" width="100"></el-table-column>
         <el-table-column prop="complete" label="完成情况" width="220"></el-table-column>
         <el-table-column prop="problem" label="问题建议" width="220"></el-table-column>
         <el-table-column prop="analysis" label="原因分析" width="380"></el-table-column>
-        <!-- <el-table-column prop="taskDataValue" label="状态" width="100" fixed="right">
+        <el-table-column prop="taskType" label="所属分类" width="240"></el-table-column>  
+        <el-table-column label="状态" width="100" fixed="right">
           <template slot-scope="scope">
-            <el-tag :type="scope.row.taskDataValue === true ? 'success' : 'danger'" close-transition>{{ scope.row.taskDataValue == true ? '督办中' : '未开始' }}</el-tag>
+            <el-tag :type="scope.row.status == 3 ? 'success' : 'danger'">{{ scope.row.status == 3 ? '已完成' : '未完成' }}</el-tag>
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -142,21 +140,15 @@ export default {
         },
         {
           label: '已完成',
-          value: '1'
+          value: '3'
         },
         {
           label: '未完成',
-          value: '2'
+          value: '1'
         }
       ],
       multipleSelection: [],
       taskList: [],                 // 后台返回的任务列表
-      serialNum: [],                // 序号列合并的单元格
-      title1: [],                   // 一级目标任务合并的单元格
-      title2: [],                   // 二级目标任务第一列
-      detail2: [],                  // 二级目标任务第二列
-      detail3: [],                  // 三级目标任务
-      duty3: [],                    // 三级目标任务第二列
       loading: true
     }
   },
@@ -179,15 +171,7 @@ export default {
       getTaskList(this.search).then((res) => {
         this.taskList = []
         if (ERR_OK === res.data.code) {
-          this.taskList = res.data.data[0]
-          this.serialNum = res.data.data[1]
-          this.title1 = res.data.data[2]
-          this.title2 = res.data.data[3]
-          this.detail2 = res.data.data[4]
-          this.detail3 = res.data.data[5]
-          this.duty3 = res.data.data[6]
-          // console.log(this.detail3)
-          // console.log(this.duty3)
+          this.taskList = res.data.data
           this.loading = false
         }
       })
@@ -252,6 +236,13 @@ export default {
           return [0, 0]    // 不合并，需要保留该单元格占位则用[1, 1], 不需要保留单元格用[0, 0]
         }
       }
+    },
+    _hasBackground (row, rowIndex) {
+      if (row.columnIndex === 15 || row.columnIndex === 16 || row.columnIndex === 14) {
+        return 'background:white'
+      } else {
+        return 'background:#EEF1F6'
+      }
     }
   }
 }
@@ -267,6 +258,9 @@ export default {
 .list-body i {
   margin-right: 5px;
   cursor: pointer;
+}
+.has-background-color {
+  background-color: #ccc;
 }
 </style>
 
