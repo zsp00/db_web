@@ -251,7 +251,7 @@ export default {
   methods: {
     onClickDetail (row) {
       this.$router.push({
-        path: '/task/fillin/detail/' + row.id
+        path: '/task/fillin/detail/' + row.tdDeptNo + '/id/' + row.id
       })
     },
     handleSizeChange (val) {

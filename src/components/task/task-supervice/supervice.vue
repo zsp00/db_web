@@ -4,29 +4,22 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form :inline="true">
+            <!-- <el-form-item label="部门名称">
+              <el-select id="choiceComp" v-model="form.compValue" filterable placeholder="请选择公司" @change="search.taskDeptNo = ''">
+                <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
+              </el-select>
+              <el-select id="choiceDept" v-model="search.taskDeptNo" filterable placeholder="请选择部门">
+                <template v-if="form.compValue != ''">
+                  <el-option v-for="(item, key) in compDept[form.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
+                </template>
+              </el-select>
+            </el-form-item> -->
             <el-form-item label="等级配分">
               <el-select v-model="search.taskLevel" filterable allow-create width="100%" placeholder="请选择等级配分">
                 <el-option v-for="item in levelValue" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-            <!-- <el-form-item label="部门选择">
-              <el-select v-model="search.taskDeptNo" filterable placeholder="请选择部门">
-                <el-option v-for="(item, key) in deptNoValue" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
-              </el-select>
-            </el-form-item> -->
-
-          <!-- <el-form-item label="部门名称" v-if="taskList.flag == true">
-            <el-select id="choiceComp" v-model="taskList.compValue" filterable placeholder="请选择公司" @change="taskList.deptValue = ''">
-              <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
-            </el-select>
-            <el-select id="choiceDept" v-model="taskList.deptValue" filterable placeholder="请选择部门" @change="search.dept = taskList.deptValue">
-              <template v-if="taskList.compValue != ''">
-                <el-option v-for="(item, key) in compDept[taskList.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
-              </template>
-            </el-select>
-          </el-form-item> -->
-
             <el-form-item label="分类选择">
               <el-select v-model="search.taskType" filterable placeholder="请选择分类">
                 <el-option v-for="(item, key) in taskTypeValue" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
@@ -42,6 +35,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSearch">查询</el-button>
+              <el-button type="primary" @click="_reset">重置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -49,7 +43,7 @@
       <el-button type="primary" @click="_supervice(taskList)">全部督办</el-button>
     </div>
     <div class="list-body">
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="700" style="width: 100%" border @selection-change="_handleSelectionChange">
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="700" style="width: 100%" border>
         <el-table-column prop="content" label="任务名称"></el-table-column>
         <!-- <el-table-column prop="pId" label="所属流程" width="110"></el-table-column> -->
         <el-table-column prop="deptNo" label="所属部门" width="180" show-overflow-tooltip></el-table-column>
@@ -72,20 +66,26 @@
 </template>
 
 <script>
-import { getSuperviceList, taskSupervice, getTaskDeptNo, getTaskType } from 'api/task-management.js'
+import { getSuperviceList, taskSupervice, getTaskType } from 'api/task-management.js'
+import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
 
 export default {
   data () {
     return {
+      taskList: [],
+      loading: true,
       search: {
-        taskDeptNo: '',
-        taskLevel: '',
-        taskType: '',
-        taskDataStauts: ''
+        taskLevel: '',                   // 任务的级别
+        taskType: '',                    // 任务的分类
+        taskDataStauts: '',              // 任务的状态（未开始，督办中）
+        taskDeptNo: ''                   // 选择部门下拉框的值
       },
-      deptNoValue: [],
+      form: {
+        compValue: ''
+      },
       taskTypeValue: [],
+      compDept: [],                      // 选择部门下拉框值
       taskDataValue: [
         {
           value: '',
@@ -121,10 +121,7 @@ export default {
           value: 'D',
           label: 'D'
         }
-      ],
-      multipleSelection: [],
-      taskList: [],
-      loading: true
+      ]
     }
   },
   mounted () {
@@ -135,7 +132,6 @@ export default {
     // 获取任务列表
     _getSuperviceList () {
       getSuperviceList(this.search.keyword, this.search.taskLevel, this.search.taskType, this.search.taskDeptNo, this.search.taskDataStauts).then((res) => {
-        console.log(this.search.taskDataStauts)
         if (ERR_OK === res.data.code) {
           this.taskList = res.data.msg
           this.loading = false
@@ -143,16 +139,6 @@ export default {
       })
     },
     _getInfo () {
-      getTaskDeptNo().then((res) => {
-        if (ERR_OK === res.data.code) {
-          this.deptNoValue = res.data.msg
-          var alldeptNo = {
-            deptNo: '',
-            deptName: '全部'
-          }
-          this.deptNoValue.splice(0, 0, alldeptNo)
-        }
-      })
       getTaskType().then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskTypeValue = res.data.msg
@@ -161,6 +147,11 @@ export default {
             typeName: '全部'
           }
           this.taskTypeValue.splice(0, 0, allType)
+        }
+      })
+      getCompDept().then((res) => {
+        if (res.data.code === ERR_OK) {
+          this.compDept = res.data.data
         }
       })
     },
@@ -183,13 +174,16 @@ export default {
         this.$message.warning('已取消！')
       })
     },
-    // 督办多选
-    _handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
     // 条件筛选
     onSearch () {
       this._getSuperviceList()
+    },
+    // 重置
+    _reset () {
+      this.form.compValue = ''
+      for (var obj in this.search) {
+        this.search[obj] = ''
+      }
     }
   }
 }

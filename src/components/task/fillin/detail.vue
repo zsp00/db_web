@@ -197,6 +197,7 @@ export default {
       form: {
         id: '',
         deptNo: '',
+        tdDeptNo: '',
         deptName: '',
         serialNumber: '',
         content: '',
@@ -236,12 +237,13 @@ export default {
   },
   mounted () {
     this.form.id = this.$route.params.id
+    this.form.tdDeptNo = this.$route.params.tdDeptNo
     this._getDetail()
   },
   methods: {
     _getDetail () {
       this.tDate = '0'
-      getDetail(this.form.id).then((res) => {
+      getDetail(this.form.id, this.form.tdDeptNo).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
           var selected = null

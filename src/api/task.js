@@ -11,9 +11,9 @@ export function getList (page, listRow, keyword, level, typeId, ifStatus, dept, 
   return get(url, {page: page, listRow: listRow, keyword: keyword, level: level, typeId: typeId, ifStatus: ifStatus, dept: dept, needToDo: needToDo}, {headers: DB_API.headers})
 }
 
-export function getDetail (id) {
+export function getDetail (id, tdDeptNo) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/detail'
-  return get(url, {id: id}, {headers: DB_API.headers})
+  return get(url, { id: id, tdDeptNo: tdDeptNo }, {headers: DB_API.headers})
 }
 
 // 任务内容修改
