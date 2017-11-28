@@ -7,14 +7,7 @@
           <el-input v-model="form.name" class="process-name"></el-input>
         </el-form-item>
         <el-form-item label="部门名称">
-          <el-select id="choiceComp" v-model="form.compValue" filterable placeholder="请选择公司" @change="form.deptValue = ''">
-            <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
-          </el-select>
-          <el-select id="choiceDept" v-model="form.deptValue" filterable placeholder="请选择部门">
-            <template v-if="form.compValue != ''">
-              <el-option v-for="(item, key) in compDept[form.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
-            </template>
-          </el-select>
+          <el-cascader :options="compDept" v-model="form.deptValue"></el-cascader>
         </el-form-item>
         <el-form-item label="流程级次">
           <el-button @click="_addOne">添加一级</el-button>
@@ -55,8 +48,7 @@ export default {
     return {
       form: {
         name: '',
-        compValue: '',                 // 选择公司下拉框的值，
-        deptValue: '',                 // 选择部门下拉框的值
+        deptValue: [],                 // 选择公司部门下拉框的值，
         process: [                     // 流程
           {},
           {

@@ -7,12 +7,7 @@
           <el-input v-model="form.name" class="process-name"></el-input>
         </el-form-item>
         <el-form-item label="部门名称">
-          <el-select id="choiceComp" v-model="form.compValue" filterable placeholder="请选择公司" @change="form.deptValue = ''">
-            <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
-          </el-select>
-          <el-select id="choiceDept" v-model="form.deptValue" filterable placeholder="请选择部门">
-            <el-option v-for="(item, key) in compDept[form.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
-          </el-select>
+          <el-cascader :options="compDept" v-model="form.deptValue"></el-cascader>
         </el-form-item>
         <el-form-item label="流程级次">
           <el-button @click="_addOne">添加一级</el-button>
@@ -55,8 +50,7 @@ export default {
       form: {
         id: null,
         name: '',
-        compValue: '',                 // 选择公司下拉框的值，
-        deptValue: '',                 // 选择部门下拉框的值
+        deptValue: [],                 // 选择部门下拉框的值
         process: [                     // 流程
           {},
           {
@@ -86,8 +80,7 @@ export default {
         if (res.data.code === 1) {
           this.form.id = res.data.data.id
           this.form.name = res.data.data.name
-          this.form.compValue = res.data.data.compNo.toString()
-          this.form.deptValue = res.data.data.deptNo
+          this.form.deptValue = [res.data.data.compNo, res.data.data.deptNo.toString()]
           this.form.process = res.data.data.process
           this.form.process.splice(0, 0, {})
           this.processCount = this.form.process.length - 1

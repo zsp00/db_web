@@ -52,16 +52,9 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="部门名称" v-if="taskList.flag == true">
-            <el-select id="choiceComp" v-model="taskList.compValue" filterable placeholder="请选择公司" @change="taskList.deptValue = ''">
-              <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
-            </el-select>
-            <el-select id="choiceDept" v-model="taskList.deptValue" filterable placeholder="请选择部门" @change="search.dept = taskList.deptValue">
-              <template v-if="taskList.compValue != ''">
-                <el-option v-for="(item, key) in compDept[taskList.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
-              </template>
-            </el-select>
-          </el-form-item>
+          <el-form-item label="部门名称">
+              <el-cascader :options="compDept" v-model="search.dept"></el-cascader>
+            </el-form-item>
           <el-form-item label="搜索内容">
             <el-input
               v-model="search.keyword"
@@ -103,7 +96,7 @@
             <el-table-column prop="duty3" label="三级目标任务(举措)" width="110"></el-table-column>
             <el-table-column prop="leader3" label="责任领导"></el-table-column>
 
-            <el-table-column prop="deptNo" label="责任部室、二级单位" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="deptNo" label="责任部室、二级单位" width="150"></el-table-column>
             <el-table-column prop="duty" label="目标任务"></el-table-column>
             <el-table-column prop="content" label="2017年度实施计划" width="300"></el-table-column>
 
@@ -165,7 +158,7 @@ export default {
         level: '',
         typeId: '',
         ifStatus: '',
-        dept: '',
+        dept: [],
         needToDo: true                          // 是否待办的开关按钮，默认选择待办
       },
       levelOptions: [
