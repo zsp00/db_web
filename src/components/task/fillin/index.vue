@@ -115,15 +115,20 @@
           <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议" width="220"></el-table-column>
           <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施" width="380"></el-table-column>
 
-          <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="90">
+          <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="110">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.getTaskStatusMsg !== '驳回' ? 'success' : 'danger'" close-transition>{{ scope.row.getTaskStatusMsg }}</el-tag>
+              <el-tag :type="scope.row.getTaskStatusMsg !== '0' ? 'success' : 'danger'" close-transition>
+                  <template v-if="scope.row.getTaskStatusMsg === 0">驳回</template>
+                  <template v-if="scope.row.getTaskStatusMsg === 1">填报中</template>
+                  <template v-if="scope.row.getTaskStatusMsg === 2">审核中</template>
+                  <template v-if="scope.row.getTaskStatusMsg === 3">审核完成</template>                                                                      
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column fixed="right" prop="statusMsg" label="步骤" align="center" width="120"></el-table-column>
           <el-table-column fixed="right" align="center" label="操作" width="80">
             <template slot-scope="scope">
-              <el-button type="text" @click="onClickDetail(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds ? '修改' : '查看'}}</el-button>
+              <el-button type="text" @click="onClickDetail(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds && scope.row.currMonthStatus != 0 ? '修改' : '查看'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -191,16 +196,20 @@ export default {
           label: '全部'
         },
         {
-          value: '填报中',
+          value: '0',
+          label: '驳回'
+        },
+        {
+          value: '1',
           label: '填报中'
         },
         {
-          value: '审核中',
+          value: '2',
           label: '审核中'
         },
         {
-          value: '驳回',
-          label: '驳回'
+          value: '3',
+          label: '审核完成'
         }
       ],
       typeList: [],
@@ -253,16 +262,16 @@ export default {
       this.taskList.page = val
       this._getList()
     },
+    onSearch () {
+      this.taskList.page = 1
+      this._getList()
+    },
     tableCellStyle (row, rowIndex) {
       if (row.columnIndex === 16 || row.columnIndex === 17 || row.columnIndex === 18) {
         return 'background:white'
       } else {
         return 'background:#EEF1F6'
       }
-    },
-    onSearch () {
-      this.taskList.page = 1
-      this._getList()
     },
     _getInfo () {
       getInfo().then((res) => {
@@ -281,13 +290,11 @@ export default {
       getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId, this.search.ifStatus, this.search.dept, this.search.needToDo).then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList.loading = false
-          this.taskList.identitys = res.data.msg.identitys
           this.taskList.total = res.data.msg.total
           this.taskList.list = res.data.msg.data
           this.taskList.flag = res.data.msg.flag
           this.taskList.commitNum = res.data.msg.commitNum
           this.taskList.dbCount = res.data.msg.dbCount
-          console.log(this.taskList.list)
         } else {
           this.$message.error(res.data.msg)
         }

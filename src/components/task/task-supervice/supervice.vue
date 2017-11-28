@@ -10,18 +10,30 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="部门选择">
+            <!-- <el-form-item label="部门选择">
               <el-select v-model="search.taskDeptNo" filterable placeholder="请选择部门">
                 <el-option v-for="(item, key) in deptNoValue" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
+
+          <!-- <el-form-item label="部门名称" v-if="taskList.flag == true">
+            <el-select id="choiceComp" v-model="taskList.compValue" filterable placeholder="请选择公司" @change="taskList.deptValue = ''">
+              <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
+            </el-select>
+            <el-select id="choiceDept" v-model="taskList.deptValue" filterable placeholder="请选择部门" @change="search.dept = taskList.deptValue">
+              <template v-if="taskList.compValue != ''">
+                <el-option v-for="(item, key) in compDept[taskList.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
+              </template>
+            </el-select>
+          </el-form-item> -->
+
             <el-form-item label="分类选择">
               <el-select v-model="search.taskType" filterable placeholder="请选择分类">
                 <el-option v-for="(item, key) in taskTypeValue" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="状态选择">
-              <el-select v-model="search.taskDataStauts" filterable placeholder="请选择状态">
+              <el-select v-model="search.taskLevel" filterable placeholder="请选择状态">
                 <el-option v-for="(item, key) in taskDataValue" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
@@ -39,11 +51,11 @@
     <div class="list-body">
       <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="700" style="width: 100%" border @selection-change="_handleSelectionChange">
         <el-table-column prop="content" label="任务名称"></el-table-column>
-        <el-table-column prop="pId" label="所属流程" width="110"></el-table-column>
-        <el-table-column prop="deptNo" label="所属部门" width="140" show-overflow-tooltip></el-table-column>
+        <!-- <el-table-column prop="pId" label="所属流程" width="110"></el-table-column> -->
+        <el-table-column prop="deptNo" label="所属部门" width="180" show-overflow-tooltip></el-table-column>
         <el-table-column prop="taskType" label="所属分类" width="240"></el-table-column>  
         <el-table-column prop="level" label="任务等级" width="80"></el-table-column>      
-        <el-table-column prop="timeLimit" label="期限" width="140"></el-table-column>
+        <el-table-column prop="timeLimit" label="期限" width="100"></el-table-column>
         <el-table-column prop="taskDataValue" label="状态" width="100">
           <template slot-scope="scope">
             <el-tag :type="scope.row.taskDataValue === true ? 'success' : 'danger'" close-transition>{{ scope.row.taskDataValue == true ? '督办中' : '未开始' }}</el-tag>
