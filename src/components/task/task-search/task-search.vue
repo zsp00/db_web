@@ -25,14 +25,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="部门名称">
-              <el-select id="choiceComp" v-model="form.compValue" filterable placeholder="请选择公司" @change="search.deptValue = ''">
-                <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
-              </el-select>
-              <el-select id="choiceDept" v-model="search.deptValue" filterable placeholder="请选择部门">
-                <template v-if="form.compValue != ''">
-                  <el-option v-for="(item, key) in compDept[form.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
-                </template>
-              </el-select>
+              <el-cascader :options="compDept" v-model="search.deptValue"></el-cascader>
             </el-form-item>
             <el-form-item label="分类选择">
               <el-select v-model="search.taskType" filterable placeholder="请选择分类">
@@ -55,7 +48,7 @@
     </div>
     <div class="list-body">
       <!-- <el-table ref="multipleTable" v-loading="loading" :data="taskList" :span-method="_cellMerge" tooltip-effect="dark" max-height="680" style="width: 100%" border> -->
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList" :cell-style="_hasBackground" tooltip-effect="dark" max-height="680" style="width: 100%" border>
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" :cell-style="_hasBackground" tooltip-effect="dark" max-height="640" style="width: 100%" border>
         <el-table-column prop="serialNum" label="序号" fixed width="60"></el-table-column>
         <el-table-column prop="title1" label="一级目标任务(目标)" width="110"></el-table-column>
         <el-table-column prop="detail1" label="一级目标任务(目标)" width="150"></el-table-column>
@@ -84,6 +77,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="taskList.page"
+          :page-size="taskList.listRow"
+          layout="total, prev, pager, next"
+          :total="taskList.total">
+        </el-pagination>
+        </div>
     </div>
   </div>
 </template>
@@ -100,14 +103,11 @@ export default {
         taskLevel: '',                   // 任务等级配分
         taskType: '',                    // 任务分类
         taskDataStauts: '',              // 任务状态
-        deptValue: '',                   // 选择部门下拉框的值
+        deptValue: [],                   // 选择部门下拉框的值
         timeLimit: '',                   // 期限
         leaderFirst: '',                 // 牵头领导
         leaderSecond: '',                // 第二级责任领导
         leaderThird: ''                  // 第三级责任领导
-      },
-      form: {
-        compValue: ''                    // 选择公司下拉框的值
       },
       compDept: [],                      // 选择部门下拉框值
       taskType: [],                      // 任务分类
@@ -148,7 +148,12 @@ export default {
         }
       ],
       multipleSelection: [],
-      taskList: [],                 // 后台返回的任务列表
+      taskList: {                     // 后台返回的任务列表
+        list: [],
+        page: 1,
+        listRow: 10,
+        total: 0
+      },
       loading: true
     }
   },
@@ -158,6 +163,14 @@ export default {
     this._getCompDept()
   },
   methods: {
+    handleSizeChange (val) {
+      this.taskList.listRow = val
+      // this._getTaskList()
+    },
+    handleCurrentChange (val) {
+      this.taskList.page = val
+      this._getTaskList()
+    },
     _getCompDept () {
       getCompDept().then((res) => {
         if (res.data.code === 1) {
@@ -168,10 +181,14 @@ export default {
     // 获取任务列表
     _getTaskList () {
       this.loading = true
-      getTaskList(this.search).then((res) => {
+      getTaskList(this.search, this.taskList.page, this.taskList.listRow).then((res) => {
         this.taskList = []
         if (ERR_OK === res.data.code) {
-          this.taskList = res.data.data
+          console.log(res)
+          this.taskList.list = res.data.data.list
+          this.taskList.page = res.data.data.page
+          this.taskList.listRow = res.data.data.listRow
+          this.taskList.total = res.data.data.total
           this.loading = false
         }
       })
@@ -261,6 +278,10 @@ export default {
 }
 .has-background-color {
   background-color: #ccc;
+}
+.pagination {
+  text-align: right;
+  padding-top: 10px;
 }
 </style>
 

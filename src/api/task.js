@@ -113,7 +113,7 @@ export function checkCount () {
 }
 
 // 任务查询
-export function getTaskList (condition) {
+export function getTaskList (condition, page, listRow) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskSearch/getTaskList'
-  return get(url, { condition: condition }, {headers: DB_API.headers})
+  return get(url, { condition: condition, page: page, listRow: listRow }, {headers: DB_API.headers})
 }
