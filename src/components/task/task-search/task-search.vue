@@ -210,7 +210,6 @@ export default {
       this._getTaskList()
     },
     _reset () {
-      this.form.compValue = ''
       for (var obj in this.search) {
         this.search[obj] = ''
       }
