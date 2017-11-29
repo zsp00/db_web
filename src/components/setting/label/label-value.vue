@@ -1,8 +1,8 @@
 <template>
   <div class="label-value">
     <div class="value-head">
-      <el-button type="primary">添加部门/成员</el-button>
-      <el-button type="primary">删除</el-button>
+      <el-button type="primary" plain>添加部门/成员</el-button>
+      <el-button type="primary" plain>删除</el-button>
     </div>
     <div class="value-table">
       <el-table ref="multipleTable" v-loading="loading" :data="valueList" tooltip-effect="dark" border style="width: 100%" @selection-change="handleSelectionChange">

@@ -1,8 +1,8 @@
 <template>
   <div id="type-list" v-loading="loading">
     <div style="margin-top: 20px" id="btn">
-      <el-button type="primary" @click="showAddDialog">新增分类</el-button>
-      <el-button type="primary" @click="_del(multipleSelection)">删除</el-button>
+      <el-button type="primary" @click="showAddDialog" plain>新增分类</el-button>
+      <el-button type="primary" @click="_del(multipleSelection)" plain>删除</el-button>
       <!--这是添加分类的模态框-->
       <el-dialog title="新增分类" :visible.sync="dialogFormAdd" width="30%">
         <el-form :model="form">
@@ -12,7 +12,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormAdd = false">取 消</el-button>
-          <el-button type="primary" @click="_AddSubmit">确 定</el-button>
+          <el-button type="primary" @click="_AddSubmit" plain>确 定</el-button>
         </div>
       </el-dialog>
       <!--这是修改分类的模态框-->
@@ -24,7 +24,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormEdit = false">取 消</el-button>
-          <el-button type="primary" @click="_editSubmit">确 定</el-button>
+          <el-button type="primary" @click="_editSubmit" plain>确 定</el-button>
         </div>
       </el-dialog>
     </div>

@@ -1,9 +1,9 @@
 <template>
   <div id="type-list" v-loading="loading">
     <div style="margin-top: 20px" id="btn">
-      <el-button type="button" @click="showAddDialog">新增菜单</el-button>
-      <el-button @click="Enable(multipleSelection)">启用</el-button>
-      <el-button @click="Disable(multipleSelection)">禁用</el-button>
+      <el-button type="primary" @click="showAddDialog" plain>新增菜单</el-button>
+      <el-button type="primary" @click="Enable(multipleSelection)" plain>启用</el-button>
+      <el-button type="primary" @click="Disable(multipleSelection)" plain>禁用</el-button>
       <!--这是添加菜单的模态框-->
       <el-dialog title="新增菜单" :visible.sync="dialogFormVisible">
         <el-form :model="form">

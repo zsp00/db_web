@@ -10,8 +10,8 @@
             </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
-            <el-button @click="addDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="_add">确 定</el-button>
+            <el-button @click="addDialogVisible = false" plain>取 消</el-button>
+            <el-button type="primary" @click="_add" plain>确 定</el-button>
           </span>
         </el-dialog>
         <!-- 修改用的标签Dialog框 -->
@@ -22,15 +22,15 @@
             </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
-            <el-button @click="editDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="_saveEdit">确 定</el-button>
+            <el-button @click="editDialogVisible = false" plain>取 消</el-button>
+            <el-button type="primary" @click="_saveEdit" plain>确 定</el-button>
           </span>
         </el-dialog>
         <!-- 左侧标签列表 -->
         <el-card>
           <div slot="header" class="label-list-header">
             <span>标签列表</span>
-            <el-button type="primary" size="small" icon="el-icon-plus" @click="addDialogVisible = true"></el-button>
+            <el-button type="primary" size="small" icon="el-icon-plus" plain @click="addDialogVisible = true"></el-button>
           </div>
           <div class="label-list-container">
             <ul id="asdasdasd">

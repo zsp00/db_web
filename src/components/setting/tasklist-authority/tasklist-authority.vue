@@ -7,7 +7,7 @@
             <el-input type="textarea" v-model="form.empNo" :rows="5"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="_save">保存</el-button>
+            <el-button type="primary" @click="_save" plain>保存</el-button>
           </el-form-item>
         </el-form>
       </el-col>

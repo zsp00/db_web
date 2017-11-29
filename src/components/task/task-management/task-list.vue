@@ -2,9 +2,9 @@
   <div class="box">
     <div class="list-head">
       <router-link to="/task/list/task-add">
-        <el-button type="primary">创建任务</el-button>
+        <el-button type="primary" plain>创建任务</el-button>
       </router-link>
-      <el-button type="primary" @click="_del(multipleSelection)">删除</el-button>
+      <el-button type="primary" @click="_del(multipleSelection)" plain>删除</el-button>
     </div>
     <div class="list-body">
       <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="700" style="width: 100%" border @selection-change="_handleSelectionChange">

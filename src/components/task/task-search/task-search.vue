@@ -115,7 +115,7 @@ export default {
       levelValue: [
         {
           value: '',
-          label: '全部'
+          label: '全部等级'
         },
         {
           value: 'A',
@@ -199,7 +199,7 @@ export default {
           this.taskType = res.data.msg
           var allType = {
             id: '',
-            typeName: '全部'
+            typeName: '全部分类'
           }
           this.taskType.splice(0, 0, allType)
         }

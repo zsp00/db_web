@@ -10,8 +10,8 @@
           <el-cascader :options="compDept" v-model="form.deptValue"></el-cascader>
         </el-form-item>
         <el-form-item label="流程级次">
-          <el-button @click="_addOne">添加一级</el-button>
-          <el-button @click="_delOne">删除一级</el-button>
+          <el-button @click="_addOne" type="primary" plain>添加一级</el-button>
+          <el-button @click="_delOne" type="primary" plain>删除一级</el-button>
         </el-form-item>
         <div class="all-process">
           <div v-for="n in processCount" :key="n" class="process-one-border">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <el-form-item>
-          <el-button type="primary" @click="_onSubmit">立即创建</el-button>
+          <el-button type="primary" @click="_onSubmit" plain>立即创建</el-button>
           <el-button @click="_cancel">取消</el-button>
         </el-form-item>
       </el-form>

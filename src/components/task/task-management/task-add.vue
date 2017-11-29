@@ -35,7 +35,7 @@
           <el-date-picker v-model="form.timeLimit" type="month" placeholder="选择日期"></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="_onSubmit">立即创建</el-button>
+          <el-button type="primary" @click="_onSubmit" plain>立即创建</el-button>
           <el-button @click="_cancel">取消</el-button>
         </el-form-item>
       </el-form>

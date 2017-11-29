@@ -15,7 +15,7 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-form :inline="true" >
-          <el-form-item label="等级配分">
+          <el-form-item>
             <el-select
               v-model="search.level"
               filterable
@@ -30,7 +30,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="任务分类">
+          <el-form-item>
             <el-select
               v-model="search.typeId"
               filterable
@@ -52,17 +52,17 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="部门名称">
-              <el-cascader :options="compDept" v-model="search.dept"></el-cascader>
+          <el-form-item>
+              <el-cascader :options="compDept" v-model="search.dept" placeholder="部门名称"></el-cascader>
             </el-form-item>
-          <el-form-item label="搜索内容">
+          <el-form-item>
             <el-input
               v-model="search.keyword"
               placeholder="请输入搜索内容">
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSearch">查询</el-button>
+            <el-button type="primary" @click="onSearch" plain>查询</el-button>
           </el-form-item>
           <el-form-item class="need-to-do">
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
@@ -164,7 +164,7 @@ export default {
       levelOptions: [
         {
           value: '',
-          label: '全部'
+          label: '全部等级'
         },
         {
           value: 'A',
@@ -263,7 +263,7 @@ export default {
       if (row.columnIndex === 16 || row.columnIndex === 17 || row.columnIndex === 15) {
         return 'background:white'
       } else {
-        return 'background:#EEF1F6'
+        return 'background:#fafafa'
       }
     },
     _getInfo () {

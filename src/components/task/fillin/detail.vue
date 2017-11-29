@@ -88,12 +88,12 @@
 
       <el-col :span="24">
         <el-form-item>
-          <el-button v-show="isEdit" type="primary" @click="onEdit">保存</el-button>
-          <el-button v-show="isSubmit" type="primary" @click="onSubmits">提交</el-button>
-          <el-button v-show="isConfirm" type="primary" @click="onConfirm">确认</el-button>
-          <el-button v-show="isReject" type="primary" @click="rejectShow">驳回</el-button>
-          <el-button v-show="isWithdraw" type="primary" @click="onWithdraw">撤回</el-button>         
-          <el-button @click="onCancel">返回</el-button>
+          <el-button v-show="isEdit" type="primary" @click="onEdit" plain>保存</el-button>
+          <el-button v-show="isSubmit" type="primary" @click="onSubmits" plain>提交</el-button>
+          <el-button v-show="isConfirm" type="primary" @click="onConfirm" plain>确认</el-button>
+          <el-button v-show="isReject" type="primary" @click="rejectShow" plain>驳回</el-button>
+          <el-button v-show="isWithdraw" type="primary" @click="onWithdraw" plain>撤回</el-button>         
+          <el-button @click="onCancel" plain>返回</el-button>
         </el-form-item>
       </el-col>
     </el-form>
@@ -107,7 +107,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormAdd = false">取 消</el-button>
-        <el-button type="primary" @click="onReject">确 定</el-button>
+        <el-button type="primary" @click="onReject" plain>确 定</el-button>
       </div>
     </el-dialog>
     <!--这是表格内容-->

@@ -4,35 +4,35 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form :inline="true">
-            <el-form-item label="部门名称">
-              <el-cascader :options="compDept" v-model="search.taskDeptNo"></el-cascader>
+            <el-form-item>
+              <el-cascader :options="compDept" v-model="search.taskDeptNo" placeholder="部门名称"></el-cascader>
             </el-form-item>
-            <el-form-item label="等级配分">
+            <!-- <el-form-item>
               <el-select v-model="search.taskLevel" filterable allow-create width="100%" placeholder="请选择等级配分">
                 <el-option v-for="item in levelValue" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
-            </el-form-item>
-            <el-form-item label="分类选择">
+            </el-form-item> -->
+            <el-form-item>
               <el-select v-model="search.taskType" filterable placeholder="请选择分类">
                 <el-option v-for="(item, key) in taskTypeValue" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="状态选择">
+            <el-form-item>
               <el-select v-model="search.taskLevel" filterable placeholder="请选择状态">
                 <el-option v-for="(item, key) in taskDataValue" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="搜索内容">
+            <el-form-item>
               <el-input v-model="search.keyword" placeholder="请输入搜索内容"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSearch">查询</el-button>
+              <el-button type="primary" @click="onSearch" plain icon="el-icon-search">搜索</el-button>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-      <el-button type="primary" @click="_supervice(taskList)">全部督办</el-button>
+      <el-button type="primary" @click="_supervice(taskList)" plain>全部督办</el-button>
     </div>
     <div class="list-body">
       <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="700" style="width: 100%" border>
@@ -81,7 +81,7 @@ export default {
       taskDataValue: [
         {
           value: '',
-          label: '全部'
+          label: '全部状态'
         },
         {
           value: 'false',
@@ -95,7 +95,7 @@ export default {
       levelValue: [
         {
           value: '',
-          label: '全部'
+          label: '全部等级'
         },
         {
           value: 'A',
@@ -136,7 +136,7 @@ export default {
           this.taskTypeValue = res.data.msg
           var allType = {
             id: '',
-            typeName: '全部'
+            typeName: '全部分类'
           }
           this.taskTypeValue.splice(0, 0, allType)
         }
