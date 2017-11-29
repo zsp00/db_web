@@ -2,6 +2,21 @@
 <transition name="detail">
   <div class="detail">
     <el-form :model="form" label-position="top" label-width="120px">
+      <el-col :span="8">
+        <el-form-item label="一级任务目标" style="margin-right:40px;">
+          {{form.title1}}
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
+         <el-form-item label="二级任务目标" style="margin-right:50px;">
+          {{form.title2}}
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
+        <el-form-item label="三级任务目标">
+          {{form.detail3}}
+        </el-form-item>
+      </el-col>
       <el-col :span="24">
         <el-form-item label="任务">
           {{form.content}}
@@ -32,11 +47,15 @@
           {{form.level}}
         </el-form-item>
       </el-col>
-      <el-form-item label="月份">
-        <el-radio-group v-model="tDate">
-          <el-radio-button v-for="(item, key) in form.taskDataList" :key="key" :label="item.tDate">{{item.tDate}}月</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="月份">
+            <el-radio-group v-model="tDate">
+              <el-radio-button v-for="(item, key) in form.taskDataList" :key="key" :label="item.tDate">{{item.tDate}}月</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+      </el-row>     
       <el-row>
         <el-col :span="24">
           <el-form-item label="完成情况">

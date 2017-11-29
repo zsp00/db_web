@@ -4,16 +4,9 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form :inline="true">
-            <!-- <el-form-item label="部门名称">
-              <el-select id="choiceComp" v-model="form.compValue" filterable placeholder="请选择公司" @change="search.taskDeptNo = ''">
-                <el-option v-for="(item, key, index) in compDept" :key="key" :label="item.name" :value="key"></el-option>
-              </el-select>
-              <el-select id="choiceDept" v-model="search.taskDeptNo" filterable placeholder="请选择部门">
-                <template v-if="form.compValue != ''">
-                  <el-option v-for="(item, key) in compDept[form.compValue].dept" :key="item.deptNo" :label="item.deptName" :value="item.deptNo"></el-option>
-                </template>
-              </el-select>
-            </el-form-item> -->
+            <el-form-item label="部门名称">
+              <el-cascader :options="compDept" v-model="search.taskDeptNo"></el-cascader>
+            </el-form-item>
             <el-form-item label="等级配分">
               <el-select v-model="search.taskLevel" filterable allow-create width="100%" placeholder="请选择等级配分">
                 <el-option v-for="item in levelValue" :key="item.value" :label="item.label" :value="item.value">
@@ -35,7 +28,6 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSearch">查询</el-button>
-              <el-button type="primary" @click="_reset">重置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -79,7 +71,7 @@ export default {
         taskLevel: '',                   // 任务的级别
         taskType: '',                    // 任务的分类
         taskDataStauts: '',              // 任务的状态（未开始，督办中）
-        taskDeptNo: ''                   // 选择部门下拉框的值
+        taskDeptNo: null                   // 选择部门下拉框的值
       },
       form: {
         compValue: ''
@@ -177,13 +169,6 @@ export default {
     // 条件筛选
     onSearch () {
       this._getSuperviceList()
-    },
-    // 重置
-    _reset () {
-      this.form.compValue = ''
-      for (var obj in this.search) {
-        this.search[obj] = ''
-      }
     }
   }
 }
