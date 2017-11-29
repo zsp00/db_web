@@ -1,5 +1,8 @@
 <template>
   <div class="header">
+    <div class="logo">
+
+    </div>
     <div class="breadcrumb">
       <el-breadcrumb class="app-levelbar" separator="/">
         <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.path">
@@ -99,8 +102,8 @@ export default {
     height:60px
     border-bottom 1px solid #e6e6e6
     position fixed
-    width calc(100% - 200px)
-    background:#eef1f6
+    width 100%
+    background:#ddd
     z-index 1000
     .breadcrumb
       float: left

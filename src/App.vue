@@ -3,11 +3,11 @@
       <loading class="l"></loading>
     </div>
     <el-container v-else-if="isLogin" class="container">
-      <el-aside style="min-width:64px;width:200px">
-        <m-menu></m-menu>
-      </el-aside>
       <el-main class="el-main">
         <m-header></m-header>
+        <el-aside style="min-width:64px;width:200px;margin-top:60px">
+          <m-menu></m-menu>
+        </el-aside>
         <div class="content">
           <router-view></router-view>
         </div>
@@ -76,12 +76,12 @@ export default {
     height: 100%
     width: 100%
     .el-main
-      width: calc(100% - 200px)
       padding: 0
       .content
         position: relative
-        margin-top 60px
+        margin-left 200px
         padding: 20px
+        width: calc(100% - 240px)
   .loading
     position: absolute
     display: block

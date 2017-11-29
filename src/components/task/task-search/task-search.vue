@@ -4,43 +4,43 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form :inline="true">
-            <el-form-item label="等级配分">
+            <!-- <el-form-item label="等级配分">
               <el-select v-model="search.taskLevel" filterable allow-create width="100%" placeholder="请选择等级配分">
                 <el-option v-for="item in levelValue" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
+            </el-form-item> -->
+            <el-form-item>
+              <el-input v-model="search.leaderFirst" placeholder="牵头领导"></el-input>
             </el-form-item>
-            <el-form-item label="牵头领导">
-              <el-input v-model="search.leaderFirst"></el-input>
+            <el-form-item>
+              <el-input v-model="search.leaderSecond" placeholder="二级任务责任领导"></el-input>
             </el-form-item>
-            <el-form-item label="二级任务责任领导">
-              <el-input v-model="search.leaderSecond"></el-input>
+            <el-form-item>
+              <el-input v-model="search.leaderThird" placeholder="三级任务责任领导"></el-input>
             </el-form-item>
-            <el-form-item label="三级任务责任领导">
-              <el-input v-model="search.leaderThird"></el-input>
-            </el-form-item>
-            <el-form-item label="状态选择">
-              <el-select v-model="search.taskDataStauts" filterable placeholder="请选择状态">
+            <el-form-item>
+              <el-select v-model="search.taskDataStauts" filterable placeholder="状态选择">
                 <el-option v-for="(item, key) in taskDataValue" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="部门名称">
-              <el-cascader :options="compDept" v-model="search.deptValue"></el-cascader>
+            <el-form-item>
+              <el-cascader :options="compDept" v-model="search.deptValue" placeholder="部门名称"></el-cascader>
             </el-form-item>
-            <el-form-item label="分类选择">
-              <el-select v-model="search.taskType" filterable placeholder="请选择分类">
+            <el-form-item>
+              <el-select v-model="search.taskType" filterable placeholder="分类选择">
                 <el-option v-for="(item, key) in taskType" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="期限">
+            <el-form-item>
               <el-date-picker type="month" placeholder="选择日期" v-model="search.timeLimit" style="width: 100%;"></el-date-picker>
             </el-form-item>
-            <el-form-item label="搜索内容">
-              <el-input v-model="search.keyword" placeholder="请输入搜索内容"></el-input>
+            <el-form-item>
+              <el-input v-model="search.keyword" placeholder="搜索内容"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSearch">查询</el-button>
-              <el-button type="primary" @click="_reset">重置</el-button>
+              <el-button type="primary" plain icon="el-icon-search" @click="onSearch">搜索</el-button>
+              <el-button type="primary" plain icon="el-icon-delete" @click="_reset">重置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -49,29 +49,29 @@
     <div class="list-body">
       <!-- <el-table ref="multipleTable" v-loading="loading" :data="taskList" :span-method="_cellMerge" tooltip-effect="dark" max-height="680" style="width: 100%" border> -->
       <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" :cell-style="_hasBackground" tooltip-effect="dark" max-height="640" style="width: 100%" border>
-        <el-table-column prop="serialNum" label="序号" fixed width="60"></el-table-column>
-        <el-table-column prop="title1" label="一级目标任务(目标)" width="110"></el-table-column>
-        <el-table-column prop="detail1" label="一级目标任务(目标)" width="150"></el-table-column>
-        <el-table-column prop="leader1" label="牵头领导"></el-table-column>
+        <el-table-column prop="serialNum" label="序号" fixed width="60" align="center"></el-table-column>
+        <el-table-column prop="title1" label="一级目标任务(目标)" width="150" align="center"></el-table-column>
+        <el-table-column prop="detail1" label="一级目标任务(目标)" width="220" align="center"></el-table-column>
+        <el-table-column prop="leader1" label="牵头领导" align="center"></el-table-column>
 
-        <el-table-column prop="title2" label="二级目标任务(任务)" width="110"></el-table-column>
-        <el-table-column prop="detail2" label="二级目标任务(任务)" width="200"></el-table-column>
-        <el-table-column prop="leader2" label="责任领导"></el-table-column>
-        <el-table-column prop="deptNo2" label="责任部室"></el-table-column>
+        <el-table-column prop="title2" label="二级目标任务(任务)" width="150" align="center"></el-table-column>
+        <el-table-column prop="detail2" label="二级目标任务(任务)" width="250" align="center"></el-table-column>
+        <el-table-column prop="leader2" label="责任领导" align="center"></el-table-column>
+        <el-table-column prop="deptNo2" label="责任部室" align="center"></el-table-column>
 
-        <el-table-column prop="detail3" label="三级目标任务(举措)" width="180"></el-table-column>
-        <el-table-column prop="duty3" label="三级目标任务(举措)" width="110"></el-table-column>
-        <el-table-column prop="leader3" label="责任领导"></el-table-column>
+        <el-table-column prop="detail3" label="三级目标任务(举措)" width="180" align="center"></el-table-column>
+        <el-table-column prop="duty3" label="三级目标任务(举措)" width="150" align="center"></el-table-column>
+        <el-table-column prop="leader3" label="责任领导" align="center"></el-table-column>
 
-        <el-table-column prop="deptNo" label="责任部室、二级单位" width="150" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="duty" label="目标任务"></el-table-column>
-        <el-table-column prop="content" label="2017年度实施计划" width="300"></el-table-column>
+        <el-table-column prop="deptNo" label="责任部室、二级单位" width="150" align="center"></el-table-column>
+        <el-table-column prop="duty" label="目标任务" align="center"></el-table-column>
+        <el-table-column prop="content" label="2017年度实施计划" width="300" align="center"></el-table-column>
 
-        <el-table-column prop="complete" label="完成情况" width="220"></el-table-column>
-        <el-table-column prop="problem" label="问题建议" width="220"></el-table-column>
-        <el-table-column prop="analysis" label="原因分析" width="380"></el-table-column>
-        <el-table-column prop="taskType" label="所属分类" width="240"></el-table-column>  
-        <el-table-column label="状态" width="100" fixed="right">
+        <el-table-column prop="complete" label="完成情况" width="220" align="center"></el-table-column>
+        <el-table-column prop="problem" label="问题建议" width="220" align="center"></el-table-column>
+        <el-table-column prop="analysis" label="原因分析" width="380" align="center"></el-table-column>
+        <el-table-column prop="taskType" label="所属分类" width="240" align="center"></el-table-column>  
+        <el-table-column label="状态" width="100" fixed="right" align="center">
           <template slot-scope="scope">
             <el-tag :type="scope.row.status == 3 ? 'success' : 'danger'">{{ scope.row.status == 3 ? '已完成' : '未完成' }}</el-tag>
           </template>
@@ -100,6 +100,7 @@ export default {
   data () {
     return {
       search: {
+        keyword: '',
         taskLevel: '',                   // 任务等级配分
         taskType: '',                    // 任务分类
         taskDataStauts: '',              // 任务状态
@@ -184,7 +185,6 @@ export default {
       getTaskList(this.search, this.taskList.page, this.taskList.listRow).then((res) => {
         this.taskList = []
         if (ERR_OK === res.data.code) {
-          console.log(res)
           this.taskList.list = res.data.data.list
           this.taskList.page = res.data.data.page
           this.taskList.listRow = res.data.data.listRow
@@ -210,10 +210,15 @@ export default {
       this._getTaskList()
     },
     _reset () {
-      this.form.compValue = ''
-      for (var obj in this.search) {
-        this.search[obj] = ''
-      }
+      this.search.keyword = ''
+      this.search.taskLevel = ''
+      this.search.taskType = ''
+      this.search.taskDataStauts = ''
+      this.search.deptValue = []
+      this.search.timeLimit = ''
+      this.search.leaderFirst = ''
+      this.search.leaderSecond = ''
+      this.search.leaderThird = ''
     },
     _cellMerge ({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -258,7 +263,7 @@ export default {
       if (row.columnIndex === 15 || row.columnIndex === 16 || row.columnIndex === 14) {
         return 'background:white'
       } else {
-        return 'background:#EEF1F6'
+        return 'background:#fafafa'
       }
     }
   }

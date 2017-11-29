@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-menu ref="menu" class="menu" unique-opened :default-active="$route.path" :collapse="isCollapse">
+    <el-menu ref="menu" class="menu" unique-opened :default-active="$route.path" background-color="#fafafa" :collapse="isCollapse">
       <el-submenu v-for="item in menus" :key="item.id" :index="item.router">
         <template slot="title">
           <template v-if="item.icon !== '' && item.icon !== null" >
