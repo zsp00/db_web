@@ -62,7 +62,7 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSearch" plain>查询</el-button>
+            <el-button type="primary" @click="onSearch" plain icon="el-icon-search">搜索</el-button>
           </el-form-item>
           <el-form-item class="need-to-do">
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
@@ -83,29 +83,28 @@
           :cell-style="tableCellStyle"         
           max-height="650">
             <el-table-column fixed prop="serialNum" label="序号" align="center" width="65"></el-table-column>
-            <el-table-column prop="title1" label="一级目标任务(目标)" width="110"></el-table-column>
-            <el-table-column prop="detail1" label="一级目标任务(目标)" width="150"></el-table-column>
-            <el-table-column prop="leader1" label="牵头领导"></el-table-column>
+            <el-table-column prop="title1" label="一级目标任务(目标)" align="center" width="150"></el-table-column>
+            <el-table-column prop="detail1" label="一级目标任务(目标)" align="center" width="220"></el-table-column>
+            <el-table-column prop="leader1" label="牵头领导" align="center"></el-table-column>
 
-            <el-table-column prop="title2" label="二级目标任务(任务)" width="110"></el-table-column>
-            <el-table-column prop="detail2" label="二级目标任务(任务)" width="200"></el-table-column>
-            <el-table-column prop="leader2" label="责任领导"></el-table-column>
-            <el-table-column prop="deptNo2" label="责任部室"></el-table-column>
+            <el-table-column prop="title2" label="二级目标任务(任务)" align="center" width="150"></el-table-column>
+            <el-table-column prop="detail2" label="二级目标任务(任务)" align="center" width="220"></el-table-column>
+            <el-table-column prop="leader2" label="责任领导" align="center"></el-table-column>
+            <el-table-column prop="deptNo2" label="责任部室" align="center"></el-table-column>
 
-            <el-table-column prop="detail3" label="三级目标任务(目标)" width="180"></el-table-column>
-            <el-table-column prop="duty3" label="三级目标任务(举措)" width="110"></el-table-column>
-            <el-table-column prop="leader3" label="责任领导"></el-table-column>
+            <el-table-column prop="detail3" label="三级目标任务(目标)" align="center" width="180"></el-table-column>
+            <el-table-column prop="duty3" label="三级目标任务(举措)" align="center" width="150"></el-table-column>
+            <el-table-column prop="leader3" label="责任领导" align="center"></el-table-column>
 
-            <el-table-column prop="deptNo" label="责任部室、二级单位" width="150"></el-table-column>
-            <el-table-column prop="duty" label="目标任务"></el-table-column>
-            <el-table-column prop="content" label="2017年度实施计划" width="300"></el-table-column>
+            <el-table-column prop="deptNo" label="责任部室、二级单位" align="center" width="150"></el-table-column>
+            <el-table-column prop="duty" label="目标任务" align="center"></el-table-column>
+            <el-table-column prop="content" label="2017年度实施计划" align="center" width="300"></el-table-column>
 
-          <!-- <el-table-column prop="level" label="等级配分" align="center" width="95"></el-table-column> -->
-          
-          <el-table-column prop="timeLimit" label="完成时限" align="center" width="115"></el-table-column>
-          <el-table-column prop="completeSituation" label="完成情况" width="200" style="background-color:white"></el-table-column>
-          <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议" width="220"></el-table-column>
-          <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施" width="380"></el-table-column>
+          <!-- <el-table-column prop="level" label="等级配分" align="center" width="95"></el-table-column>
+          <el-table-column prop="timeLimit" label="完成时限" align="center" width="115"></el-table-column> -->
+          <el-table-column prop="completeSituation" label="完成情况" align="center" width="200" style="background-color:white"></el-table-column>
+          <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议" align="center" width="220"></el-table-column>
+          <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施" align="center" width="380"></el-table-column>
           <el-table-column prop="typeName" label="任务分类"  align="center" width="100"></el-table-column>
 
           <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="110">
