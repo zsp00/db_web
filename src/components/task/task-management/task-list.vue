@@ -47,9 +47,11 @@ export default {
   methods: {
     // 获取任务列表
     _getTaskList () {
+      this.loading = true
       getTaskList().then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList = res.data.msg
+          this.loading = false
         }
       })
     },

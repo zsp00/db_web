@@ -62,11 +62,7 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-<<<<<<< HEAD
             <el-button type="primary" @click="onSearch" plain icon="el-icon-search">搜索</el-button>
-=======
-            <el-button type="primary" @click="onSearch">查询</el-button>
->>>>>>> 5b5c0488b1bd922f20b1675a4d6e8c1b133f2c8b
           </el-form-item>
           <el-form-item class="need-to-do">
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
@@ -263,10 +259,10 @@ export default {
       this._getList()
     },
     tableCellStyle (row, rowIndex) {
-      if (row.columnIndex === 16 || row.columnIndex === 17 || row.columnIndex === 18) {
+      if (row.columnIndex === 14 || row.columnIndex === 15 || row.columnIndex === 16) {
         return 'background:white'
       } else {
-        return 'background:#EEF1F6'
+        return 'background:#fafafa'
       }
     },
     _getInfo () {

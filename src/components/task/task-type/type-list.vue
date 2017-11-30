@@ -81,8 +81,10 @@
     methods: {
       // 查询分类列表
       _getTypeList () {
+        this.loading = true
         getTypeList().then((res) => {
           this.typeList = res.data.msg
+          this.loading = false
         })
       },
       handleSelectionChange (val) {
