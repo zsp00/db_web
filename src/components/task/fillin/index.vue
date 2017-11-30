@@ -15,7 +15,7 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-form :inline="true" >
-          <el-form-item>
+          <el-form-item label="等级配分">
             <el-select
               v-model="search.level"
               filterable
@@ -30,7 +30,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
+          <el-form-item label="任务分类">
             <el-select
               v-model="search.typeId"
               filterable
@@ -52,17 +52,21 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
-              <el-cascader :options="compDept" v-model="search.dept" placeholder="部门名称"></el-cascader>
+          <el-form-item label="部门名称">
+              <el-cascader :options="compDept" v-model="search.dept"></el-cascader>
             </el-form-item>
-          <el-form-item>
+          <el-form-item label="搜索内容">
             <el-input
               v-model="search.keyword"
               placeholder="请输入搜索内容">
             </el-input>
           </el-form-item>
           <el-form-item>
+<<<<<<< HEAD
             <el-button type="primary" @click="onSearch" plain icon="el-icon-search">搜索</el-button>
+=======
+            <el-button type="primary" @click="onSearch">查询</el-button>
+>>>>>>> 5b5c0488b1bd922f20b1675a4d6e8c1b133f2c8b
           </el-form-item>
           <el-form-item class="need-to-do">
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
@@ -81,7 +85,7 @@
           v-loading.body="taskList.loading"
           style="width: 100%"
           :cell-style="tableCellStyle"         
-          max-height="650">
+          max-height="720">
             <el-table-column fixed prop="serialNum" label="序号" align="center" width="65"></el-table-column>
             <el-table-column prop="title1" label="一级目标任务(目标)" align="center" width="150"></el-table-column>
             <el-table-column prop="detail1" label="一级目标任务(目标)" align="center" width="220"></el-table-column>
@@ -100,16 +104,16 @@
             <el-table-column prop="duty" label="目标任务" align="center"></el-table-column>
             <el-table-column prop="content" label="2017年度实施计划" align="center" width="300"></el-table-column>
 
-          <!-- <el-table-column prop="level" label="等级配分" align="center" width="95"></el-table-column>
-          <el-table-column prop="timeLimit" label="完成时限" align="center" width="115"></el-table-column> -->
-          <el-table-column prop="completeSituation" label="完成情况" align="center" width="200" style="background-color:white"></el-table-column>
-          <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议" align="center" width="220"></el-table-column>
-          <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施" align="center" width="380"></el-table-column>
-          <el-table-column prop="typeName" label="任务分类"  align="center" width="100"></el-table-column>
+            <!-- <el-table-column prop="level" label="等级配分" align="center" width="95"></el-table-column>
+            <el-table-column prop="timeLimit" label="完成时限" align="center" width="115"></el-table-column> -->
+            <el-table-column prop="completeSituation" label="完成情况" align="center" width="200" style="background-color:white"></el-table-column>
+            <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议" align="center" width="220"></el-table-column>
+            <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施" align="center" width="380"></el-table-column>
+            <el-table-column prop="typeName" label="任务分类"  align="center" width="100"></el-table-column>
 
-          <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="110">
-            <template slot-scope="scope">
-              <el-tag :type="scope.row.getTaskStatusMsg !== '0' ? 'success' : 'danger'" close-transition>
+            <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="110">
+              <template slot-scope="scope">
+                <el-tag :type="scope.row.getTaskStatusMsg !== '0' ? 'success' : 'danger'" close-transition>
                   <template v-if="scope.row.getTaskStatusMsg === 0">驳回</template>
                   <template v-if="scope.row.getTaskStatusMsg === 1">填报中</template>
                   <template v-if="scope.row.getTaskStatusMsg === 2">审核中</template>
@@ -163,7 +167,7 @@ export default {
       levelOptions: [
         {
           value: '',
-          label: '全部等级'
+          label: '全部'
         },
         {
           value: 'A',
@@ -243,7 +247,7 @@ export default {
   methods: {
     onClickDetail (row) {
       this.$router.push({
-        path: '/task/fillin/detail/' + row.tdDeptNo + '/id/' + row.id
+        path: '/task/fillin/detail/' + row.tdDeptNo + '/' + row.id
       })
     },
     handleSizeChange (val) {
@@ -259,10 +263,10 @@ export default {
       this._getList()
     },
     tableCellStyle (row, rowIndex) {
-      if (row.columnIndex === 16 || row.columnIndex === 17 || row.columnIndex === 15) {
+      if (row.columnIndex === 16 || row.columnIndex === 17 || row.columnIndex === 18) {
         return 'background:white'
       } else {
-        return 'background:#fafafa'
+        return 'background:#EEF1F6'
       }
     },
     _getInfo () {

@@ -216,7 +216,6 @@ export default {
       form: {
         id: '',
         deptNo: '',
-        tdDeptNo: '',
         deptName: '',
         serialNumber: '',
         content: '',
@@ -250,19 +249,20 @@ export default {
       isWithdraw: false,
       isComplete: false,
       loglist: null,
+      tdDeptNo: '',              // 任务部门的Id
       monthIndex: 0,             // 该任务选择展示月份的索引
       dialogFormAdd: false       // 驳回理由的模态框
     }
   },
   mounted () {
     this.form.id = this.$route.params.id
-    this.form.tdDeptNo = this.$route.params.tdDeptNo
+    this.tdDeptNo = this.$route.params.tdDeptNo
     this._getDetail()
   },
   methods: {
     _getDetail () {
       this.tDate = '0'
-      getDetail(this.form.id, this.form.tdDeptNo).then((res) => {
+      getDetail(this.form.id, this.tdDeptNo).then((res) => {
         if (ERR_OK === res.data.code) {
           this.form = res.data.msg
           var selected = null
