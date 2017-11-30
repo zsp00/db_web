@@ -52,7 +52,7 @@ export default new Router({
               component: FillinIndex
             },
             {
-              path: 'detail/:tdDeptNo/id/:id',
+              path: 'detail/:tdDeptNo/:id',
               name: '修改',
               component: FillinDetail
             }
