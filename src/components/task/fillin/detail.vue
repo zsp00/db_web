@@ -320,7 +320,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        confirm(this.update).then((res) => {
+        confirm(this.update.id, this.update.taskSelect).then((res) => {
           if (ERR_OK === res.data.code) {
             this.$message.success(res.data.msg)
             this.$router.push({

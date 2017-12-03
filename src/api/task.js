@@ -29,9 +29,9 @@ export function submits (data) {
 }
 
 // 确认任务
-export function confirm (data) {
+export function confirm (data, taskSelect) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/confirm'
-  return post(url, data, {headers: DB_API.headers})
+  return post(url, { data: data, taskSelect: taskSelect }, {headers: DB_API.headers})
 }
 
 // 驳回任务请求
