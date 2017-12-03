@@ -68,7 +68,7 @@
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
           </el-form-item>
           <el-form-item class="commit-all" v-if="taskList.list.length > 0 && search.needToDo == true && taskList.list[0].commitAll == 1">
-            <el-button type="primary" @click="_commitAll">全部提交</el-button>
+            <el-button type="primary" @click="_commitAll" plain>全部提交</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -289,6 +289,8 @@ export default {
           this.taskList.dbCount = res.data.msg.dbCount
         } else {
           this.$message.error(res.data.msg)
+          this.taskList.list = []
+          this.taskList.loading = false
         }
       })
     },
@@ -329,7 +331,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        checkCount().then((res) => {
+        checkCount(this.taskList.list.length).then((res) => {
           if (res.data.code === 1) {
             commitAll().then((res) => {
               if (res.data.code === 1) {

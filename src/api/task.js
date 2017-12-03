@@ -107,9 +107,9 @@ export function commitAll () {
 }
 
 // 检查第三级用户提交时是否提交全部任务
-export function checkCount () {
+export function checkCount (countDoing) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/checkCount'
-  return get(url, {}, {headers: DB_API.headers})
+  return get(url, { countDoing: countDoing }, {headers: DB_API.headers})
 }
 
 // 任务查询
