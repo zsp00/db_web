@@ -70,6 +70,9 @@
           <el-form-item class="commit-all" v-if="taskList.list.length > 0 && search.needToDo == true && taskList.list[0].commitAll == 1">
             <el-button type="primary" @click="_commitAll">全部提交</el-button>
           </el-form-item>
+          <el-form-item class="commit-all" v-if="taskList.list.length > 0 && search.needToDo == true && taskList.list[0].confirmAll == 1">
+            <el-button type="primary" @click="_confirmAll">全部确认</el-button>
+          </el-form-item>
         </el-form>
       </el-col>
     </el-row>
@@ -109,7 +112,7 @@
 
             <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="110">
               <template slot-scope="scope">
-                <el-tag :type="scope.row.getTaskStatusMsg !== '0' ? 'success' : 'danger'" close-transition>
+                <el-tag :type="scope.row.getTaskStatusMsg !== 0 ? 'success' : 'danger'" close-transition>
                   <template v-if="scope.row.getTaskStatusMsg === 0">驳回</template>
                   <template v-if="scope.row.getTaskStatusMsg === 1">填报中</template>
                   <template v-if="scope.row.getTaskStatusMsg === 2">审核中</template>
@@ -144,7 +147,7 @@
 </template>
 
 <script>
-import { getInfo, getList, getTypeList, commitAll, checkCount } from 'api/task.js'
+import { getInfo, getList, getTypeList, commitAll, checkCount, confirm } from 'api/task.js'
 import { getTaskDeptNo } from 'api/task-management.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
@@ -339,6 +342,23 @@ export default {
                 this.$message.error('全部提交失败！')
               }
             })
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+      }).catch(() => {})
+    },
+    _confirmAll () {
+      this.$confirm('该操作将确认所有待办任务，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(this.taskList.list)
+        confirm(this.taskList.list).then((res) => {
+          if (ERR_OK === res.data.code) {
+            this.$message.success(res.data.msg)
+            this._getList()
           } else {
             this.$message.error(res.data.msg)
           }

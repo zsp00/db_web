@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    <div style="height:40px;">本月督办任务{{ taskList.allTotal }}个，已提交{{ taskList.supNum }}个</div>
     <div class="list-head">
       <el-row :gutter="20">
         <el-col :span="24">
