@@ -73,7 +73,7 @@
         <el-table-column prop="taskType" label="所属分类" width="240" align="center"></el-table-column>  
         <el-table-column label="状态" width="100" fixed="right" align="center">
           <template slot-scope="scope">
-            <el-tag :type="scope.row.status == 3 ? 'success' : 'danger'">{{ scope.row.status == 3 ? '已完成' : '未完成' }}</el-tag>
+            <el-tag :type="scope.row.status == 3 ? 'success' : 'danger'">{{ scope.row.status == '3' ? '已完成' : '未完成' }}</el-tag>
           </template>
         </el-table-column>
       </el-table>

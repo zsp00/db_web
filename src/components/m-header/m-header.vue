@@ -1,13 +1,13 @@
 <template>
   <div class="header">
     <div class="breadcrumb">
-      <!-- <el-breadcrumb class="app-levelbar" separator="/">
+      <img src="../../assets/images/logo.png" class="db-logo">
+      <el-breadcrumb class="app-levelbar" separator="/">
         <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.path">
           <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">{{item.name}}</span>
           <router-link v-else :to="item.redirect||item.path">{{item.name}}</router-link>
         </el-breadcrumb-item>
-      </el-breadcrumb> -->
-      <img src="../../assets/images/logo.png">
+      </el-breadcrumb>
     </div>
     <div class="member">
       <img ref="avatar" :src="userinfo.avatar">
@@ -107,6 +107,11 @@ export default {
       float: left
       margin-top: 12px
       padding-left: 40px
+      .app-levelbar
+        float: left
+        margin-top: 11px
+      .db-logo
+        float: left
     h1
       float: left
       height: 60px
