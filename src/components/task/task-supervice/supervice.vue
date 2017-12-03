@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div style="height:40px;">本月督办任务{{ taskList.allTotal }}个，已提交{{ taskList.supNum }}个</div>
+    <div style="height:40px;">本月督办任务{{ taskList.number.allTotal }}个，已督办{{ taskList.number.supNum}}个</div>
     <div class="list-head">
       <el-row :gutter="20">
         <el-col :span="24">
@@ -20,7 +20,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-select v-model="search.taskLevel" filterable placeholder="请选择状态">
+              <el-select v-model="search.taskDataStauts" filterable placeholder="请选择状态">
                 <el-option v-for="(item, key) in taskDataValue" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
@@ -33,10 +33,10 @@
           </el-form>
         </el-col>
       </el-row>
-      <el-button type="primary" @click="_supervice(taskList)" plain>全部督办</el-button>
+      <el-button type="primary" @click="_supervice(taskList.list)" plain>全部督办</el-button>
     </div>
     <div class="list-body">
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="700" style="width: 100%" border>
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" tooltip-effect="dark" max-height="700" style="width: 100%" border>
         <el-table-column prop="content" label="任务名称"></el-table-column>
         <!-- <el-table-column prop="pId" label="所属流程" width="110"></el-table-column> -->
         <el-table-column prop="deptNo" label="所属部门" width="180" show-overflow-tooltip></el-table-column>
@@ -66,7 +66,10 @@ import {ERR_OK} from 'api/config.js'
 export default {
   data () {
     return {
-      taskList: [],
+      taskList: {
+        list: [],
+        number: []
+      },
       loading: true,
       search: {
         taskLevel: '',                   // 任务的级别
@@ -126,7 +129,8 @@ export default {
     _getSuperviceList () {
       getSuperviceList(this.search.keyword, this.search.taskLevel, this.search.taskType, this.search.taskDeptNo, this.search.taskDataStauts).then((res) => {
         if (ERR_OK === res.data.code) {
-          this.taskList = res.data.msg
+          this.taskList.list = res.data.msg.list
+          this.taskList.number = res.data.msg.number
           this.loading = false
         }
       })
