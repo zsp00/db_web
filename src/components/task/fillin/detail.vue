@@ -237,7 +237,7 @@ export default {
         completeSituation: null,
         problemSuggestions: null,
         analysis: null,
-        taskSelect: false
+        taskSelect: false                  // 任务是否完成
       },
       rejectReason: null,
       tDate: null,
@@ -303,15 +303,24 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        submits(this.update).then((res) => {
-          if (ERR_OK === res.data.code) {
-            this.$message.success(res.data.msg)
-            this._getDetail()
-          } else {
-            this.$message.error(res.data.msg)
-          }
-        })
+        this._submit()
       }).catch(() => {})
+    },
+    _submit () {
+      edit(this.update).then((result) => {
+        if (ERR_OK === result.data.code) {
+          submits(this.update).then((res) => {
+            if (ERR_OK === res.data.code) {
+              this.$message.success(res.data.msg)
+              this._getDetail()
+            } else {
+              this.$message.error(res.data.msg)
+            }
+          })
+        } else {
+          this.$message.error(result.data.msg)
+        }
+      })
     },
     // 确认任务
     onConfirm () {

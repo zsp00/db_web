@@ -117,3 +117,9 @@ export function getTaskList (condition, page, listRow) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskSearch/getTaskList'
   return get(url, { condition: condition, page: page, listRow: listRow }, {headers: DB_API.headers})
 }
+
+// 任务导出
+export function exportList (condition) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskSearch/exportList'
+  return get(url, { condition: condition }, {headers: DB_API.headers})
+}

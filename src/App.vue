@@ -9,6 +9,12 @@
           <m-menu></m-menu>
         </el-aside>
         <div class="content">
+          <el-breadcrumb class="app-levelbar" separator="/">
+            <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.path">
+              <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">{{item.name}}</span>
+              <router-link v-else :to="item.redirect||item.path">{{item.name}}</router-link>
+            </el-breadcrumb-item>
+          </el-breadcrumb>
           <router-view></router-view>
         </div>
       </el-main>
@@ -27,8 +33,12 @@ export default {
   data () {
     return {
       isLogin: false,
-      isChecked: false
+      isChecked: false,
+      levelList: null
     }
+  },
+  created () {
+    this.getBreadcrumb()
   },
   mounted () {
     this._checkLogin()
@@ -57,6 +67,19 @@ export default {
       this.$router.push({
         path: item.router
       })
+    },
+    getBreadcrumb () {
+      var matched = this.$route.matched.filter(item => item.name)
+      const first = matched[0]
+      if (first && (first.name !== '首页' || first.path !== '')) {
+        matched = [{ name: '首页', path: '/' }].concat(matched)
+      }
+      this.levelList = matched
+    }
+  },
+  watch: {
+    $route () {
+      this.getBreadcrumb()
     }
   },
   components: {

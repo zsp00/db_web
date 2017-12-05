@@ -41,14 +41,14 @@
             <el-form-item>
               <el-button type="primary" plain icon="el-icon-search" @click="onSearch">搜索</el-button>
               <el-button type="primary" plain icon="el-icon-delete" @click="_reset">重置</el-button>
+              <el-button type="primary" plain icon="el-icon-upload2" @click="_export">导出</el-button>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
     </div>
     <div class="list-body">
-      <!-- <el-table ref="multipleTable" v-loading="loading" :data="taskList" :span-method="_cellMerge" tooltip-effect="dark" max-height="680" style="width: 100%" border> -->
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" :cell-style="_hasBackground" tooltip-effect="dark" max-height="640" style="width: 100%" border>
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" :cell-style="_hasBackground" tooltip-effect="dark" max-height="630" style="width: 100%" border>
         <el-table-column prop="serialNum" label="序号" fixed width="60" align="center"></el-table-column>
         <el-table-column prop="title1" label="一级目标任务(目标)" width="150" align="center"></el-table-column>
         <el-table-column prop="detail1" label="一级目标任务(目标)" width="220" align="center"></el-table-column>
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { getTaskList, getTypeList } from 'api/task.js'
+import { getTaskList, getTypeList, exportList } from 'api/task.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
 
@@ -220,44 +220,9 @@ export default {
       this.search.leaderSecond = ''
       this.search.leaderThird = ''
     },
-    _cellMerge ({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
-        if (this.serialNum[rowIndex] !== 0) {
-          return [this.serialNum[rowIndex], 1]
-        } else {
-          return [0, 0]
-        }
-      } else if (columnIndex === 1 || columnIndex === 2 || columnIndex === 3) {
-        if (this.title1[rowIndex] !== 0) {
-          return [this.title1[rowIndex], 1]
-        } else {
-          return [0, 0]
-        }
-      } else if (columnIndex === 4) {
-        if (this.title2[rowIndex] !== 0) {
-          return [this.title2[rowIndex], 1]
-        } else {
-          return [0, 0]
-        }
-      } else if (columnIndex === 5 || columnIndex === 6 || columnIndex === 7) {
-        if (this.detail2[rowIndex] !== 0) {
-          return [this.detail2[rowIndex], 1]
-        } else {
-          return [0, 0]
-        }
-      } else if (columnIndex === 8) {
-        if (this.detail3[rowIndex] !== 0) {
-          return [this.detail3[rowIndex], 1]
-        } else {
-          return [0, 0]
-        }
-      } else if (columnIndex === 9) {
-        if (this.duty3[rowIndex] !== 0) {
-          return [this.duty3[rowIndex], 1]
-        } else {
-          return [0, 0]    // 不合并，需要保留该单元格占位则用[1, 1], 不需要保留单元格用[0, 0]
-        }
-      }
+    _export () {
+      exportList(this.search).then((res) => {
+      })
     },
     _hasBackground (row, rowIndex) {
       if (row.columnIndex === 15 || row.columnIndex === 16 || row.columnIndex === 14) {
