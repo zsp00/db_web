@@ -356,7 +356,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(this.taskList.list)
         confirm(this.taskList.list).then((res) => {
           if (ERR_OK === res.data.code) {
             this.$message.success(res.data.msg)
@@ -376,6 +375,7 @@ export default {
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .header
+    margin-top 20px
     padding-bottom 20px
     height 40px
   .loading

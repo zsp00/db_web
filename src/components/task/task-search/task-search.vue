@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { getTaskList, getTypeList, exportList } from 'api/task.js'
+import { getTaskList, getTypeList } from 'api/task.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
 
@@ -221,8 +221,15 @@ export default {
       this.search.leaderThird = ''
     },
     _export () {
-      exportList(this.search).then((res) => {
-      })
+      var url = 'H:\\Project\\db_admin\\public\\excel\\导出任务1512549227.xlsx'
+      document.location.href = url
+      // exportList(this.search).then((res) => {
+      //   if (res.data.code === 1) {
+      //     // var url = res.data.data.url
+      //     var url = 'H:\\Project\\db_admin\\public\\excel\\导出任务1512549227.xlsx'
+      //     console.log(url)
+      //   }
+      // })
     },
     _hasBackground (row, rowIndex) {
       if (row.columnIndex === 15 || row.columnIndex === 16 || row.columnIndex === 14) {
