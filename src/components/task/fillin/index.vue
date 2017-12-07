@@ -84,7 +84,7 @@
           v-loading.body="taskList.loading"
           style="width: 100%"
           :cell-style="tableCellStyle"         
-          max-height="720">
+          max-height="680">
             <el-table-column fixed prop="serialNum" label="序号" align="center" width="65"></el-table-column>
             <el-table-column prop="title1" label="一级目标任务(目标)" align="center" width="150"></el-table-column>
             <el-table-column prop="detail1" label="一级目标任务(目标)" align="center" width="220"></el-table-column>
