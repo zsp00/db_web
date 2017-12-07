@@ -36,7 +36,7 @@
       <el-button type="primary" @click="_supervice(taskList.list)" plain>全部督办</el-button>
     </div>
     <div class="list-body">
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" tooltip-effect="dark" max-height="650" style="width: 100%" border>
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" tooltip-effect="dark" max-height="620" style="width: 100%" border>
         <el-table-column prop="content" label="任务名称"></el-table-column>
         <!-- <el-table-column prop="pId" label="所属流程" width="110"></el-table-column> -->
         <el-table-column prop="deptNo" label="所属部门" width="180" show-overflow-tooltip></el-table-column>
@@ -54,6 +54,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="taskList.page"
+          :page-size="taskList.listRow"
+          layout="total, prev, pager, next"
+          :total="taskList.total">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -68,6 +78,9 @@ export default {
     return {
       taskList: {
         list: [],
+        page: 1,
+        listRow: 10,
+        total: 0,
         number: []
       },
       loading: true,
@@ -127,9 +140,13 @@ export default {
   methods: {
     // 获取任务列表
     _getSuperviceList () {
-      getSuperviceList(this.search.keyword, this.search.taskLevel, this.search.taskType, this.search.taskDeptNo, this.search.taskDataStauts).then((res) => {
+      getSuperviceList(this.search.keyword, this.search.taskLevel, this.search.taskType, this.search.taskDeptNo, this.search.taskDataStauts, this.taskList.page, this.taskList.listRow).then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList.list = res.data.msg.list
+          console.log(res.data.msg)
+          this.taskList.page = res.data.msg.page
+          this.taskList.listRow = res.data.msg.listRow
+          this.taskList.total = res.data.msg.total
           this.taskList.number = res.data.msg.number
           this.loading = false
         }
@@ -152,6 +169,13 @@ export default {
         }
       })
     },
+    handleSizeChange (val) {
+      this.taskList.listRow = val
+    },
+    handleCurrentChange (val) {
+      this.taskList.page = val
+      this._getSuperviceList()
+    },
     // 督办任务按钮
     _supervice (id) {
       this.$confirm('此操作将开始督办, 是否继续?', '提示', {
@@ -159,10 +183,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.loading = true
         taskSupervice(id).then((res) => {
           if (res.data.code === ERR_OK) {
             this.$message.success(res.data.msg)
             this._getSuperviceList()
+            this.loading = false
           } else {
             this.$message.error(res.data.msg)
           }

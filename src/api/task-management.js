@@ -2,9 +2,9 @@ import {post} from 'assets/js/util.js'
 import {DB_API} from 'api/config.js'
 
 // 获取所有任务列表
-export function getTaskList () {
+export function getTaskList (page, listRow) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getTaskList'
-  return post(url, {}, {headers: DB_API.headers})
+  return post(url, { page: page, listRow: listRow }, {headers: DB_API.headers})
 }
 
 // 添加任务
@@ -32,9 +32,9 @@ export function getProcess () {
 }
 
 // 督办任务列表
-export function getSuperviceList (keyword, level, typeId, deptNo, taskdataStatus) {
+export function getSuperviceList (keyword, level, typeId, deptNo, taskdataStatus, page, listRow) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskManage/getSuperviceList'
-  return post(url, { keyword: keyword, level: level, typeId: typeId, deptNo: deptNo, taskdataStatus: taskdataStatus }, {headers: DB_API.headers})
+  return post(url, { keyword: keyword, level: level, typeId: typeId, deptNo: deptNo, taskdataStatus: taskdataStatus, page: page, listRow: listRow }, {headers: DB_API.headers})
 }
 
 // 全部督办任务

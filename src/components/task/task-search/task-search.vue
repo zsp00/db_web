@@ -185,6 +185,7 @@ export default {
       getTaskList(this.search, this.taskList.page, this.taskList.listRow).then((res) => {
         this.taskList = []
         if (ERR_OK === res.data.code) {
+          console.log(res.data.data)
           this.taskList.list = res.data.data.list
           this.taskList.page = res.data.data.page
           this.taskList.listRow = res.data.data.listRow
@@ -221,7 +222,7 @@ export default {
       this.search.leaderThird = ''
     },
     _export () {
-      var url = 'H:\\Project\\db_admin\\public\\excel\\导出任务1512549227.xlsx'
+      var url = 'D:\\wamp64\\www\\newdb\\db\\public\\excel\\导出任务1512549227.xlsx'
       document.location.href = url
       // exportList(this.search).then((res) => {
       //   if (res.data.code === 1) {
