@@ -15,7 +15,7 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-form :inline="true" >
-          <el-form-item label="等级配分">
+          <!-- <el-form-item label="等级配分">
             <el-select
               v-model="search.level"
               filterable
@@ -29,7 +29,7 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="任务分类">
             <el-select
               v-model="search.typeId"
@@ -52,7 +52,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="部门名称">
+          <el-form-item label="部门名称" v-if="taskList.flag == true">
               <el-cascader :options="compDept" v-model="search.dept"></el-cascader>
             </el-form-item>
           <el-form-item label="搜索内容">
@@ -63,6 +63,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSearch" plain icon="el-icon-search">搜索</el-button>
+            <el-button type="primary" plain icon="el-icon-upload2" @click="_export">导出</el-button>
           </el-form-item>
           <el-form-item class="need-to-do">
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
@@ -147,7 +148,7 @@
 </template>
 
 <script>
-import { getInfo, getList, getTypeList, commitAll, checkCount, confirm } from 'api/task.js'
+import { getInfo, getList, getTypeList, commitAll, checkCount, confirm, exportFillinList } from 'api/task.js'
 import { getTaskDeptNo } from 'api/task-management.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
@@ -365,6 +366,14 @@ export default {
           }
         })
       }).catch(() => {})
+    },
+    _export () {
+      exportFillinList(this.search).then((res) => {
+        if (res.data.code === 1) {
+          var url = res.data.data.url
+          console.log(url)
+        }
+      })
     }
   },
   components: {

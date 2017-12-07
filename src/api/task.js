@@ -123,3 +123,9 @@ export function exportList (condition) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/TaskSearch/exportList'
   return get(url, { condition: condition }, {headers: DB_API.headers})
 }
+
+// 任务导出
+export function exportFillinList (condition) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/exportFillinList'
+  return get(url, { condition: condition }, {headers: DB_API.headers})
+}
