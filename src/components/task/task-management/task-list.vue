@@ -7,15 +7,16 @@
       <el-button type="primary" @click="_del(multipleSelection)" plain>删除</el-button>
     </div>
     <div class="list-body">
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList" tooltip-effect="dark" max-height="700" style="width: 100%" border @selection-change="_handleSelectionChange">
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" tooltip-effect="dark" max-height="700" style="width: 100%" border @selection-change="_handleSelectionChange">
         <el-table-column type="selection" width="50" align="center"></el-table-column>
         <el-table-column prop="content" label="任务名称"></el-table-column>
         <el-table-column prop="pId" label="所属流程" width="150"></el-table-column>
         <el-table-column prop="deptNo" label="所属部门" width="180" show-overflow-tooltip></el-table-column>
         <!-- <el-table-column prop="typeId" label="所属分类" width="110"></el-table-column>         -->
+        <el-table-column prop="level" label="任务等级" width="80"></el-table-column>
         <el-table-column prop="releaseTime" label="创建时间" width="175"></el-table-column>
         <el-table-column prop="timeLimit" label="期限" width="140"></el-table-column>
-        <el-table-column prop="completeTime" label="完成时间" width="175"></el-table-column>
+        <!-- <el-table-column prop="completeTime" label="完成时间" width="175"></el-table-column> -->
         <el-table-column prop="options" label="操作" width="80">
           <template slot-scope="scope">
             <router-link :to="'/task/list/task-edit/' + scope.row.id">
@@ -25,6 +26,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="taskList.page"
+          :page-size="taskList.listRow"
+          layout="total, prev, pager, next"
+          :total="taskList.total">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +48,12 @@ export default {
   data () {
     return {
       multipleSelection: [],
-      taskList: [],
+      taskList: {
+        list: [],
+        page: 1,
+        listRow: 10,
+        total: 0
+      },
       loading: false
     }
   },
@@ -48,12 +64,22 @@ export default {
     // 获取任务列表
     _getTaskList () {
       this.loading = true
-      getTaskList().then((res) => {
+      getTaskList(this.taskList.page, this.taskList.listRow).then((res) => {
         if (ERR_OK === res.data.code) {
-          this.taskList = res.data.msg
+          this.taskList.list = res.data.msg.list
+          this.taskList.page = res.data.msg.page
+          this.taskList.listRow = res.data.msg.listRow
+          this.taskList.total = res.data.msg.total
           this.loading = false
         }
       })
+    },
+    handleSizeChange (val) {
+      this.taskList.listRow = val
+    },
+    handleCurrentChange (val) {
+      this.taskList.page = val
+      this._getTaskList()
     },
     // 修改按钮触发
     _edit (pId) {

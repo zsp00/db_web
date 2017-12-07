@@ -185,6 +185,7 @@ export default {
       getTaskList(this.search, this.taskList.page, this.taskList.listRow).then((res) => {
         this.taskList = []
         if (ERR_OK === res.data.code) {
+          console.log(res.data.data)
           this.taskList.list = res.data.data.list
           this.taskList.page = res.data.data.page
           this.taskList.listRow = res.data.data.listRow
