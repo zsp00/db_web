@@ -143,7 +143,6 @@ export default {
       getSuperviceList(this.search.keyword, this.search.taskLevel, this.search.taskType, this.search.taskDeptNo, this.search.taskDataStauts, this.taskList.page, this.taskList.listRow).then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList.list = res.data.msg.list
-          console.log(res.data.msg)
           this.taskList.page = res.data.msg.page
           this.taskList.listRow = res.data.msg.listRow
           this.taskList.total = res.data.msg.total
@@ -191,6 +190,8 @@ export default {
             this.loading = false
           } else {
             this.$message.error(res.data.msg)
+            this._getSuperviceList()
+            this.loading = false
           }
         })
       }).catch(() => {
