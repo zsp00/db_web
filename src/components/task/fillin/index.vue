@@ -63,7 +63,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSearch" plain icon="el-icon-search">搜索</el-button>
-            <el-button type="primary" plain icon="el-icon-upload2" @click="_export">导出</el-button>
+            <a @click="beforeExport" id="export_a" class="export-btn" href="" target="_blank">导出</a>
           </el-form-item>
           <el-form-item class="need-to-do">
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import { getInfo, getList, getTypeList, commitAll, checkCount, confirm, exportFillinList } from 'api/task.js'
+import { getInfo, getList, getTypeList, commitAll, checkCount, confirm } from 'api/task.js'
 import { getTaskDeptNo } from 'api/task-management.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
@@ -367,13 +367,9 @@ export default {
         })
       }).catch(() => {})
     },
-    _export () {
-      exportFillinList(this.search).then((res) => {
-        if (res.data.code === 1) {
-          var url = res.data.data.url
-          console.log(url)
-        }
-      })
+    beforeExport (obj) {
+      var condition = JSON.stringify(this.search)
+      document.getElementById('export_a').href = '/admin/index/Task/exportFillinList/condition/' + condition
     }
   },
   components: {
@@ -405,4 +401,14 @@ export default {
     margin-left 20px;
   .commit-all
     float right;
+  .export-btn
+    margin-left: 10px;
+    width: 70px;
+    height: 40px;
+    display: inline-block;
+    border: solid 1px rgb(153, 184, 217);
+    text-align: center;
+    background-color: rgb(230, 237, 246);
+    border-radius: 4px;
+    color: #004DA0;
 </style>

@@ -41,7 +41,8 @@
             <el-form-item>
               <el-button type="primary" plain icon="el-icon-search" @click="onSearch">搜索</el-button>
               <el-button type="primary" plain icon="el-icon-delete" @click="_reset">重置</el-button>
-              <el-button type="primary" plain icon="el-icon-upload2" @click="_export">导出</el-button>
+              <!-- <el-button type="primary" plain icon="el-icon-upload2" @click="_export">导出</el-button> -->
+              <a @click="beforeExport" id="export_a" class="export-btn" href="" target="_blank">导出</a>
             </el-form-item>
           </el-form>
         </el-col>
@@ -92,7 +93,7 @@
 </template>
 
 <script>
-import { getTaskList, getTypeList, exportList } from 'api/task.js'
+import { getTaskList, getTypeList } from 'api/task.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
 
@@ -185,7 +186,6 @@ export default {
       getTaskList(this.search, this.taskList.page, this.taskList.listRow).then((res) => {
         this.taskList = []
         if (ERR_OK === res.data.code) {
-          console.log(res.data.data)
           this.taskList.list = res.data.data.list
           this.taskList.page = res.data.data.page
           this.taskList.listRow = res.data.data.listRow
@@ -221,25 +221,9 @@ export default {
       this.search.leaderSecond = ''
       this.search.leaderThird = ''
     },
-    _export () {
-      exportList(this.search).then((res) => {
-        if (res.data.code === 1) {
-          var url = res.data.data.url
-          // var url = 'H:\\Project\\db_admin\\public\\excel\\导出任务1512549227.xlsx'
-          // console.log(url)
-          var turnForm = document.createElement('form')
-          document.body.appendChild(turnForm)
-          turnForm.method = 'post'
-          turnForm.action = url
-          turnForm.target = ''
-          var newElement = document.createElement('input')
-          newElement.setAttribute('name', 'id')
-          newElement.setAttribute('type', 'hidden')
-          newElement.setAttribute('value', 'elementValue')
-          turnForm.appendChild(newElement)
-          turnForm.submit()
-        }
-      })
+    beforeExport () {
+      var condition = JSON.stringify(this.search)
+      document.getElementById('export_a').href = '/admin/index/TaskSearch/exportList/condition/' + condition
     },
     _hasBackground (row, rowIndex) {
       if (row.columnIndex === 15 || row.columnIndex === 16 || row.columnIndex === 14) {
@@ -269,6 +253,17 @@ export default {
 .pagination {
   text-align: right;
   padding-top: 10px;
+}
+.export-btn {
+  margin-left: 10px;
+  width: 70px;
+  height: 40px;
+  display: inline-block;
+  border: solid 1px rgb(153, 184, 217);
+  text-align: center;
+  background-color: rgb(230, 237, 246);
+  border-radius: 4px;
+  color: #004DA0;
 }
 </style>
 
