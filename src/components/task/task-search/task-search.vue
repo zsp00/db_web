@@ -68,9 +68,9 @@
         <el-table-column prop="duty" label="目标任务" align="center"></el-table-column>
         <el-table-column prop="content" label="2017年度实施计划" width="300" align="center"></el-table-column>
 
-        <el-table-column prop="complete" label="完成情况" width="220" align="center"></el-table-column>
-        <el-table-column prop="problem" label="问题建议" width="220" align="center"></el-table-column>
-        <el-table-column prop="analysis" label="原因分析" width="380" align="center"></el-table-column>
+        <el-table-column prop="complete" :label="taskList.month + '月完成情况'" width="220" align="center"></el-table-column>
+        <el-table-column prop="problem" :label="taskList.month + '月问题建议'" width="220" align="center"></el-table-column>
+        <el-table-column prop="analysis" :label="taskList.month + '月原因分析'" width="380" align="center"></el-table-column>
         <el-table-column prop="taskType" label="所属分类" width="240" align="center"></el-table-column>  
         <el-table-column label="状态" width="100" fixed="right" align="center">
           <template slot-scope="scope">
@@ -154,7 +154,8 @@ export default {
         list: [],
         page: 1,
         listRow: 10,
-        total: 0
+        total: 0,
+        month: 1
       },
       loading: true
     }
@@ -190,6 +191,7 @@ export default {
           this.taskList.page = res.data.data.page
           this.taskList.listRow = res.data.data.listRow
           this.taskList.total = res.data.data.total
+          this.taskList.month = res.data.data.month
           this.loading = false
         }
       })
