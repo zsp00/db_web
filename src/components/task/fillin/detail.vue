@@ -307,18 +307,12 @@ export default {
       }).catch(() => {})
     },
     _submit () {
-      edit(this.update).then((result) => {
-        if (ERR_OK === result.data.code) {
-          submits(this.update).then((res) => {
-            if (ERR_OK === res.data.code) {
-              this.$message.success(res.data.msg)
-              this._getDetail()
-            } else {
-              this.$message.error(res.data.msg)
-            }
-          })
+      submits(this.update).then((res) => {
+        if (ERR_OK === res.data.code) {
+          this.$message.success(res.data.msg)
+          this._getDetail()
         } else {
-          this.$message.error(result.data.msg)
+          this.$message.error(res.data.msg)
         }
       })
     },
