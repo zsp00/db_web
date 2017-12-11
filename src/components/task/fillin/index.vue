@@ -369,7 +369,7 @@ export default {
     },
     beforeExport (obj) {
       var condition = JSON.stringify(this.search)
-      document.getElementById('export_a').href = '/admin/index/Task/exportFillinList/condition/' + condition
+      document.getElementById('export_a').href = '/api/index/Task/exportFillinList/condition/' + condition
     }
   },
   components: {

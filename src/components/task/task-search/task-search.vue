@@ -223,7 +223,7 @@ export default {
     },
     beforeExport () {
       var condition = JSON.stringify(this.search)
-      document.getElementById('export_a').href = '/admin/index/TaskSearch/exportList/condition/' + condition
+      document.getElementById('export_a').href = '/api/index/TaskSearch/exportList/condition/' + condition
     },
     _hasBackground (row, rowIndex) {
       if (row.columnIndex === 15 || row.columnIndex === 16 || row.columnIndex === 14) {

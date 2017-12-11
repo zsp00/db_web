@@ -41,8 +41,8 @@
         <!-- <el-table-column prop="pId" label="所属流程" width="110"></el-table-column> -->
         <el-table-column prop="deptNo" label="所属部门" width="180" show-overflow-tooltip></el-table-column>
         <el-table-column prop="taskType" label="所属分类" width="240"></el-table-column>  
-        <el-table-column prop="level" label="任务等级" width="80"></el-table-column>      
-        <el-table-column prop="timeLimit" label="期限" width="100"></el-table-column>
+        <!-- <el-table-column prop="level" label="任务等级" width="80"></el-table-column>      
+        <el-table-column prop="timeLimit" label="期限" width="100"></el-table-column> -->
         <el-table-column prop="taskDataValue" label="状态" width="100">
           <template slot-scope="scope">
             <el-tag :type="scope.row.taskDataValue === true ? 'success' : 'danger'" close-transition>{{ scope.row.taskDataValue == true ? '督办中' : '未开始' }}</el-tag>
