@@ -81,7 +81,7 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="是否完成任务">
-            <el-switch v-model="update.taskSelect"></el-switch>
+            <el-switch v-model="update.taskSelect" active-text="已完成" inactive-text="未完成">></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
