@@ -53,9 +53,9 @@ export function complete (data) {
 }
 
 // 修改日志
-export function getLogs (tId, mouth) {
+export function getLogs (tId, mouth, deptNo) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/getLogs'
-  return post(url, { tId: tId, mouth: mouth }, {headers: DB_API.headers})
+  return post(url, { tId: tId, mouth: mouth, deptNo: deptNo }, {headers: DB_API.headers})
 }
 
 // 获取分类列表

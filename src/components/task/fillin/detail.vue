@@ -279,7 +279,7 @@ export default {
       })
     },
     logs (tDate) {
-      getLogs(this.form.id, tDate).then((res) => {
+      getLogs(this.form.id, tDate, this.tdDeptNo).then((res) => {
         if (ERR_OK === res.data.code) {
           this.loglist = res.data.msg
         }
