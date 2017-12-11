@@ -7,7 +7,7 @@
       <el-button type="primary" @click="_del(multipleSelection)" plain>删除</el-button>
     </div>
     <div class="list-body">
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" tooltip-effect="dark" max-height="700" style="width: 100%" border @selection-change="_handleSelectionChange">
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" tooltip-effect="dark" max-height="500" style="width: 100%" border @selection-change="_handleSelectionChange">
         <el-table-column type="selection" width="50" align="center"></el-table-column>
         <el-table-column prop="content" label="任务名称"></el-table-column>
         <el-table-column prop="pId" label="所属流程" width="150"></el-table-column>
