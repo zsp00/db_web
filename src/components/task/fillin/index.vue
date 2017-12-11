@@ -85,7 +85,7 @@
           v-loading.body="taskList.loading"
           style="width: 100%"
           :cell-style="tableCellStyle"         
-          max-height="680">
+          max-height="500">
             <el-table-column fixed prop="id" label="序号" align="center" width="65"></el-table-column>
             <el-table-column prop="title1" label="一级目标任务(目标)" align="center" width="150"></el-table-column>
             <el-table-column prop="detail1" label="一级目标任务(目标)" align="center" width="220"></el-table-column>
@@ -106,7 +106,7 @@
 
             <!-- <el-table-column prop="level" label="等级配分" align="center" width="95"></el-table-column>
             <el-table-column prop="timeLimit" label="完成时限" align="center" width="115"></el-table-column> -->
-            <el-table-column prop="completeSituation" label="完成情况" align="center" width="200" style="background-color:white"></el-table-column>
+            <el-table-column prop="completeSituation" label="完成情况" align="center" width="380" style="background-color:white"></el-table-column>
             <el-table-column prop="problemSuggestions" label="实施过程中存在的问题及建议" align="center" width="220"></el-table-column>
             <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施" align="center" width="380"></el-table-column>
             <el-table-column prop="typeName" label="任务分类"  align="center" width="100"></el-table-column>

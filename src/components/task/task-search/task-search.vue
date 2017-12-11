@@ -49,7 +49,7 @@
       </el-row>
     </div>
     <div class="list-body">
-      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" :cell-style="_hasBackground" tooltip-effect="dark" max-height="630" style="width: 100%" border>
+      <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" :cell-style="_hasBackground" tooltip-effect="dark" max-height="500" style="width: 100%" border>
         <el-table-column prop="serialNum" label="序号" fixed width="60" align="center"></el-table-column>
         <el-table-column prop="title1" label="一级目标任务(目标)" width="150" align="center"></el-table-column>
         <el-table-column prop="detail1" label="一级目标任务(目标)" width="220" align="center"></el-table-column>
@@ -68,7 +68,7 @@
         <el-table-column prop="duty" label="目标任务" align="center"></el-table-column>
         <el-table-column prop="content" label="2017年度实施计划" width="300" align="center"></el-table-column>
 
-        <el-table-column prop="complete" :label="taskList.month + '月完成情况'" width="220" align="center"></el-table-column>
+        <el-table-column prop="complete" :label="taskList.month + '月完成情况'" width="380" align="center"></el-table-column>
         <el-table-column prop="problem" :label="taskList.month + '月问题建议'" width="220" align="center"></el-table-column>
         <el-table-column prop="analysis" :label="taskList.month + '月原因分析'" width="380" align="center"></el-table-column>
         <el-table-column prop="taskType" label="所属分类" width="240" align="center"></el-table-column>  
