@@ -5,9 +5,9 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form :inline="true">
-            <el-form-item>
+            <!-- <el-form-item>
               <el-cascader :options="compDept" v-model="search.taskDeptNo" placeholder="部门名称"></el-cascader>
-            </el-form-item>
+            </el-form-item> -->
             <!-- <el-form-item>
               <el-select v-model="search.taskLevel" filterable allow-create width="100%" placeholder="请选择等级配分">
                 <el-option v-for="item in levelValue" :key="item.value" :label="item.label" :value="item.value">
