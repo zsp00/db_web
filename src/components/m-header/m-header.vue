@@ -6,7 +6,7 @@
     <div class="member">
       <img ref="avatar" :src="userinfo.avatar">
       <div ref="userCard" class="user-card">
-        <div class="item">个人信息</div>
+        <!-- <div class="item">个人信息</div> -->
         <div @click="onLogout" class="item last-item">退出</div>
       </div>
     </div>

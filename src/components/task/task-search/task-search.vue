@@ -33,7 +33,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-date-picker type="month" placeholder="选择日期" v-model="search.timeLimit" style="width: 100%;"></el-date-picker>
+              <el-date-picker type="month" placeholder="选择日期" v-model="search.timeLimit" format="yyyy-MM" value-format="yyyy-MM" style="width: 100%;"></el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-input v-model="search.keyword" placeholder="搜索内容"></el-input>
@@ -161,9 +161,9 @@ export default {
     }
   },
   mounted () {
-    this._getTaskList()
     this._getInfo()
     this._getCompDept()
+    this._getTaskList()
   },
   methods: {
     handleSizeChange (val) {
@@ -178,6 +178,11 @@ export default {
       getCompDept().then((res) => {
         if (res.data.code === 1) {
           this.compDept = res.data.data
+          var obj = {
+            value: 0,
+            label: '所有部门'
+          }
+          this.compDept.unshift(obj)
         }
       })
     },
@@ -192,6 +197,9 @@ export default {
           this.taskList.listRow = res.data.data.listRow
           this.taskList.total = res.data.data.total
           this.taskList.month = res.data.data.month
+          this.search.deptValue = res.data.data.dept
+          var tDate = res.data.data.tDate
+          this.search.timeLimit = tDate.substr(0, 4) + '-' + tDate.substr(4)
           this.loading = false
         }
       })

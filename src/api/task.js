@@ -17,9 +17,9 @@ export function getDetail (id, tdDeptNo) {
 }
 
 // 任务内容修改
-export function edit (data) {
+export function edit (id, completeSituation, problemSuggestions, analysis, taskSelect, submit) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/edit'
-  return post(url, data, {headers: DB_API.headers})
+  return post(url, { id: id, completeSituation: completeSituation, problemSuggestions: problemSuggestions, analysis: analysis, taskSelect: taskSelect, submit: submit }, {headers: DB_API.headers})
 }
 
 // 提交任务
@@ -53,9 +53,9 @@ export function complete (data) {
 }
 
 // 修改日志
-export function getLogs (tId, mouth, deptNo) {
+export function getLogs (tId, mouth, tDeptNo) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/getLogs'
-  return post(url, { tId: tId, mouth: mouth, deptNo: deptNo }, {headers: DB_API.headers})
+  return post(url, { tId: tId, mouth: mouth, tDeptNo: tDeptNo }, {headers: DB_API.headers})
 }
 
 // 获取分类列表
@@ -107,9 +107,9 @@ export function commitAll () {
 }
 
 // 检查第三级用户提交时是否提交全部任务
-export function checkCount (countDoing) {
+export function checkCount () {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/checkCount'
-  return get(url, { countDoing: countDoing }, {headers: DB_API.headers})
+  return get(url, {}, {headers: DB_API.headers})
 }
 
 // 任务查询

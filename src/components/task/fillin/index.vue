@@ -335,7 +335,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        checkCount(this.taskList.list.length).then((res) => {
+        checkCount().then((res) => {
           if (res.data.code === 1) {
             commitAll().then((res) => {
               if (res.data.code === 1) {

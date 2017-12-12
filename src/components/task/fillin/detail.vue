@@ -287,7 +287,7 @@ export default {
     },
     // 修改内容按钮
     onEdit () {
-      edit(this.update).then((res) => {
+      edit(this.update.id, this.update.completeSituation, this.update.problemSuggestions, this.update.analysis, this.update.taskSelect, false).then((res) => {
         if (ERR_OK === res.data.code) {
           this.$message.success(res.data.msg)
           this._getDetail()
@@ -307,7 +307,7 @@ export default {
       }).catch(() => {})
     },
     _submit () {
-      edit(this.update).then((result) => {
+      edit(this.update.id, this.update.completeSituation, this.update.problemSuggestions, this.update.analysis, this.update.taskSelect, true).then((result) => {
         if (ERR_OK === result.data.code) {
           submits(this.update).then((res) => {
             if (ERR_OK === res.data.code) {
