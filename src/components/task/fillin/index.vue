@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import { getInfo, getList, getTypeList, commitAll, checkCount, confirm } from 'api/task.js'
+import { getInfo, getList, getTypeList, commitAll, checkCount, confirm, checkCountConfirm } from 'api/task.js'
 import { getTaskDeptNo } from 'api/task-management.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
@@ -363,10 +363,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        confirm(this.taskList.list, false, this.search.timeLimit).then((res) => {
-          if (ERR_OK === res.data.code) {
-            this.$message.success(res.data.msg)
-            this._getList()
+        checkCountConfirm(this.search.timeLimit).then((res) => {
+          if (res.data.code === 1) {
+            confirm(this.search.timeLimit).then((res) => {
+              if (res.data.code === 1) {
+                this.$message.success(res.data.msg)
+                this._getList()
+              } else {
+                this.$message.error('全部确认失败！')
+              }
+            })
           } else {
             this.$message.error(res.data.msg)
           }

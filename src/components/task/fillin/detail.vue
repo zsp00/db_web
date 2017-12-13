@@ -27,12 +27,12 @@
           {{form.serialNumber}}
         </el-form-item>
       </el-col>
-      <el-col :span="9">
+      <el-col :span="21">
         <el-form-item label="部门">
           {{form.deptName}}
         </el-form-item>
       </el-col>
-      <el-col :span="4">
+      <!-- <el-col :span="4">
         <el-form-item label="所属年份">
           {{form.releaseTime}}年
         </el-form-item>
@@ -46,7 +46,7 @@
         <el-form-item label="等级配分">
           {{form.level}}
         </el-form-item>
-      </el-col>
+      </el-col> -->
       <el-row>
         <el-col :span="24">
           <el-form-item label="月份">
@@ -90,7 +90,7 @@
         <el-form-item>
           <el-button v-show="isEdit" type="primary" @click="onEdit" plain>保存</el-button>
           <el-button v-show="isSubmit" type="primary" @click="onSubmits" plain>提交</el-button>
-          <el-button v-show="isConfirm" type="primary" @click="onConfirm" plain>确认</el-button>
+          <!-- <el-button v-show="isConfirm" type="primary" @click="onConfirm" plain>确认</el-button> -->
           <el-button v-show="isReject" type="primary" @click="rejectShow" plain>驳回</el-button>
           <el-button v-show="isWithdraw" type="primary" @click="onWithdraw" plain>撤回</el-button>         
           <el-button @click="onCancel" plain>返回</el-button>

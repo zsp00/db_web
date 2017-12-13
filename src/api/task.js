@@ -28,12 +28,6 @@ export function submits (data) {
   return post(url, data, {headers: DB_API.headers})
 }
 
-// 确认任务
-export function confirm (data, taskSelect, timeLimit) {
-  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/confirm'
-  return post(url, { data: data, taskSelect: taskSelect, timeLimit: timeLimit }, {headers: DB_API.headers})
-}
-
 // 驳回任务请求
 export function reject (data, reason) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/reject'
@@ -109,6 +103,18 @@ export function commitAll (timeLimit) {
 // 检查第三级用户提交时是否提交全部任务
 export function checkCount (timeLimit) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/checkCount'
+  return get(url, { timeLimit: timeLimit }, {headers: DB_API.headers})
+}
+
+// 全部确认任务
+export function confirm (timeLimit) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/confirm'
+  return post(url, { timeLimit: timeLimit }, {headers: DB_API.headers})
+}
+
+// 检查最后一级用户确认时是否确认全部任务
+export function checkCountConfirm (timeLimit) {
+  var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/checkCountConfirm'
   return get(url, { timeLimit: timeLimit }, {headers: DB_API.headers})
 }
 
