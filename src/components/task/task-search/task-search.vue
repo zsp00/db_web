@@ -72,7 +72,7 @@
         <el-table-column prop="problem" :label="taskList.month + '月问题建议'" width="220" align="center"></el-table-column>
         <el-table-column prop="analysis" :label="taskList.month + '月原因分析'" width="380" align="center"></el-table-column>
         <el-table-column prop="taskType" label="所属分类" width="240" align="center"></el-table-column>  
-        <el-table-column label="状态" width="100" fixed="right" align="center">
+        <el-table-column label="任务状态" width="100" fixed="right" align="center">
           <template slot-scope="scope">
             <el-tag :type="scope.row.status == 3 ? 'success' : 'danger'">{{ scope.row.status == '3' ? '已完成' : '未完成' }}</el-tag>
           </template>

@@ -114,7 +114,7 @@
             <el-table-column prop="analysis" label="未按时限完成或进度滞后的项目原因分析及推进措施" align="center" width="380"></el-table-column>
             <el-table-column prop="typeName" label="任务分类"  align="center" width="100"></el-table-column>
 
-            <el-table-column prop="getTaskStatusMsg" fixed="right" label="状态" align="center" width="110">
+            <el-table-column prop="getTaskStatusMsg" fixed="right" label="审核状态" align="center" width="110">
               <template slot-scope="scope">
                 <el-tag :type="scope.row.getTaskStatusMsg !== 0 ? 'success' : 'danger'" close-transition>
                   <template v-if="scope.row.getTaskStatusMsg === 0">驳回</template>
