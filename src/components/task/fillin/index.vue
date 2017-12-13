@@ -7,7 +7,7 @@
           <div v-if="this.info.loaded">
             <span>{{this.info.date.currYear}}年{{this.info.date.currMouth}}月</span>
             <span>我的部门：{{info.deptName}}</span>
-            <span class="task-record" v-if="taskList.flag == true">本月督办任务{{ taskList.dbCount }}个，已提交{{ taskList.commitNum }}个</span>
+            <span class="task-record" v-if="taskList.flag == true">本月督办任务{{ taskList.dbCount }}个，未提交{{ taskList.commitNum }}个</span>
           </div>
         </transition>
       </el-col>
