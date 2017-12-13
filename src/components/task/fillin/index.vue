@@ -30,7 +30,7 @@
               </el-option>
             </el-select>
           </el-form-item> -->
-          <el-form-item label="任务分类">
+          <el-form-item>
             <el-select
               v-model="search.typeId"
               filterable
@@ -46,16 +46,19 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="状态查询" v-if="taskList.flag == true">
+          <el-form-item v-if="taskList.flag == true">
             <el-select v-model="search.ifStatus" filterable width="100%" placeholder="">
               <el-option v-for="item in ifStatus" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="部门名称" v-if="taskList.flag == true">
+          <el-form-item v-if="taskList.flag == true">
               <el-cascader :options="compDept" v-model="search.dept"></el-cascader>
             </el-form-item>
-          <el-form-item label="搜索内容">
+          <el-form-item>
+              <el-date-picker type="month" placeholder="选择日期" v-model="search.timeLimit" format="yyyy-MM" value-format="yyyy-MM" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          <el-form-item>
             <el-input
               v-model="search.keyword"
               placeholder="请输入搜索内容">
@@ -162,6 +165,7 @@ export default {
         typeId: '',
         ifStatus: '',
         dept: [],
+        timeLimit: '',
         needToDo: true                          // 是否待办的开关按钮，默认选择待办
       },
       levelOptions: [
@@ -283,7 +287,7 @@ export default {
     },
     _getList () {
       this.taskList.loading = true
-      getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId, this.search.ifStatus, this.search.dept, this.search.needToDo).then((res) => {
+      getList(this.taskList.page, this.taskList.listRow, this.search.keyword, this.search.level, this.search.typeId, this.search.ifStatus, this.search.dept, this.search.needToDo, this.search.timeLimit).then((res) => {
         if (ERR_OK === res.data.code) {
           this.taskList.loading = false
           this.taskList.total = res.data.msg.total
@@ -291,6 +295,8 @@ export default {
           this.taskList.flag = res.data.msg.flag
           this.taskList.commitNum = res.data.msg.commitNum
           this.taskList.dbCount = res.data.msg.dbCount
+          var tDate = res.data.msg.tDate
+          this.search.timeLimit = tDate.substr(0, 4) + '-' + tDate.substr(4)
         } else {
           this.$message.error(res.data.msg)
           this.taskList.list = []
@@ -335,9 +341,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        checkCount().then((res) => {
+        checkCount(this.search.timeLimit).then((res) => {
           if (res.data.code === 1) {
-            commitAll().then((res) => {
+            commitAll(this.search.timeLimit).then((res) => {
               if (res.data.code === 1) {
                 this.$message.success(res.data.msg)
                 this._getList()
@@ -357,7 +363,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        confirm(this.taskList.list).then((res) => {
+        confirm(this.taskList.list, false, this.search.timeLimit).then((res) => {
           if (ERR_OK === res.data.code) {
             this.$message.success(res.data.msg)
             this._getList()

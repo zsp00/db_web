@@ -6,9 +6,9 @@ export function getInfo () {
   return get(url, {}, {headers: DB_API.headers})
 }
 
-export function getList (page, listRow, keyword, level, typeId, ifStatus, dept, needToDo) {
+export function getList (page, listRow, keyword, level, typeId, ifStatus, dept, needToDo, timeLimit) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/getList'
-  return get(url, {page: page, listRow: listRow, keyword: keyword, level: level, typeId: typeId, ifStatus: ifStatus, dept: dept, needToDo: needToDo}, {headers: DB_API.headers})
+  return get(url, { page: page, listRow: listRow, keyword: keyword, level: level, typeId: typeId, ifStatus: ifStatus, dept: dept, needToDo: needToDo, timeLimit: timeLimit }, {headers: DB_API.headers})
 }
 
 export function getDetail (id, tdDeptNo) {
@@ -29,9 +29,9 @@ export function submits (data) {
 }
 
 // 确认任务
-export function confirm (data, taskSelect) {
+export function confirm (data, taskSelect, timeLimit) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/confirm'
-  return post(url, { data: data, taskSelect: taskSelect }, {headers: DB_API.headers})
+  return post(url, { data: data, taskSelect: taskSelect, timeLimit: timeLimit }, {headers: DB_API.headers})
 }
 
 // 驳回任务请求
@@ -101,15 +101,15 @@ export function oprationSta (typeId, status) {
 }
 
 // 全部提交
-export function commitAll () {
+export function commitAll (timeLimit) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/commitAll'
-  return get(url, {}, {headers: DB_API.headers})
+  return get(url, { timeLimit: timeLimit }, {headers: DB_API.headers})
 }
 
 // 检查第三级用户提交时是否提交全部任务
-export function checkCount () {
+export function checkCount (timeLimit) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/checkCount'
-  return get(url, {}, {headers: DB_API.headers})
+  return get(url, { timeLimit: timeLimit }, {headers: DB_API.headers})
 }
 
 // 任务查询
