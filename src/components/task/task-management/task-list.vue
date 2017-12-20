@@ -10,13 +10,8 @@
       <el-table ref="multipleTable" v-loading="loading" :data="taskList.list" tooltip-effect="dark" max-height="500" style="width: 100%" border @selection-change="_handleSelectionChange">
         <el-table-column type="selection" width="50" align="center"></el-table-column>
         <el-table-column prop="content" label="任务名称"></el-table-column>
-        <el-table-column prop="pId" label="所属流程" width="150"></el-table-column>
         <el-table-column prop="deptNo" label="所属部门" width="180" show-overflow-tooltip></el-table-column>
-        <!-- <el-table-column prop="typeId" label="所属分类" width="110"></el-table-column>         -->
-        <el-table-column prop="level" label="任务等级" width="80"></el-table-column>
-        <el-table-column prop="releaseTime" label="创建时间" width="175"></el-table-column>
-        <el-table-column prop="timeLimit" label="期限" width="140"></el-table-column>
-        <!-- <el-table-column prop="completeTime" label="完成时间" width="175"></el-table-column> -->
+        <el-table-column prop="deptNo" label="所属分类" width="180" show-overflow-tooltip></el-table-column>
         <el-table-column prop="options" label="操作" width="80">
           <template slot-scope="scope">
             <router-link :to="'/task/list/task-edit/' + scope.row.id">
