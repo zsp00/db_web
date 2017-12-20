@@ -24,7 +24,7 @@
       </el-col>
       <el-col :span="3">
         <el-form-item label="序号">
-          {{form.serialNumber}}
+          {{form.serialNum}}
         </el-form-item>
       </el-col>
       <el-col :span="21">
