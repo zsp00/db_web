@@ -25,7 +25,7 @@ export function edit (id, completeSituation, problemSuggestions, analysis, taskS
 // 提交任务
 export function submits (data) {
   var url = DB_API['protocol'] + '://' + DB_API['hostname'] + '/index/Task/submits'
-  return post(url, data, {headers: DB_API.headers})
+  return post(url, { data: data }, {headers: DB_API.headers})
 }
 
 // 驳回任务请求
