@@ -311,7 +311,7 @@ export default {
     _submit () {
       edit(this.update.id, this.update.completeSituation, this.update.problemSuggestions, this.update.analysis, this.update.taskSelect, true).then((result) => {
         if (ERR_OK === result.data.code) {
-          submits(this.update).then((res) => {
+          submits(this.update, 'detail').then((res) => {
             if (ERR_OK === res.data.code) {
               this.$message.success(res.data.msg)
               this._getDetail()
@@ -370,6 +370,7 @@ export default {
           if (ERR_OK === res.data.code) {
             this.$message.success(res.data.msg)
             this._getDetail()
+            this.isDisable = false
           } else {
             this.$message.error(res.data.msg)
           }

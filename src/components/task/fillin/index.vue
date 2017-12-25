@@ -360,13 +360,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        submits(value).then((res) => {
-          // if (ERR_OK === res.data.code) {
-          //   this.$message.success(res.data.msg)
-          //   this._getDetail()
-          // } else {
-          //   this.$message.error(res.data.msg)
-          // }
+        submits(value, 'fillin').then((res) => {
+          if (ERR_OK === res.data.code) {
+            this.$message.success(res.data.msg)
+            this._getList()
+          } else {
+            this.$message.error(res.data.msg)
+          }
         })
       }).catch(() => {})
     },
