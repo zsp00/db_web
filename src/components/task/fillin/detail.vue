@@ -89,7 +89,7 @@
       <el-col :span="24">
         <el-form-item>
           <el-button v-show="isEdit" type="primary" @click="onEdit" plain>保存</el-button>
-          <el-button v-show="isSubmit" type="primary" @click="onSubmits" plain>提交</el-button>
+          <el-button v-show="isSubmit" :disabled="isDisable" type="primary" @click="onSubmits" plain>提交</el-button>
           <!-- <el-button v-show="isConfirm" type="primary" @click="onConfirm" plain>确认</el-button> -->
           <el-button v-show="isReject" type="primary" @click="rejectShow" plain>驳回</el-button>
           <el-button v-show="isWithdraw" type="primary" @click="onWithdraw" plain>撤回</el-button>         
@@ -248,6 +248,7 @@ export default {
       isReject: false,
       isWithdraw: false,
       isComplete: false,
+      isDisable: false,
       loglist: null,
       tdDeptNo: '',              // 任务部门的Id
       monthIndex: 0,             // 该任务选择展示月份的索引
@@ -303,6 +304,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.isDisable = true
         this._submit()
       }).catch(() => {})
     },

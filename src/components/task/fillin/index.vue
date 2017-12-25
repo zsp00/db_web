@@ -1,6 +1,5 @@
 <template>
   <div>
-    <keep-alive>
     <template v-show="$route.path === '/task/fillin'">
     <el-row  class="header" >
       <el-col :span="24" >
@@ -69,9 +68,12 @@
             <el-button type="primary" @click="onSearch" plain icon="el-icon-search">搜索</el-button>
             <a @click="beforeExport" id="export_a" class="export-btn" href="" target="_blank">导出</a>
           </el-form-item>
-          <el-form-item class="need-to-do">
+            <el-select v-model="search.needToDo" filterable allow-create width="100%" :value="search.needToDo"  @change="_getList">
+              <el-option v-for="item in taskStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          <!-- <el-form-item class="need-to-do">
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item class="commit-all" v-if="taskList.list.length > 0 && search.needToDo == true && taskList.list[0].commitAll == 1">
             <el-button type="primary" @click="_commitAll" plain>全部提交</el-button>
           </el-form-item>
@@ -128,7 +130,8 @@
           <el-table-column fixed="right" prop="statusMsg" label="步骤" align="center" width="120"></el-table-column>
           <el-table-column fixed="right" align="center" label="操作" width="80">
             <template slot-scope="scope">
-              <el-button type="text" @click="onClickDetail(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds && scope.row.currMonthStatus != 0 ? '修改' : '查看'}}</el-button>
+              <span><el-button type="text" @click="onClickDetail(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds && scope.row.currMonthStatus != 0 ? '修改' : '查看'}}</el-button></span>
+              <span<el-button type="text" @click="onSubmits(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds && scope.row.currMonthStatus != 0 ? '提交' : ''}}</el-button></span>
             </template>
           </el-table-column>
         </el-table>
@@ -145,7 +148,6 @@
       </el-col>
     </el-row>
     </template>
-    </keep-alive>
     <template v-show="$route.path !== '/task/fillin'">
       <router-view></router-view>
     </template>
@@ -153,7 +155,7 @@
 </template>
 
 <script>
-import { getInfo, getList, getTypeList, commitAll, checkCount, confirm, checkCountConfirm } from 'api/task.js'
+import { getInfo, getList, getTypeList, commitAll, checkCount, confirm, checkCountConfirm, submits } from 'api/task.js'
 import { getTaskDeptNo } from 'api/task-management.js'
 import { getCompDept } from 'api/process.js'
 import {ERR_OK} from 'api/config.js'
@@ -168,8 +170,22 @@ export default {
         ifStatus: '',
         dept: [],
         timeLimit: '',
-        needToDo: true                          // 是否待办的开关按钮，默认选择待办
+        needToDo: '1'
       },
+      taskStatus: [
+        {
+          value: '1',
+          label: '待办任务'
+        },
+        {
+          value: '2',
+          label: '已办任务'
+        },
+        {
+          value: '0',
+          label: '全部任务'
+        }
+      ],
       levelOptions: [
         {
           value: '',
@@ -336,6 +352,23 @@ export default {
           this.compDept = res.data.data
         }
       })
+    },
+    // 提交按钮
+    onSubmits (value) {
+      this.$confirm('是否要提交该任务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        submits(value).then((res) => {
+          // if (ERR_OK === res.data.code) {
+          //   this.$message.success(res.data.msg)
+          //   this._getDetail()
+          // } else {
+          //   this.$message.error(res.data.msg)
+          // }
+        })
+      }).catch(() => {})
     },
     _commitAll () {
       this.$confirm('该操作将提交所有待办任务，是否继续?', '提示', {

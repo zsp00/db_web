@@ -13,7 +13,7 @@
           <el-checkbox v-model="loginData.remember">记住我</el-checkbox>
         </div>
         <div style="margin-top: 15px;">
-          <el-button type="primary" class="login-btn" :loading="loging" @click="_login">登陆</el-button>
+          <el-button type="primary" class="login-btn" :loading="loging" @click="_login">登录</el-button>
         </div>
       </div>
       <div class="car"></div>
