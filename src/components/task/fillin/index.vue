@@ -68,12 +68,9 @@
             <el-button type="primary" @click="onSearch" plain icon="el-icon-search">搜索</el-button>
             <a @click="beforeExport" id="export_a" class="export-btn" href="" target="_blank">导出</a>
           </el-form-item>
-            <el-select v-model="search.needToDo" filterable allow-create width="100%" :value="search.needToDo"  @change="_getList">
-              <el-option v-for="item in taskStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          <!-- <el-form-item class="need-to-do">
+          <el-form-item class="need-to-do">
             <el-switch v-model="search.needToDo" active-text="待办任务" inactive-text="全部任务" @change="_getList"></el-switch>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item class="commit-all" v-if="taskList.list.length > 0 && search.needToDo == true && taskList.list[0].commitAll == 1">
             <el-button type="primary" @click="_commitAll" plain>全部提交</el-button>
           </el-form-item>
@@ -130,8 +127,7 @@
           <el-table-column fixed="right" prop="statusMsg" label="步骤" align="center" width="120"></el-table-column>
           <el-table-column fixed="right" align="center" label="操作" width="80">
             <template slot-scope="scope">
-              <span><el-button type="text" @click="onClickDetail(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds && scope.row.currMonthStatus != 0 ? '修改' : '查看'}}</el-button></span>
-              <span<el-button type="text" @click="onSubmits(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds && scope.row.currMonthStatus != 0 ? '提交' : ''}}</el-button></span>
+              <el-button type="text" @click="onClickDetail(scope.row)" size="small">{{ scope.row.taskDataStatus == scope.row.getStepIds && scope.row.currMonthStatus != 0 ? '修改' : '查看'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -170,22 +166,8 @@ export default {
         ifStatus: '',
         dept: [],
         timeLimit: '',
-        needToDo: '1'
+        needToDo: true                          // 是否待办的开关按钮，默认选择待办
       },
-      taskStatus: [
-        {
-          value: '1',
-          label: '待办任务'
-        },
-        {
-          value: '2',
-          label: '已办任务'
-        },
-        {
-          value: '0',
-          label: '全部任务'
-        }
-      ],
       levelOptions: [
         {
           value: '',

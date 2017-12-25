@@ -64,7 +64,7 @@
         <el-table-column prop="duty3" label="三级目标任务(举措)" width="150" align="center"></el-table-column>
         <el-table-column prop="leader3" label="责任领导" align="center"></el-table-column>
 
-        <el-table-column prop="deptNo" label="责任部室、二级单位" width="150" align="center"></el-table-column>
+        <el-table-column prop="deptName" label="责任部室、二级单位" width="150" align="center"></el-table-column>
         <el-table-column prop="duty" label="目标任务" align="center"></el-table-column>
         <el-table-column prop="content" label="2017年度实施计划" width="300" align="center"></el-table-column>
 
