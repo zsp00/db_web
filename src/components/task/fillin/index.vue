@@ -1,6 +1,6 @@
 <template>
   <div>
-    <keep-alive>
+    <!-- <keep-alive> -->
     <template v-show="$route.path === '/task/fillin'">
     <el-row  class="header" >
       <el-col :span="24" >
@@ -145,7 +145,7 @@
       </el-col>
     </el-row>
     </template>
-    </keep-alive>
+    <!-- </keep-alive> -->
     <template v-show="$route.path !== '/task/fillin'">
       <router-view></router-view>
     </template>
